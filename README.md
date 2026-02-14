@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="static/gamify_logo.png" alt="Gamify AI Logo" width="150">
+  <img src="static/gamify_logo.png" alt="Questra Logo" width="150">
 </p>
 
-<h1 align="center">🎮 Gamify AI</h1>
+<h1 align="center">🧭 Questra</h1>
 
 <p align="center">
   <strong>Level Up Your Learning. Transform Education into an RPG Adventure.</strong>
@@ -19,11 +19,11 @@
 
 ## 💡 Inspiration
 
-Traditional learning platforms feel like a chore. We wanted to create an experience where education feels like playing a video game—complete with XP, levels, achievements, and a sense of progression. Inspired by platforms like Duolingo and Codédex, we built **Gamify AI** to make learning addictive.
+Traditional learning platforms feel like a chore. We wanted to create an experience where education feels like playing a video game—complete with XP, levels, achievements, and a sense of progression. Inspired by platforms like Duolingo and Codédex, we built **Questra** to make learning addictive.
 
 ## 🚀 What It Does
 
-Gamify AI transforms any topic into a 4-stage interactive adventure:
+Questra transforms any topic into a 4-stage interactive adventure:
 
 ### 1. 📖 Story Mode
 Engaging narratives that teach concepts through storytelling rather than dry lectures.
@@ -110,7 +110,7 @@ Open [http://localhost:8000](http://localhost:8000) and start your quest! 🎮
 
 ---
 
-## 🔮 What's Next for Gamify AI
+## 🔮 What's Next for Questra
 
 - **Multiplayer Arena**: Compete with friends in real-time quiz battles.
 - **Classroom Mode**: Teachers can create custom quest paths for students.

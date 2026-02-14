@@ -1,5 +1,5 @@
 /**
- * Gamify AI V2 - Story-Based Learning Frontend (Unified API Version)
+ * Questra - Interactive Learning Frontend
  */
 
 // Session state

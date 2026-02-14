@@ -1,4 +1,4 @@
-"""Gamify AI V2 - Story-Based Learning Platform"""
+"""Questra - Interactive Learning Platform"""
 import os
 import uuid
 from pathlib import Path
@@ -24,7 +24,7 @@ from modules.detective_mode import solve_case
 from gamification.models import LearningSession
 
 # Initialize FastAPI
-app = FastAPI(title="Gamify AI", description="Transform any topic into a game!")
+app = FastAPI(title="Questra", description="Your quest. Live now.")
 
 # CORS
 app.add_middleware(

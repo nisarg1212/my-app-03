@@ -1,4 +1,4 @@
-"""Data models for Gamify AI V2 - Story-Based Learning"""
+"""Data models for Questra - Interactive Learning Platform"""
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime

@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from pathlib import Path
 
 # Create database in the data directory
-DB_FILE = Path(__file__).parent.parent / "data" / "gamify.db"
+DB_FILE = Path(__file__).parent.parent / "data" / "questra.db"
 DB_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{DB_FILE}"
