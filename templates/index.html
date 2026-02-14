@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamify AI ⋆ Start Your Learning Quest</title>
+    <meta name="description"
+        content="Transform any topic into an epic 8-bit learning adventure! Earn XP, unlock achievements, and master new skills.">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/static/gamify_logo.png" alt="Gamify AI" class="logo-image">
+                <span class="logo-text">GAMIFY</span>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-value" id="streak-count">0</span>
+                    <span class="stat-label">Streak</span>
+                </div>
+
+                <div class="stat-item clickable" onclick="showAchievements()">
+                    <span class="stat-icon">🏆</span>
+                    <span class="stat-value" id="achievement-count">0</span>
+                    <span class="stat-label">Badges</span>
+                </div>
+
+                <div class="xp-bar-container">
+                    <div class="xp-bar-header">
+                        <span id="xp-current">0</span>
+                        <span id="xp-next">/ 100 XP</span>
+                    </div>
+                    <div class="xp-bar">
+                        <div class="xp-bar-fill" id="xp-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="level-badge" id="level-badge">1</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Topic Input Section -->
+            <div id="topic-section" class="topic-section">
+                <h1 class="hero-title">
+                    <span class="gradient-text">START YOUR</span>
+                    <br>LEARNING QUEST
+                </h1>
+                <p class="hero-subtitle">Choose a featured quest or enter any topic! 🎮</p>
+
+                <!-- Featured Quests -->
+                <h2 class="section-title featured-title">
+                    <span>⭐</span> FEATURED QUESTS
+                </h2>
+                <div class="featured-quests-grid" id="featured-quests">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="custom-topic-divider">
+                    <span>OR ENTER YOUR OWN TOPIC</span>
+                </div>
+
+                <div class="topic-input-wrapper">
+                    <input type="text" id="topic-input" class="topic-input"
+                        placeholder="Enter any topic... (e.g., Space Travel, History, Music)">
+                    <button class="btn btn-primary btn-large" onclick="startLearning()" id="start-btn">
+                        <span>⚔️</span> BEGIN QUEST
+                    </button>
+                </div>
+
+                <!-- API Key Section (for custom topics) -->
+                <div class="api-key-section">
+                    <button class="api-key-toggle" onclick="toggleApiKeySection()">
+                        <span id="api-key-arrow">▶</span> Use your own API key (for custom topics)
+                    </button>
+                    <div id="api-key-container" class="api-key-container" style="display: none;">
+                        <p class="api-key-info">
+                            ✨ Featured quests work without a key!<br>
+                            For custom topics, get a free API key from
+                            <a href="https://openrouter.ai" target="_blank">OpenRouter.ai</a>
+                        </p>
+                        <div class="api-key-input-wrapper">
+                            <input type="password" id="api-key-input" class="api-key-input" placeholder="sk-or-v1-..."
+                                onchange="saveApiKey()">
+                            <button class="btn btn-sm" onclick="toggleKeyVisibility()">👁️</button>
+                        </div>
+                        <div id="api-key-status" class="api-key-status"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Session Container (hidden initially) -->
+            <div id="session-container" class="session-container" style="display: none;">
+                <!-- Vertical Progress Sidebar -->
+                <aside class="session-sidebar">
+                    <div class="sidebar-topic" id="sidebar-topic"></div>
+
+                    <!-- Level Indicator -->
+                    <div class="sidebar-levels">
+                        <div class="sidebar-level active" id="sidebar-lvl-1">LVL 1</div>
+                        <div class="sidebar-level locked" id="sidebar-lvl-2">🔒 2</div>
+                        <div class="sidebar-level locked" id="sidebar-lvl-3">🔒 3</div>
+                    </div>
+
+                    <div class="progress-steps-vertical">
+                        <div class="progress-step-v completed" id="step-story">
+                            <span class="step-icon-v">📖</span>
+                            <span class="step-label-v">STORY</span>
+                        </div>
+                        <div class="progress-line-v"></div>
+                        <div class="progress-step-v" id="step-quiz">
+                            <span class="step-icon-v">❓</span>
+                            <span class="step-label-v">QUIZ</span>
+                        </div>
+                        <div class="progress-line-v"></div>
+                        <div class="progress-step-v" id="step-master">
+                            <span class="step-icon-v">🏆</span>
+                            <span class="step-label-v">MASTER</span>
+                        </div>
+                        <div class="progress-line-v"></div>
+                        <div class="progress-step-v" id="step-detective">
+                            <span class="step-icon-v">🔍</span>
+                            <span class="step-label-v">DETECTIVE</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content Area -->
+                <div class="session-main">
+
+                    <!-- Story Mode -->
+                    <div id="story-mode" class="mode-section">
+                        <div class="mode-header">
+                            <h3><span>📖</span> Story Mode</h3>
+                            <div class="mode-controls">
+                                <button class="btn btn-secondary btn-sm" onclick="toggleTTS()" id="tts-btn">
+                                    <span>🔊</span> LISTEN
+                                </button>
+                            </div>
+                        </div>
+                        <div class="story-card">
+                            <h4 class="story-title" id="story-title"></h4>
+                            <div class="story-content" id="story-content"></div>
+                        </div>
+                        <button class="btn btn-primary" onclick="completeStory()" id="complete-story-btn">
+                            <span>✅</span> QUEST COMPLETE → NEXT STAGE
+                        </button>
+                    </div>
+
+                    <!-- Quiz Mode -->
+                    <div id="quiz-mode" class="mode-section" style="display: none;">
+                        <div class="mode-header">
+                            <h3><span>❓</span> Quick Test</h3>
+                            <span class="xp-badge" id="quiz-xp">+50 XP possible</span>
+                        </div>
+                        <div id="quiz-questions"></div>
+                        <button class="btn btn-primary" onclick="submitQuiz()" id="submit-quiz-btn">
+                            <span>⚡</span> SUBMIT ANSWERS
+                        </button>
+                        <div id="quiz-results" style="display: none;"></div>
+                    </div>
+
+                    <!-- Master Mode -->
+                    <div id="master-mode" class="mode-section" style="display: none;">
+                        <div class="mode-header">
+                            <h3><span>🏆</span> Master Practice</h3>
+                            <span class="xp-badge" id="master-xp">+150 XP possible</span>
+                        </div>
+                        <div id="master-questions"></div>
+                        <button class="btn btn-primary" onclick="submitMaster()" id="submit-master-btn">
+                            <span>🎯</span> SUBMIT ANSWERS
+                        </button>
+                        <div id="master-results" style="display: none;"></div>
+                    </div>
+
+                    <!-- Detective Mode -->
+                    <div id="detective-mode" class="mode-section" style="display: none;">
+                        <div class="mode-header">
+                            <h3><span>🔍</span> Detective Mode</h3>
+                            <span class="xp-badge" id="detective-xp">+100 XP possible</span>
+                        </div>
+                        <div class="detective-case">
+                            <h4 class="case-title" id="case-title"></h4>
+                            <div class="case-scenario" id="case-scenario"></div>
+                            <div class="clues-section">
+                                <h5>🔎 Clues</h5>
+                                <div id="case-clues"></div>
+                            </div>
+                            <div class="case-question" id="case-question"></div>
+                            <input type="text" class="form-input" id="detective-answer"
+                                placeholder="Enter your answer...">
+                        </div>
+                        <button class="btn btn-primary" onclick="solveCase()" id="solve-case-btn">
+                            <span>🔐</span> CRACK THE CASE
+                        </button>
+                        <div id="detective-results" style="display: none;"></div>
+                    </div>
+
+                    <!-- Session Complete -->
+                    <div id="session-complete" class="mode-section" style="display: none;">
+                        <div class="completion-card">
+                            <div class="completion-icon">🎉</div>
+                            <h3>LEVEL <span id="completed-level">1</span> COMPLETE!</h3>
+                            <div class="completion-xp" id="total-xp-earned">+0 XP</div>
+                            <p id="completion-message">You've mastered this level!</p>
+
+                            <!-- Level Progress -->
+                            <div class="level-progress-bar">
+                                <div class="level-dot completed" id="lvl-1">1</div>
+                                <div class="level-line"></div>
+                                <div class="level-dot" id="lvl-2">2</div>
+                                <div class="level-line"></div>
+                                <div class="level-dot" id="lvl-3">3</div>
+                            </div>
+
+                            <div class="completion-buttons">
+                                <button class="btn btn-secondary" onclick="newAdventure()">
+                                    <span>🏠</span> HOME
+                                </button>
+                                <button class="btn btn-primary btn-large" id="next-level-btn" onclick="startNextLevel()"
+                                    style="display: none;">
+                                    <span>⚔️</span> LEVEL <span id="next-level-num">2</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end session-main -->
+            </div><!-- end session-container -->
+        </div>
+    </main>
+
+    <!-- Achievements Modal -->
+    <div id="achievements-modal" class="modal-overlay" style="display: none;" onclick="closeAchievements(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2><span>🏆</span> ACHIEVEMENTS</h2>
+                <button class="modal-close" onclick="closeAchievements()">&times;</button>
+            </div>
+            <div class="achievements-grid" id="achievements-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- XP Popup -->
+    <div id="xp-popup" class="xp-popup" style="display: none;">
+        <div class="xp-popup-value" id="xp-popup-value">+50 XP</div>
+    </div>
+
+    <!-- Level Up Overlay -->
+    <div class="level-up-overlay" id="level-up-overlay">
+        <div class="level-up-content">
+            <div class="level-up-text">🎉 LEVEL UP! 🎉</div>
+            <div class="level-up-number" id="new-level">2</div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p id="loading-text">Generating your adventure...</p>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
