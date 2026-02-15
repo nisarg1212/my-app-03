@@ -4,6 +4,28 @@ This file tracks key architectural and project decisions. Add new entries at the
 
 ---
 
+## 2026-02-15 — Level 1: AI Agent Adventures + Retro Pixel Theme + Sound + Timer
+
+### Context
+Building the first real topic/path — "AI Agent Adventures" Level 1 — as a polished, game-like learning experience. The goal is to create an addictive, Duolingo-beating experience with retro pixel art aesthetics.
+
+### Changes Made
+- **New Quest Content:** Added `AI_AGENT_ADVENTURES_QUEST` to `prebuilt_quests.py` with full Level 1 content (story about ARIA the AI Agent, 5 quiz questions, 3 master questions, detective case)
+- **Sound System:** Created `static/js/sounds.js` — Web Audio API chiptune sound engine with correct/wrong/click/typewriter/levelComplete/confetti sounds
+- **Timer System:** Created `static/js/timer.js` — Phase-level timer tracking with localStorage persistence for future certificates
+- **Enhanced CSS:** Added typewriter cursor, story panels, quiz progress bar, correct/wrong animations, confetti canvas, reward screen, pixel explosions, phase transitions, hover micro-interactions
+- **Updated app.js:** Integrated sounds throughout all interactions, typewriter story effect, quiz progress tracking, confetti on level complete, animated XP counter, phase transition overlays
+- **Updated index.html:** Added timer display, sound toggle, confetti canvas, phase transition overlay, script includes for sounds.js and timer.js
+
+### Design Decisions
+1. **Web Audio API over audio files** — Programmatic chiptune sounds are lightweight, customizable, and don't require loading external assets
+2. **Typewriter effect** — Creates narrative immersion; includes skip button for returning users
+3. **Phase transitions** — Full-screen overlays between story→quiz→master→detective create game-like flow
+4. **Timer tracking** — Stored in localStorage for future certificate generation; displayed subtly in header
+5. **Confetti system** — Canvas-based pixel confetti on level complete for maximum celebration
+
+---
+
 ## 2026-02-14 — Rebrand from "Gamify AI" to "Questra" + Initial Analysis
 
 ### Context

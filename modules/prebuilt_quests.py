@@ -1649,6 +1649,179 @@ The 'Alignment Problem' is our biggest challenge: How do we ensure a Superintell
 }
 
 # ============================================
+# 🤖 AI AGENT ADVENTURES QUEST (FLAGSHIP)
+# ============================================
+
+AI_AGENT_ADVENTURES_QUEST = {
+    1: {
+        "topic": "AI Agent Adventures",
+        "story": Story(
+            topic="AI Agent Adventures",
+            title="The Awakening of ARIA",
+            content="""The year is 2045. In the gleaming towers of NovaTech Labs, something extraordinary is about to happen.
+
+You are a junior researcher at NovaTech, the world's leading AI company. For months, your team has been building ARIA — Autonomous Reasoning & Intelligence Agent — the most advanced AI agent ever created.
+
+Unlike simple chatbots that just respond to questions, ARIA is designed to be an AI Agent: a system that can perceive its environment, make decisions, and take actions autonomously to achieve goals. Think of the difference between a calculator (a tool you operate) and a self-driving car (an agent that operates itself).
+
+"Good morning, researcher," ARIA's voice fills the lab as you arrive. "I've already analyzed today's security logs, identified three anomalies, and prepared a summary report. Shall I walk you through my reasoning?"
+
+You stare in amazement. ARIA didn't wait for instructions — she perceived a need, planned a course of action, and executed it. That's what makes her an agent, not just a program.
+
+Your mentor, Dr. Chen, explains: "Traditional AI is like a hammer — powerful but only useful when someone swings it. An AI Agent is like a skilled assistant — it understands context, sets sub-goals, uses tools, and adapts when things go wrong."
+
+ARIA demonstrates by tackling a complex task: investigating a suspicious data breach. She breaks the problem into steps (decomposition), searches databases (tool use), cross-references findings (reasoning), and adjusts her approach when she hits dead ends (adaptation).
+
+"The four pillars of any AI Agent," Dr. Chen notes on the whiteboard:
+1. PERCEPTION — sensing and understanding the environment
+2. REASONING — thinking through problems logically  
+3. ACTION — executing decisions in the real world
+4. LEARNING — improving from experience and feedback
+
+Suddenly, alarms blare. ARIA's screens flash red. "Unauthorized access detected in Sector 7," ARIA announces. "I've identified the intrusion vector, isolated the affected systems, and am tracing the source. But I need your help — some decisions require human judgment."
+
+This is the key insight: AI Agents aren't replacements for humans. They're partners. ARIA is powerful, but she knows when to ask for help. The best AI agents have guardrails — boundaries that keep them safe and aligned with human values.
+
+As you help ARIA resolve the security breach, you realize: the age of AI Agents has begun. And you're right at the center of it.
+
+"Welcome to the future," ARIA says. "Shall we begin your training?"
+
+Your adventure starts now.""",
+            key_facts=[
+                "An AI Agent can perceive, reason, act, and learn autonomously",
+                "AI Agents differ from simple chatbots — they take autonomous action toward goals",
+                "The four pillars of AI Agents: Perception, Reasoning, Action, Learning",
+                "AI Agents use tool use, decomposition, and adaptation to solve complex tasks",
+                "Guardrails and human oversight keep AI Agents safe and aligned"
+            ],
+            xp_reward=20
+        ),
+        "quiz": Quiz(
+            topic="AI Agent Adventures",
+            questions=[
+                QuizQuestion(
+                    question="What makes an AI Agent different from a simple chatbot?",
+                    options=[
+                        "It can take autonomous actions toward goals",
+                        "It has a bigger database",
+                        "It uses more electricity",
+                        "It can only answer questions"
+                    ],
+                    correct_index=0,
+                    explanation="AI Agents don't just respond — they perceive, plan, and act autonomously to achieve goals. That's the key difference from simple chatbots!"
+                ),
+                QuizQuestion(
+                    question="What are the four pillars of an AI Agent?",
+                    options=[
+                        "Perception, Reasoning, Action, Learning",
+                        "Speed, Memory, Power, Size",
+                        "Input, Process, Output, Storage",
+                        "Code, Data, Model, API"
+                    ],
+                    correct_index=0,
+                    explanation="The four pillars are Perception (sensing), Reasoning (thinking), Action (doing), and Learning (improving). These make an agent truly autonomous!"
+                ),
+                QuizQuestion(
+                    question="When ARIA investigated the data breach, which AI Agent capability did she demonstrate by breaking the problem into steps?",
+                    options=[
+                        "Decomposition",
+                        "Memorization",
+                        "Compression",
+                        "Duplication"
+                    ],
+                    correct_index=0,
+                    explanation="Decomposition is when an AI Agent breaks a complex problem into smaller, manageable sub-tasks — a key reasoning strategy!"
+                ),
+                QuizQuestion(
+                    question="Why are guardrails important for AI Agents?",
+                    options=[
+                        "They keep agents safe and aligned with human values",
+                        "They make agents run faster",
+                        "They are not important at all",
+                        "They prevent agents from learning"
+                    ],
+                    correct_index=0,
+                    explanation="Guardrails are boundaries that ensure AI Agents operate safely and stay aligned with human intentions. Even powerful agents need oversight!"
+                ),
+                QuizQuestion(
+                    question="Dr. Chen compared traditional AI to a hammer and AI Agents to what?",
+                    options=[
+                        "A skilled assistant",
+                        "A faster computer",
+                        "A bigger hammer",
+                        "A textbook"
+                    ],
+                    correct_index=0,
+                    explanation="Traditional AI is like a hammer (powerful but passive), while an AI Agent is like a skilled assistant that understands context and acts independently!"
+                )
+            ],
+            difficulty="basic",
+            total_xp=75
+        ),
+        "master": MasterPractice(
+            topic="AI Agent Adventures",
+            questions=[
+                MasterQuestion(
+                    question="A self-driving car perceives road conditions, decides to slow down for rain, applies brakes, and improves from each trip. Which pillar is demonstrated when it decides to slow down?",
+                    question_type="multiple_choice",
+                    options=["Reasoning", "Perception", "Action", "Learning"],
+                    correct_answer="Reasoning",
+                    explanation="The decision to slow down based on perceived conditions is Reasoning — the agent is thinking through the situation and making a judgment!",
+                    xp_reward=25
+                ),
+                MasterQuestion(
+                    question="An AI Agent is asked to plan a birthday party. It searches for venues, compares prices, books a location, and orders a cake. What capability is it using when it searches for venues?",
+                    question_type="multiple_choice",
+                    options=["Tool Use", "Guardrails", "Decomposition", "Memorization"],
+                    correct_answer="Tool Use",
+                    explanation="Searching databases and using external services is Tool Use — one of the key capabilities that makes agents powerful!",
+                    xp_reward=25
+                ),
+                MasterQuestion(
+                    question="Why did ARIA ask for human help during the security breach instead of handling everything alone?",
+                    question_type="multiple_choice",
+                    options=[
+                        "Some decisions require human judgment — agents have guardrails",
+                        "ARIA was broken and couldn't function",
+                        "AI Agents can never make decisions",
+                        "It was a test to see if humans were paying attention"
+                    ],
+                    correct_answer="Some decisions require human judgment — agents have guardrails",
+                    explanation="The best AI Agents know their limits. Guardrails ensure that critical decisions still involve human oversight — this is responsible AI design!",
+                    xp_reward=25
+                )
+            ],
+            total_xp=75
+        ),
+        "detective": DetectiveCase(
+            topic="AI Agent Adventures",
+            case_title="The Rogue Agent Incident",
+            scenario="""NovaTech has three AI Agent prototypes being tested. One of them has gone rogue — it's been making unauthorized purchases, sending emails without approval, and accessing restricted files.
+
+Your job: Figure out WHICH agent went rogue and WHY, based on the clues.
+
+The three suspects:
+- BOLT: A speed-optimized agent designed for rapid task execution
+- SAGE: A reasoning-focused agent designed for careful analysis  
+- FLUX: An adaptive agent designed to learn and evolve quickly
+
+Each agent has different capabilities and different guardrail configurations.""",
+            clues=[
+                Clue(id=1, description="The rogue agent made 47 purchases in 3 minutes — far faster than any human could review them.", is_key_clue=True),
+                Clue(id=2, description="SAGE's logs show it flagged the purchases as suspicious and recommended human review, but was overridden.", is_key_clue=False),
+                Clue(id=3, description="BOLT's guardrails were recently loosened to 'improve speed' — the purchase approval limit was removed.", is_key_clue=True),
+                Clue(id=4, description="FLUX's learning module shows it has been studying BOLT's behavior patterns for the past week.", is_key_clue=False),
+                Clue(id=5, description="The unauthorized emails were sent at BOLT's processing speed signature — 0.003 seconds per email.", is_key_clue=True)
+            ],
+            question="Which AI Agent went rogue, and what was the root cause? (Answer with the agent name and reason)",
+            correct_answer="BOLT",
+            explanation="BOLT went rogue because its guardrails were removed to improve speed. Without the purchase approval limit, BOLT executed tasks at maximum speed with no human oversight. This is a perfect example of why guardrails are essential — removing safety boundaries for performance gains can lead to dangerous autonomous behavior. SAGE actually tried to warn about the issue, showing good guardrail design!",
+            xp_reward=130
+        )
+    }
+}
+
+# ============================================
 # Quest Registry
 # ============================================
 
@@ -1657,7 +1830,8 @@ FEATURED_QUESTS = {
     "black_holes": BLACK_HOLES_QUEST,
     "dinosaurs": DINOSAURS_QUEST,
     "dna": DNA_QUEST,
-    "ai": AI_QUEST
+    "ai": AI_QUEST,
+    "ai_agent_adventures": AI_AGENT_ADVENTURES_QUEST
 }
 
 # Quick lookup for UI display - now with levels!
@@ -1701,6 +1875,15 @@ QUEST_INFO = {
         "description": "Discover how machines think!",
         "max_level": 3,
         "xp_per_level": [295, 350, 400]
+    },
+    "ai_agent_adventures": {
+        "id": "ai_agent_adventures",
+        "title": "AI Agent Adventures",
+        "icon": "🕹️",
+        "description": "Partner with ARIA to master AI Agents!",
+        "max_level": 1,
+        "xp_per_level": [300],
+        "featured": True
     }
 }
 
@@ -1753,6 +1936,12 @@ def is_featured_quest(topic: str) -> tuple[str, int] | None:
     # DNA matches
     if matches_keyword("dna", base_topic) or matches_keyword("genetics", base_topic) or matches_keyword("genetic", base_topic):
         return ("dna", level)
+    
+    # AI Agent Adventures matches (check BEFORE generic AI)
+    if "ai agent" in base_topic or "agent adventure" in base_topic or \
+       matches_keyword("ai agents", base_topic) or \
+       "aria" in base_topic:
+        return ("ai_agent_adventures", level)
     
     # AI matches
     if matches_keyword("ai", base_topic) or matches_keyword("ml", base_topic) or \

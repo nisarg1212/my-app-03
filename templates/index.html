@@ -10,6 +10,7 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
 
 <body>
@@ -42,6 +43,15 @@
                     <div class="xp-bar">
                         <div class="xp-bar-fill" id="xp-bar-fill" style="width: 0%"></div>
                     </div>
+                </div>
+
+                <div class="timer-display" id="timer-display" style="display: none;">
+                    <span class="timer-icon">⏱️</span>
+                    <span class="timer-value" id="timer-value">0:00</span>
+                </div>
+
+                <div class="sound-toggle" id="sound-toggle" onclick="toggleSound()">
+                    🔊 SFX
                 </div>
 
                 <div class="level-badge" id="level-badge">1</div>
@@ -275,6 +285,16 @@
         </div>
     </div>
 
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Phase Transition Overlay -->
+    <div id="phase-transition" class="phase-transition" style="display: none;">
+        <div class="phase-transition-text" id="phase-transition-text">QUIZ TIME!</div>
+    </div>
+
+    <script src="/static/js/sounds.js"></script>
+    <script src="/static/js/timer.js"></script>
     <script src="/static/js/app.js"></script>
 </body>
 
