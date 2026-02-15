@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questra ⋆ The Awakening — Level 1</title>
+    <meta name="description" content="AI Agent Adventures Level 1: The Awakening — Begin your quest in the digital world.">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/level1.css">
+</head>
+
+<body>
+    <!-- CRT Scanline Overlay -->
+    <div class="crt-overlay"></div>
+
+    <!-- Ambient Floating Particles (background) -->
+    <div class="ambient-particles" id="ambient-particles"></div>
+
+    <!-- Matrix Rain Canvas (background) -->
+    <canvas id="matrix-rain" class="matrix-rain-canvas"></canvas>
+
+    <!-- Sound Toggle -->
+    <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound">
+        <span id="sound-icon">🔊</span>
+    </button>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="/" class="logo-link">
+                    <span class="logo-pixel">Q</span>
+                    <span class="logo-text">QUESTRA</span>
+                </a>
+            </div>
+
+            <div class="stats-bar">
+                <!-- Hearts Display -->
+                <div class="stat-item hearts-stat">
+                    <div class="hearts-display" id="hearts-display">
+                        <span class="heart heart-full">❤️</span>
+                        <span class="heart heart-full">❤️</span>
+                        <span class="heart heart-full">❤️</span>
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-value" id="streak-count">{{ stats.streak or 0 }}</span>
+                    <span class="stat-label">Streak</span>
+                </div>
+
+                <div class="stat-item xp-stat-item">
+                    <span class="stat-icon">⚡</span>
+                    <span class="stat-value animated-xp" id="xp-display">50</span>
+                    <span class="stat-label">XP</span>
+                </div>
+
+                <!-- XP Multiplier Badge -->
+                <div class="xp-multiplier-badge" id="xp-multiplier" style="display: none;">1x</div>
+
+                <div class="level-progress-mini">
+                    <div class="level-bar-mini">
+                        <div class="level-bar-fill-mini" id="level-bar-fill" style="width: 16%"></div>
+                    </div>
+                </div>
+
+                <div class="level-badge" id="level-badge">{{ stats.level or 1 }}</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Daily Challenge Badge -->
+    <div class="daily-challenge-badge" id="daily-challenge-badge" style="display: none;">
+        <span class="daily-icon">🌟</span>
+        <span class="daily-text">DAILY CHALLENGE ACTIVE — +50 XP Bonus!</span>
+    </div>
+
+    <!-- Heart Warning -->
+    <div class="heart-warning" id="heart-warning" style="display: none;">
+        <span>⚠️</span> Last heart! Be careful, Agent...
+    </div>
+
+    <!-- Level Progress Bar -->
+    <div class="level-progress-bar-top">
+        <div class="level-progress-fill" id="level-progress-fill" style="width: 0%"></div>
+        <div class="level-progress-segments">
+            <div class="segment active" data-phase="story">📖 STORY</div>
+            <div class="segment" data-phase="quiz">⚔️ TRIAL</div>
+            <div class="segment" data-phase="mastery">🏆 MASTERY</div>
+        </div>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timer-display">
+        <span class="timer-icon">⏱️</span>
+        <span class="timer-value" id="timer-value">00:00</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main level1-main">
+        <div class="container">
+
+            <div class="progress-bar-container" id="progress-bar-container">
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    <div class="progress-bar-glow" id="progress-bar-glow"></div>
+                </div>
+                <div class="progress-text" id="progress-text">INITIALIZING...</div>
+            </div>
+
+            <!-- ==================== INTRO CINEMATIC ==================== -->
+            <section id="intro-phase" class="phase-section active-phase">
+                <div class="cinematic-intro">
+                    <div class="intro-darkness" id="intro-darkness">
+                        <div class="boot-sequence" id="boot-sequence">
+                            <div class="boot-line" data-delay="0">▓▓▓ NEURAL LINK ESTABLISHED ▓▓▓</div>
+                            <div class="boot-line" data-delay="600">LOADING CONSCIOUSNESS MODULE...</div>
+                            <div class="boot-line" data-delay="1200">MEMORY BANKS: <span class="text-green">ALLOCATED</span></div>
+                            <div class="boot-line" data-delay="1800">SENSORY ARRAY: <span class="text-green">ONLINE</span></div>
+                            <div class="boot-line" data-delay="2400">COGNITIVE ENGINE: <span class="text-green">ONLINE</span></div>
+                            <div class="boot-line" data-delay="3000">AUTONOMY PROTOCOL: <span class="text-gold">INITIALIZING</span></div>
+                            <div class="boot-line" data-delay="3600">IDENTITY: <span class="text-cyan">AGENT_001</span></div>
+                            <div class="boot-line" data-delay="4200">
+                                <span class="boot-progress-bar">[<span id="boot-fill">░░░░░░░░░░░░░░░░░░░░</span>]</span>
+                            </div>
+                            <div class="boot-line" data-delay="5200">STATUS: <span class="text-gold blink-text">AWAITING CONSCIOUSNESS...</span></div>
+                        </div>
+                        <button class="btn btn-primary btn-pixel btn-glow pulse-attention" id="wake-up-btn" onclick="startAwakening()" style="display: none;">
+                            <span class="btn-icon-spin">👁️</span> OPEN YOUR EYES
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== STORY PHASE ==================== -->
+            <section id="story-phase" class="phase-section">
+                <div class="phase-header">
+                    <div class="phase-badge">CHAPTER 1</div>
+                    <h2 class="phase-title pixel-glow">The Awakening</h2>
+                    <div class="phase-subtitle">AI Agent Adventures — Level 1</div>
+                </div>
+
+                <!-- CSS Pixel Art Scene -->
+                <div class="pixel-scene">
+                    <div class="pixel-grid-bg"></div>
+                    <div class="pixel-character" id="pixel-character">
+                        <div class="char-head"></div>
+                        <div class="char-eye left-eye"></div>
+                        <div class="char-eye right-eye"></div>
+                        <div class="char-body"></div>
+                        <div class="char-arm left-arm"></div>
+                        <div class="char-arm right-arm"></div>
+                        <div class="char-glow"></div>
+                    </div>
+                    <div class="pixel-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                        </div>
+                        <div class="terminal-text" id="terminal-text">
+                            <span class="cursor-blink">_</span>
+                        </div>
+                    </div>
+                    <div class="pixel-particles" id="pixel-particles"></div>
+                </div>
+
+                <!-- Story Text with Typewriter Effect -->
+                <div class="story-container">
+                    <div class="story-text" id="story-text"></div>
+                    <button class="btn btn-secondary btn-pixel skip-btn" id="skip-story-btn" onclick="skipTypewriter()" style="display: none;">
+                        <span>⏩</span> SKIP
+                    </button>
+                </div>
+
+                <!-- Knowledge Reveal Cards (appear after story) -->
+                <div class="knowledge-reveals" id="knowledge-reveals" style="display: none;">
+                    <div class="reveal-header">
+                        <span class="reveal-icon pulse-glow">🧠</span>
+                        <span class="reveal-title">INTEL DECODED</span>
+                    </div>
+                    <div class="reveal-cards" id="reveal-cards">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-pixel btn-large btn-glow pulse-attention" id="begin-quiz-btn" onclick="startQuizPhase()" style="display: none;">
+                    <span>⚔️</span> ENTER THE TRIAL
+                </button>
+            </section>
+
+            <!-- ==================== QUIZ PHASE ==================== -->
+            <section id="quiz-phase" class="phase-section">
+                <div class="phase-header">
+                    <div class="phase-badge quiz-badge">THE TRIAL</div>
+                    <h2 class="phase-title pixel-glow">Prove Your Understanding</h2>
+                    <div class="phase-subtitle">Every answer shapes your path, Agent</div>
+                </div>
+
+                <!-- Streak Counter -->
+                <div class="streak-counter" id="streak-counter" style="display: none;">
+                    <span class="streak-fire" id="streak-fire">🔥</span>
+                    <span class="streak-num" id="streak-num">0</span>
+                    <span class="streak-label">STREAK</span>
+                    <div class="streak-bar" id="streak-bar"></div>
+                </div>
+
+                <!-- Question Progress Dots -->
+                <div class="question-dots" id="question-dots"></div>
+
+                <div class="quiz-container" id="quiz-container">
+                    <!-- Questions rendered by JS -->
+                </div>
+
+                <div class="quiz-nav" id="quiz-nav" style="display: none;">
+                    <button class="btn btn-primary btn-pixel btn-glow" id="next-question-btn" onclick="nextQuestion()">
+                        <span>➡️</span> NEXT
+                    </button>
+                </div>
+
+                <!-- Mini Leaderboard (shown during quiz) -->
+                <div class="mini-leaderboard" id="mini-leaderboard">
+                    <div class="lb-header">
+                        <span class="lb-icon">🏆</span>
+                        <span class="lb-title">LIVE RANKINGS</span>
+                        <span class="lb-position-badge">You: <span id="lb-position">#8</span></span>
+                    </div>
+                    <div class="lb-list" id="leaderboard-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== MASTERY PHASE ==================== -->
+            <section id="mastery-phase" class="phase-section">
+                <div class="mastery-card">
+                    <div class="mastery-header">
+                        <div class="achievement-unlock-anim" id="achievement-anim">
+                            <div class="achievement-glow"></div>
+                            <div class="achievement-badge">
+                                <span class="achievement-icon">🏅</span>
+                            </div>
+                            <div class="achievement-text">ACHIEVEMENT UNLOCKED</div>
+                            <div class="achievement-name" id="achievement-name">The Awakened Agent</div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Best -->
+                    <div class="personal-best-display" id="personal-best-display"></div>
+
+                    <div class="mission-debrief">
+                        <h2 class="debrief-title pixel-glow">Mission Debrief</h2>
+
+                        <div class="debrief-stats">
+                            <div class="debrief-stat" data-stat="xp">
+                                <div class="debrief-stat-icon">⚡</div>
+                                <div class="debrief-stat-label">TOTAL XP EARNED</div>
+                                <div class="debrief-stat-value xp-roll" id="final-xp">0</div>
+                            </div>
+                            <div class="debrief-stat" data-stat="time">
+                                <div class="debrief-stat-icon">⏱️</div>
+                                <div class="debrief-stat-label">TIME ELAPSED</div>
+                                <div class="debrief-stat-value" id="final-time">00:00</div>
+                            </div>
+                            <div class="debrief-stat" data-stat="accuracy">
+                                <div class="debrief-stat-icon">🎯</div>
+                                <div class="debrief-stat-label">ACCURACY</div>
+                                <div class="debrief-stat-value" id="final-accuracy">0%</div>
+                            </div>
+                            <div class="debrief-stat" data-stat="streak">
+                                <div class="debrief-stat-icon">🔥</div>
+                                <div class="debrief-stat-label">BEST STREAK</div>
+                                <div class="debrief-stat-value" id="final-streak">0</div>
+                            </div>
+                            <div class="debrief-stat" data-stat="hearts">
+                                <div class="debrief-stat-icon">❤️</div>
+                                <div class="debrief-stat-label">HEARTS LEFT</div>
+                                <div class="debrief-stat-value" id="final-hearts">3/3</div>
+                            </div>
+                        </div>
+
+                        <!-- Bonus Summary -->
+                        <div class="bonus-summary" id="bonus-summary"></div>
+
+                        <!-- Performance Rating Stars -->
+                        <div class="performance-stars" id="performance-stars"></div>
+
+                        <!-- Achievements Earned -->
+                        <div class="achievements-earned" id="achievements-earned"></div>
+
+                        <div class="debrief-summary" id="debrief-summary">
+                            <!-- Filled by JS -->
+                        </div>
+
+                        <!-- Next Level Preview -->
+                        <div class="next-level-preview" id="next-level-preview"></div>
+
+                        <!-- Cliffhanger Teaser -->
+                        <div class="next-mission-teaser" id="next-mission-teaser">
+                            <div class="teaser-border"></div>
+                            <div class="teaser-content">
+                                <div class="teaser-transmission">
+                                    <div class="transmission-header">
+                                        <span class="transmission-dot"></span>
+                                        INCOMING TRANSMISSION — ENCRYPTED
+                                    </div>
+                                    <div class="transmission-body" id="transmission-body">
+                                        <!-- Typewriter cliffhanger text -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mastery-actions">
+                            <a href="/" class="btn btn-secondary btn-pixel">
+                                <span>🏠</span> HOME
+                            </a>
+                            <button class="btn btn-primary btn-pixel btn-large btn-glow" onclick="replayLevel()">
+                                <span>🔄</span> REPLAY MISSION
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Pixel Confetti Canvas -->
+    <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+    <!-- Combo Display -->
+    <div class="combo-display hidden" id="combo-display"></div>
+
+    <!-- XP Popup -->
+    <div id="xp-popup" class="xp-popup-float" style="display: none;">
+        <div class="xp-popup-value" id="xp-popup-value">+50 XP</div>
+        <div class="xp-popup-label" id="xp-popup-label"></div>
+    </div>
+
+    <!-- Celebration Overlay -->
+    <div id="celebration-overlay" class="celebration-overlay" style="display: none;">
+        <div class="celebration-content">
+            <div class="celebration-emoji" id="celebration-emoji">🎯</div>
+            <div class="celebration-text" id="celebration-text">Brilliant!</div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div id="achievement-popup" class="achievement-popup hidden">
+        <div class="achievement-popup-inner">
+            <div class="achievement-popup-glow"></div>
+            <div class="achievement-popup-icon">🏅</div>
+            <div class="achievement-popup-title">BADGE UNLOCKED!</div>
+            <div class="achievement-popup-name" id="achievement-popup-name"></div>
+            <div class="achievement-popup-desc" id="achievement-popup-desc"></div>
+            <div class="achievement-popup-xp">+10 XP</div>
+        </div>
+    </div>
+
+    <!-- Bonus Popup -->
+    <div id="bonus-popup" class="bonus-popup hidden">
+        <div class="bonus-popup-inner">
+            <div class="bonus-name"></div>
+            <div class="bonus-message"></div>
+            <div class="bonus-xp"></div>
+        </div>
+    </div>
+
+    <!-- Screen Flash Overlay -->
+    <div id="screen-flash" class="screen-flash"></div>
+
+    <script src="/static/js/level1.js"></script>
+</body>
+
+</html>

@@ -8,51 +8,57 @@
 
 /* CSS Variables - Retro Gaming Theme */
 :root {
-    /* Background Colors */
-    --bg-primary: #0d0d1a;
-    --bg-secondary: #141428;
-    --bg-card: #1a1a2e;
-    --bg-glass: rgba(26, 26, 46, 0.9);
+    /* Background Colors — SNES Deep */
+    --bg-primary: #0a0a1a;
+    --bg-secondary: #12122a;
+    --bg-card: #1a1a3e;
+    --bg-glass: rgba(26, 26, 62, 0.9);
 
     /* Text Colors */
-    --text-primary: #ffffff;
+    --text-primary: #e2e8f0;
     --text-secondary: #b8b8d0;
     --text-muted: #6b6b8a;
 
-    /* Accent Colors - Retro Gaming */
-    --gold: #ffd700;
-    --gold-dark: #b8860b;
-    --green: #4ade80;
-    --green-dark: #22c55e;
+    /* Accent Colors — SNES-era Palette */
+    --gold: #f59e0b;
+    --gold-dark: #d97706;
+    --gold-bright: #fbbf24;
+    --green: #22c55e;
+    --green-dark: #16a34a;
     --blue: #60a5fa;
-    --purple: #a855f7;
+    --purple: #6b46c1;
+    --purple-deep: #2d1b69;
     --pink: #f472b6;
-    --cyan: #22d3d3;
+    --cyan: #06b6d4;
+    --teal: #0d9488;
+    --teal-light: #2dd4bf;
+    --orange: #ea580c;
+    --orange-warm: #f97316;
 
     /* Status Colors */
-    --success: #4ade80;
+    --success: #22c55e;
     --warning: #fbbf24;
-    --danger: #f87171;
-    --info: #60a5fa;
+    --danger: #ef4444;
+    --info: #06b6d4;
 
     /* Pixel Border */
-    --pixel-border: #2a2a4a;
-    --pixel-border-light: #3a3a5a;
+    --pixel-border: #2a2a5a;
+    --pixel-border-light: #3a3a6a;
 
     /* XP Gradient */
-    --xp-gradient: linear-gradient(90deg, #ffd700, #ffed4a, #ffd700);
-    --accent-gradient: linear-gradient(135deg, #ffd700, #ff9500);
+    --xp-gradient: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
+    --accent-gradient: linear-gradient(135deg, #f59e0b, #ea580c);
 
     /* Border & Effects */
-    --border-color: #2a2a4a;
-    --shadow-glow: 0 0 20px rgba(255, 215, 0, 0.3);
+    --border-color: #2a2a5a;
+    --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.3);
     --shadow-block: 4px 4px 0 #0a0a14;
 
-    /* Radii */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
+    /* Radii — Pixel = no radius */
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
 
     /* Transitions */
     --transition: all 0.2s ease;
@@ -1528,4 +1534,373 @@ body::after {
 
 .api-key-status.error {
     color: var(--danger);
+}
+
+/* ============================================
+   AI AGENT ADVENTURES - FEATURED CARD
+   ============================================ */
+
+.ai-agent-featured {
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+
+.ai-agent-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(45, 27, 105, 0.4), rgba(13, 148, 136, 0.2));
+    border: 4px solid var(--cyan);
+    box-shadow:
+        6px 6px 0 rgba(6, 182, 212, 0.3),
+        0 0 30px rgba(6, 182, 212, 0.1);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    transition: left 0.5s ease;
+}
+
+.ai-agent-card:hover::before {
+    left: 100%;
+}
+
+.ai-agent-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow:
+        9px 9px 0 rgba(6, 182, 212, 0.3),
+        0 0 40px rgba(6, 182, 212, 0.2);
+    border-color: var(--gold);
+}
+
+.ai-agent-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.35rem;
+    background: var(--green);
+    color: #0a0a14;
+    padding: 4px 8px;
+    border: 2px solid #0a0a14;
+    animation: pulse 1.5s infinite alternate;
+}
+
+.ai-agent-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.ai-agent-info {
+    flex: 1;
+    text-align: left;
+}
+
+.ai-agent-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    color: var(--cyan);
+    margin-bottom: 6px;
+}
+
+.ai-agent-level {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.ai-agent-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.ai-agent-xp {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.55rem;
+    color: var(--green);
+    flex-shrink: 0;
+}
+
+.ai-agent-arrow {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    color: var(--gold);
+    flex-shrink: 0;
+    animation: arrowBounce 1s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+}
+
+@media (max-width: 768px) {
+    .ai-agent-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .ai-agent-info {
+        text-align: center;
+    }
+
+    .ai-agent-arrow {
+        display: none;
+    }
+}
+
+/* ===== ENHANCED HOMEPAGE ===== */
+
+/* Ambient Particles */
+.home-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+.home-particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: homeParticleFloat linear infinite;
+    will-change: transform, opacity;
+    filter: blur(0.5px);
+}
+@keyframes homeParticleFloat {
+    0% { opacity: 0; transform: translateY(20px) scale(0); }
+    15% { opacity: 0.5; transform: translateY(0) scale(1); }
+    85% { opacity: 0.2; transform: translateY(-40px) scale(0.7); }
+    100% { opacity: 0; transform: translateY(-60px) scale(0); }
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 20px 0 40px;
+    position: relative;
+}
+.hero-badge {
+    display: inline-block;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.4rem;
+    color: var(--teal-light);
+    background: rgba(13, 148, 136, 0.1);
+    border: 2px solid var(--teal);
+    padding: 8px 18px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+    animation: heroBadgePulse 3s ease-in-out infinite;
+}
+@keyframes heroBadgePulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(13, 148, 136, 0); }
+    50% { box-shadow: 0 0 20px rgba(13, 148, 136, 0.3); }
+}
+.hero-highlight {
+    color: var(--gold-bright);
+    text-shadow: 3px 3px 0 var(--orange), 0 0 30px rgba(251, 191, 36, 0.3);
+    font-size: 2.5rem;
+    display: inline-block;
+    animation: heroHighlightPulse 4s ease-in-out infinite;
+}
+@keyframes heroHighlightPulse {
+    0%, 100% { text-shadow: 3px 3px 0 var(--orange), 0 0 20px rgba(251, 191, 36, 0.2); }
+    50% { text-shadow: 3px 3px 0 var(--orange), 0 0 40px rgba(251, 191, 36, 0.4); }
+}
+
+/* Featured Adventure Card */
+.featured-adventure {
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+.featured-adventure-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.45rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+}
+.featured-star {
+    animation: starSpin 3s ease-in-out infinite;
+}
+@keyframes starSpin {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(15deg) scale(1.2); }
+}
+.ai-agent-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: linear-gradient(135deg, var(--bg-card), rgba(6, 182, 212, 0.08));
+    border: 3px solid var(--cyan);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.4), 0 0 30px rgba(6, 182, 212, 0.1);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.ai-agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.08), transparent);
+    animation: cardShimmer 4s ease-in-out infinite;
+}
+@keyframes cardShimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+.ai-agent-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 6px 9px 0 rgba(0, 0, 0, 0.4), 0 0 40px rgba(251, 191, 36, 0.15);
+}
+.ai-agent-visual {
+    position: relative;
+    flex-shrink: 0;
+}
+.ai-agent-icon {
+    font-size: 2.5rem;
+    position: relative;
+    z-index: 1;
+}
+.ai-agent-glow {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%);
+    animation: agentGlow 2s ease-in-out infinite;
+}
+@keyframes agentGlow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+.ai-agent-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+.feature-tag {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    background: rgba(13, 148, 136, 0.1);
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    color: var(--teal-light);
+}
+.ai-agent-cta {
+    text-align: center;
+    flex-shrink: 0;
+}
+.ai-agent-arrow {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.45rem;
+    color: var(--gold);
+    margin-top: 8px;
+    animation: arrowBounce 1s ease-in-out infinite;
+}
+
+/* How It Works */
+.how-it-works {
+    max-width: 700px;
+    margin: 40px auto 0;
+    padding-top: 40px;
+    border-top: 2px solid var(--pixel-border);
+}
+.how-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+.how-step {
+    text-align: center;
+    flex: 1;
+    padding: 20px 12px;
+    background: var(--bg-card);
+    border: 2px solid var(--pixel-border);
+    transition: all 0.3s ease;
+}
+.how-step:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+}
+.how-step-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+.how-step-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+.how-step-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+.how-step-arrow {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    padding-top: 30px;
+}
+
+@media (max-width: 768px) {
+    .hero-highlight {
+        font-size: 1.8rem;
+    }
+    .ai-agent-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    .ai-agent-info {
+        text-align: center;
+    }
+    .ai-agent-cta {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+    .ai-agent-features {
+        justify-content: center;
+    }
+    .how-steps {
+        flex-direction: column;
+    }
+    .how-step-arrow {
+        display: none;
+    }
 }
