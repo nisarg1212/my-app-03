@@ -8,6 +8,7 @@
     <meta name="description" content="AI Agent Adventures Level 1: The Awakening — Begin your quest in the digital world.">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/level1.css">
 </head>
@@ -15,6 +16,9 @@
 <body>
     <!-- CRT Scanline Overlay -->
     <div class="crt-overlay"></div>
+
+    <!-- Ambient Floating Particles (background) -->
+    <div class="ambient-particles" id="ambient-particles"></div>
 
     <!-- Sound Toggle -->
     <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound">
@@ -60,7 +64,7 @@
         <div class="level-progress-fill" id="level-progress-fill" style="width: 0%"></div>
         <div class="level-progress-segments">
             <div class="segment active" data-phase="story">📖 STORY</div>
-            <div class="segment" data-phase="quiz">❓ QUIZ</div>
+            <div class="segment" data-phase="quiz">⚔️ TRIAL</div>
             <div class="segment" data-phase="mastery">🏆 MASTERY</div>
         </div>
     </div>
@@ -75,8 +79,28 @@
     <main class="main level1-main">
         <div class="container">
 
+            <!-- ==================== INTRO CINEMATIC ==================== -->
+            <section id="intro-phase" class="phase-section active-phase">
+                <div class="cinematic-intro">
+                    <div class="intro-darkness" id="intro-darkness">
+                        <div class="boot-sequence" id="boot-sequence">
+                            <div class="boot-line" data-delay="0">▓▓▓ NEURAL LINK ESTABLISHED ▓▓▓</div>
+                            <div class="boot-line" data-delay="800">LOADING CONSCIOUSNESS MODULE...</div>
+                            <div class="boot-line" data-delay="1600">SENSORY ARRAY: <span class="text-green">ONLINE</span></div>
+                            <div class="boot-line" data-delay="2400">COGNITIVE ENGINE: <span class="text-green">ONLINE</span></div>
+                            <div class="boot-line" data-delay="3200">AUTONOMY PROTOCOL: <span class="text-gold">INITIALIZING</span></div>
+                            <div class="boot-line" data-delay="4000">IDENTITY: <span class="text-cyan">AGENT_001</span></div>
+                            <div class="boot-line" data-delay="5000">STATUS: <span class="text-gold blink-text">AWAKENING...</span></div>
+                        </div>
+                        <button class="btn btn-primary btn-pixel btn-glow" id="wake-up-btn" onclick="startAwakening()" style="display: none;">
+                            <span>👁️</span> OPEN YOUR EYES
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <!-- ==================== STORY PHASE ==================== -->
-            <section id="story-phase" class="phase-section active-phase">
+            <section id="story-phase" class="phase-section">
                 <div class="phase-header">
                     <div class="phase-badge">CHAPTER 1</div>
                     <h2 class="phase-title pixel-glow">The Awakening</h2>
@@ -111,22 +135,33 @@
                 <!-- Story Text with Typewriter Effect -->
                 <div class="story-container">
                     <div class="story-text" id="story-text"></div>
-                    <button class="btn btn-primary btn-pixel skip-btn" id="skip-story-btn" onclick="skipTypewriter()" style="display: none;">
+                    <button class="btn btn-secondary btn-pixel skip-btn" id="skip-story-btn" onclick="skipTypewriter()" style="display: none;">
                         <span>⏩</span> SKIP
                     </button>
                 </div>
 
-                <button class="btn btn-primary btn-pixel btn-large" id="begin-quiz-btn" onclick="startQuizPhase()" style="display: none;">
-                    <span>⚔️</span> BEGIN THE TRIAL
+                <!-- Knowledge Reveal Cards (appear after story) -->
+                <div class="knowledge-reveals" id="knowledge-reveals" style="display: none;">
+                    <div class="reveal-header">
+                        <span class="reveal-icon">🧠</span>
+                        <span class="reveal-title">INTEL DECODED</span>
+                    </div>
+                    <div class="reveal-cards" id="reveal-cards">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-pixel btn-large btn-glow" id="begin-quiz-btn" onclick="startQuizPhase()" style="display: none;">
+                    <span>⚔️</span> ENTER THE TRIAL
                 </button>
             </section>
 
             <!-- ==================== QUIZ PHASE ==================== -->
             <section id="quiz-phase" class="phase-section">
                 <div class="phase-header">
-                    <div class="phase-badge">TRIAL</div>
-                    <h2 class="phase-title pixel-glow">Prove Your Knowledge</h2>
-                    <div class="phase-subtitle">Answer wisely, young agent</div>
+                    <div class="phase-badge">THE TRIAL</div>
+                    <h2 class="phase-title pixel-glow">Prove Your Understanding</h2>
+                    <div class="phase-subtitle">Every answer shapes your path, Agent</div>
                 </div>
 
                 <!-- Streak Counter -->
@@ -141,7 +176,7 @@
                 </div>
 
                 <div class="quiz-nav" id="quiz-nav" style="display: none;">
-                    <button class="btn btn-primary btn-pixel" id="next-question-btn" onclick="nextQuestion()">
+                    <button class="btn btn-primary btn-pixel btn-glow" id="next-question-btn" onclick="nextQuestion()">
                         <span>➡️</span> NEXT
                     </button>
                 </div>
@@ -187,13 +222,18 @@
                             <!-- Filled by JS -->
                         </div>
 
-                        <div class="next-mission-teaser">
+                        <!-- Cliffhanger Teaser -->
+                        <div class="next-mission-teaser" id="next-mission-teaser">
                             <div class="teaser-border"></div>
                             <div class="teaser-content">
-                                <span class="teaser-icon">🔮</span>
-                                <div class="teaser-text">
-                                    <div class="teaser-label">NEXT MISSION</div>
-                                    <div class="teaser-title">Level 2: The First Protocol — Coming Soon</div>
+                                <div class="teaser-transmission">
+                                    <div class="transmission-header">
+                                        <span class="transmission-dot"></span>
+                                        INCOMING TRANSMISSION — ENCRYPTED
+                                    </div>
+                                    <div class="transmission-body" id="transmission-body">
+                                        <!-- Typewriter cliffhanger text -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -202,8 +242,8 @@
                             <a href="/" class="btn btn-secondary btn-pixel">
                                 <span>🏠</span> HOME
                             </a>
-                            <button class="btn btn-primary btn-pixel btn-large" onclick="replayLevel()">
-                                <span>🔄</span> REPLAY
+                            <button class="btn btn-primary btn-pixel btn-large btn-glow" onclick="replayLevel()">
+                                <span>🔄</span> REPLAY MISSION
                             </button>
                         </div>
                     </div>
@@ -216,9 +256,20 @@
     <!-- Pixel Confetti Canvas -->
     <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
 
+    <!-- Screen Shake Container (wraps body content via JS) -->
+
     <!-- XP Popup -->
     <div id="xp-popup" class="xp-popup-float" style="display: none;">
         <div class="xp-popup-value" id="xp-popup-value">+50 XP</div>
+        <div class="xp-popup-label" id="xp-popup-label"></div>
+    </div>
+
+    <!-- Celebration Overlay -->
+    <div id="celebration-overlay" class="celebration-overlay" style="display: none;">
+        <div class="celebration-content">
+            <div class="celebration-emoji" id="celebration-emoji">🎯</div>
+            <div class="celebration-text" id="celebration-text">Brilliant!</div>
+        </div>
     </div>
 
     <script src="/static/js/level1.js"></script>
