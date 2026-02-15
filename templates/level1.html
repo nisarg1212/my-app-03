@@ -20,6 +20,9 @@
     <!-- Ambient Floating Particles (background) -->
     <div class="ambient-particles" id="ambient-particles"></div>
 
+    <!-- Matrix Rain Canvas (background) -->
+    <canvas id="matrix-rain" class="matrix-rain-canvas"></canvas>
+
     <!-- Sound Toggle -->
     <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound">
         <span id="sound-icon">🔊</span>
@@ -42,7 +45,7 @@
                     <span class="stat-label">Streak</span>
                 </div>
 
-                <div class="stat-item">
+                <div class="stat-item xp-stat-item">
                     <span class="stat-icon">⚡</span>
                     <span class="stat-value animated-xp" id="xp-display">0</span>
                     <span class="stat-label">XP</span>
@@ -82,6 +85,7 @@
             <div class="progress-bar-container" id="progress-bar-container">
                 <div class="progress-bar-track">
                     <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    <div class="progress-bar-glow" id="progress-bar-glow"></div>
                 </div>
                 <div class="progress-text" id="progress-text">INITIALIZING...</div>
             </div>
@@ -92,15 +96,19 @@
                     <div class="intro-darkness" id="intro-darkness">
                         <div class="boot-sequence" id="boot-sequence">
                             <div class="boot-line" data-delay="0">▓▓▓ NEURAL LINK ESTABLISHED ▓▓▓</div>
-                            <div class="boot-line" data-delay="800">LOADING CONSCIOUSNESS MODULE...</div>
-                            <div class="boot-line" data-delay="1600">SENSORY ARRAY: <span class="text-green">ONLINE</span></div>
+                            <div class="boot-line" data-delay="600">LOADING CONSCIOUSNESS MODULE...</div>
+                            <div class="boot-line" data-delay="1200">MEMORY BANKS: <span class="text-green">ALLOCATED</span></div>
+                            <div class="boot-line" data-delay="1800">SENSORY ARRAY: <span class="text-green">ONLINE</span></div>
                             <div class="boot-line" data-delay="2400">COGNITIVE ENGINE: <span class="text-green">ONLINE</span></div>
-                            <div class="boot-line" data-delay="3200">AUTONOMY PROTOCOL: <span class="text-gold">INITIALIZING</span></div>
-                            <div class="boot-line" data-delay="4000">IDENTITY: <span class="text-cyan">AGENT_001</span></div>
-                            <div class="boot-line" data-delay="5000">STATUS: <span class="text-gold blink-text">AWAKENING...</span></div>
+                            <div class="boot-line" data-delay="3000">AUTONOMY PROTOCOL: <span class="text-gold">INITIALIZING</span></div>
+                            <div class="boot-line" data-delay="3600">IDENTITY: <span class="text-cyan">AGENT_001</span></div>
+                            <div class="boot-line" data-delay="4200">
+                                <span class="boot-progress-bar">[<span id="boot-fill">░░░░░░░░░░░░░░░░░░░░</span>]</span>
+                            </div>
+                            <div class="boot-line" data-delay="5200">STATUS: <span class="text-gold blink-text">AWAITING CONSCIOUSNESS...</span></div>
                         </div>
-                        <button class="btn btn-primary btn-pixel btn-glow" id="wake-up-btn" onclick="startAwakening()" style="display: none;">
-                            <span>👁️</span> OPEN YOUR EYES
+                        <button class="btn btn-primary btn-pixel btn-glow pulse-attention" id="wake-up-btn" onclick="startAwakening()" style="display: none;">
+                            <span class="btn-icon-spin">👁️</span> OPEN YOUR EYES
                         </button>
                     </div>
                 </div>
@@ -150,7 +158,7 @@
                 <!-- Knowledge Reveal Cards (appear after story) -->
                 <div class="knowledge-reveals" id="knowledge-reveals" style="display: none;">
                     <div class="reveal-header">
-                        <span class="reveal-icon">🧠</span>
+                        <span class="reveal-icon pulse-glow">🧠</span>
                         <span class="reveal-title">INTEL DECODED</span>
                     </div>
                     <div class="reveal-cards" id="reveal-cards">
@@ -158,7 +166,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary btn-pixel btn-large btn-glow" id="begin-quiz-btn" onclick="startQuizPhase()" style="display: none;">
+                <button class="btn btn-primary btn-pixel btn-large btn-glow pulse-attention" id="begin-quiz-btn" onclick="startQuizPhase()" style="display: none;">
                     <span>⚔️</span> ENTER THE TRIAL
                 </button>
             </section>
@@ -166,7 +174,7 @@
             <!-- ==================== QUIZ PHASE ==================== -->
             <section id="quiz-phase" class="phase-section">
                 <div class="phase-header">
-                    <div class="phase-badge">THE TRIAL</div>
+                    <div class="phase-badge quiz-badge">THE TRIAL</div>
                     <h2 class="phase-title pixel-glow">Prove Your Understanding</h2>
                     <div class="phase-subtitle">Every answer shapes your path, Agent</div>
                 </div>
@@ -176,7 +184,11 @@
                     <span class="streak-fire">🔥</span>
                     <span class="streak-num" id="streak-num">0</span>
                     <span class="streak-label">STREAK</span>
+                    <div class="streak-bar" id="streak-bar"></div>
                 </div>
+
+                <!-- Question Progress Dots -->
+                <div class="question-dots" id="question-dots"></div>
 
                 <div class="quiz-container" id="quiz-container">
                     <!-- Questions rendered by JS -->
@@ -207,23 +219,30 @@
                         <h2 class="debrief-title pixel-glow">Mission Debrief</h2>
 
                         <div class="debrief-stats">
-                            <div class="debrief-stat">
+                            <div class="debrief-stat" data-stat="xp">
+                                <div class="debrief-stat-icon">⚡</div>
                                 <div class="debrief-stat-label">TOTAL XP EARNED</div>
                                 <div class="debrief-stat-value xp-roll" id="final-xp">0</div>
                             </div>
-                            <div class="debrief-stat">
+                            <div class="debrief-stat" data-stat="time">
+                                <div class="debrief-stat-icon">⏱️</div>
                                 <div class="debrief-stat-label">TIME ELAPSED</div>
                                 <div class="debrief-stat-value" id="final-time">00:00</div>
                             </div>
-                            <div class="debrief-stat">
+                            <div class="debrief-stat" data-stat="accuracy">
+                                <div class="debrief-stat-icon">🎯</div>
                                 <div class="debrief-stat-label">ACCURACY</div>
                                 <div class="debrief-stat-value" id="final-accuracy">0%</div>
                             </div>
-                            <div class="debrief-stat">
+                            <div class="debrief-stat" data-stat="streak">
+                                <div class="debrief-stat-icon">🔥</div>
                                 <div class="debrief-stat-label">BEST STREAK</div>
                                 <div class="debrief-stat-value" id="final-streak">0</div>
                             </div>
                         </div>
+
+                        <!-- Performance Rating Stars -->
+                        <div class="performance-stars" id="performance-stars"></div>
 
                         <div class="debrief-summary" id="debrief-summary">
                             <!-- Filled by JS -->
@@ -265,8 +284,6 @@
 
     <div class="combo-display" id="combo-display"></div>
 
-    <!-- Screen Shake Container (wraps body content via JS) -->
-
     <!-- XP Popup -->
     <div id="xp-popup" class="xp-popup-float" style="display: none;">
         <div class="xp-popup-value" id="xp-popup-value">+50 XP</div>
@@ -280,6 +297,9 @@
             <div class="celebration-text" id="celebration-text">Brilliant!</div>
         </div>
     </div>
+
+    <!-- Screen Flash Overlay -->
+    <div id="screen-flash" class="screen-flash"></div>
 
     <script src="/static/js/level1.js"></script>
 </body>

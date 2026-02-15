@@ -1,11 +1,12 @@
 /**
  * Questra — Level 1: The Awakening
- * AI Agent Adventures — ULTRA Edition
+ * AI Agent Adventures — ULTRA Cinematic Edition
  * 
- * Cinematic Intro → Story → Quiz → Mastery
+ * Cinematic Intro → Story → Knowledge Reveals → Quiz Trial → Mastery
  * With: typewriter, screen shake, confetti, celebrations,
  *       8-bit sounds, progressive reveals, emotional arc,
- *       progress bar, combo system, pulse animations
+ *       progress bar, combo system, matrix rain, screen flash,
+ *       question dots, performance stars, boot progress bar
  */
 
 // ==================== LEVEL DATA ====================
@@ -209,8 +210,8 @@ Level 2: "The First Protocol" — STANDBY FOR DEPLOYMENT...`
     ],
 
     comboMessages: [
-        null, // 0 streak
-        null, // 1 streak (no combo)
+        null,
+        null,
         { emoji: '⚔️', text: 'DOUBLE KILL!' },
         { emoji: '🔱', text: 'TRIPLE THREAT!' },
         { emoji: '💀', text: 'UNSTOPPABLE!' },
@@ -252,7 +253,9 @@ let state = {
     storyXP: 0,
     revealedCards: 0,
     comboCount: 0,
-    wrongCount: 0
+    wrongCount: 0,
+    questionResults: [], // track per-question results for dots
+    matrixRainId: null
 };
 
 // ==================== SOUND ENGINE (Web Audio API — Enhanced) ====================
@@ -286,6 +289,7 @@ function playSound(type) {
                 break;
             }
             case 'correct': {
+                // Triumphant ascending arpeggio
                 const notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, i) => {
                     const osc = ctx.createOscillator();
@@ -302,12 +306,13 @@ function playSound(type) {
                 break;
             }
             case 'wrong': {
+                // Descending buzz
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, now);
-                osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
-                gain.gain.setValueAtTime(0.06, now);
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+                gain.gain.setValueAtTime(0.08, now);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
@@ -315,23 +320,63 @@ function playSound(type) {
                 osc.stop(now + 0.4);
                 break;
             }
-            case 'fanfare': {
-                const melody = [
-                    [523.25, 0], [659.25, 0.12], [783.99, 0.24],
-                    [1046.50, 0.36], [783.99, 0.52], [1046.50, 0.64],
-                    [1318.51, 0.80], [1567.98, 0.96]
-                ];
-                melody.forEach(([freq, delay]) => {
+            case 'click': {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'square';
+                osc.frequency.value = 600;
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.06);
+                break;
+            }
+            case 'hover': {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 800;
+                gain.gain.setValueAtTime(0.03, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.05);
+                break;
+            }
+            case 'streak': {
+                // Power-up sound
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, i) => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'square';
                     osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.1, now + delay);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.25);
+                    gain.gain.setValueAtTime(0.1, now + i * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.12);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
-                    osc.start(now + delay);
-                    osc.stop(now + delay + 0.3);
+                    osc.start(now + i * 0.06);
+                    osc.stop(now + i * 0.06 + 0.15);
+                });
+                break;
+            }
+            case 'combo': {
+                // Epic combo sound
+                const notes = [523.25, 783.99, 1046.50, 1318.51, 1567.98];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.08, now + i * 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.05);
+                    osc.stop(now + i * 0.05 + 0.25);
                 });
                 break;
             }
@@ -341,7 +386,7 @@ function playSound(type) {
                 osc.type = 'triangle';
                 osc.frequency.setValueAtTime(400, now);
                 osc.frequency.exponentialRampToValueAtTime(800, now + 0.2);
-                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.setValueAtTime(0.1, now);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
@@ -349,25 +394,12 @@ function playSound(type) {
                 osc.stop(now + 0.35);
                 break;
             }
-            case 'click': {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'square';
-                osc.frequency.value = 800;
-                gain.gain.setValueAtTime(0.06, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.06);
-                break;
-            }
             case 'typewriter': {
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'square';
-                osc.frequency.value = 600 + Math.random() * 200;
-                gain.gain.setValueAtTime(0.025, now);
+                osc.frequency.value = 1200 + Math.random() * 400;
+                gain.gain.setValueAtTime(0.015, now);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
@@ -375,52 +407,68 @@ function playSound(type) {
                 osc.stop(now + 0.03);
                 break;
             }
-            case 'streak': {
-                // Rising power chord
-                [523.25, 659.25, 783.99].forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'square';
-                    osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.08, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.25);
-                });
-                break;
-            }
-            case 'combo': {
-                // Epic ascending combo sound
-                const comboNotes = [523.25, 783.99, 1046.50, 1318.51, 1567.98];
-                comboNotes.forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'square';
-                    osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.1, now + i * 0.06);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.18);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now + i * 0.06);
-                    osc.stop(now + i * 0.06 + 0.22);
-                });
-                break;
-            }
             case 'transmission': {
-                // Eerie sci-fi beep
+                // Eerie transmission sound
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(1200, now);
-                osc.frequency.exponentialRampToValueAtTime(400, now + 0.5);
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.linearRampToValueAtTime(400, now + 0.5);
+                osc.frequency.linearRampToValueAtTime(150, now + 1);
                 gain.gain.setValueAtTime(0.06, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+                gain.gain.linearRampToValueAtTime(0.08, now + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start(now);
-                osc.stop(now + 0.65);
+                osc.stop(now + 1.3);
+                break;
+            }
+            case 'fanfare': {
+                // Epic level complete fanfare
+                const melody = [
+                    { freq: 523.25, time: 0, dur: 0.15 },
+                    { freq: 659.25, time: 0.12, dur: 0.15 },
+                    { freq: 783.99, time: 0.24, dur: 0.15 },
+                    { freq: 1046.50, time: 0.36, dur: 0.3 },
+                    { freq: 783.99, time: 0.55, dur: 0.1 },
+                    { freq: 1046.50, time: 0.65, dur: 0.4 }
+                ];
+                melody.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = note.freq;
+                    gain.gain.setValueAtTime(0.1, now + note.time);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + note.time + note.dur);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + note.time);
+                    osc.stop(now + note.time + note.dur + 0.05);
+                });
+                break;
+            }
+            case 'levelup': {
+                // Dramatic level-up with harmony
+                const chords = [
+                    [523.25, 659.25, 783.99],
+                    [659.25, 783.99, 1046.50],
+                    [783.99, 1046.50, 1318.51]
+                ];
+                chords.forEach((chord, ci) => {
+                    chord.forEach(freq => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'square';
+                        osc.frequency.value = freq;
+                        gain.gain.setValueAtTime(0.06, now + ci * 0.2);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + ci * 0.2 + 0.35);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + ci * 0.2);
+                        osc.stop(now + ci * 0.2 + 0.4);
+                    });
+                });
                 break;
             }
         }
@@ -429,72 +477,59 @@ function playSound(type) {
     }
 }
 
+// ==================== SCREEN EFFECTS ====================
+
+function screenShake(intensity) {
+    document.body.classList.remove('shake-light', 'shake-medium');
+    void document.body.offsetHeight;
+    document.body.classList.add(`shake-${intensity}`);
+    setTimeout(() => document.body.classList.remove(`shake-${intensity}`), 500);
+}
+
+function screenFlash(color) {
+    const flash = document.getElementById('screen-flash');
+    if (!flash) return;
+    flash.className = 'screen-flash';
+    void flash.offsetHeight;
+    flash.classList.add(`flash-${color}`);
+    setTimeout(() => { flash.className = 'screen-flash'; }, 500);
+}
+
+function pulseElement(el) {
+    el.classList.remove('pulse-animate');
+    void el.offsetHeight;
+    el.classList.add('pulse-animate');
+    setTimeout(() => el.classList.remove('pulse-animate'), 500);
+}
+
 function toggleSound() {
     state.soundEnabled = !state.soundEnabled;
     const icon = document.getElementById('sound-icon');
     const btn = document.getElementById('sound-toggle');
-    if (state.soundEnabled) {
-        icon.textContent = '🔊';
-        btn.classList.remove('muted');
-    } else {
-        icon.textContent = '🔇';
-        btn.classList.add('muted');
-    }
-    playSound('click');
+    icon.textContent = state.soundEnabled ? '🔊' : '🔇';
+    btn.classList.toggle('muted', !state.soundEnabled);
+    if (state.soundEnabled) playSound('click');
 }
 
-// ==================== PROGRESS BAR SYSTEM ====================
+// ==================== PROGRESS BAR ====================
 
 function updateProgressBar(percent) {
     const fill = document.getElementById('progress-bar-fill');
     const text = document.getElementById('progress-text');
-    if (fill) {
-        fill.style.width = Math.min(percent, 100) + '%';
-    }
+    if (fill) fill.style.width = percent + '%';
+
     if (text) {
-        if (percent <= 15) {
-            text.textContent = 'BOOTING...';
-        } else if (percent <= 45) {
-            text.textContent = 'STORY MODE';
-        } else if (percent <= 60) {
-            text.textContent = 'KNOWLEDGE UPLOAD';
-        } else if (percent <= 95) {
-            text.textContent = 'TRIAL MODE';
-        } else {
-            text.textContent = 'MASTERY ACHIEVED';
-        }
+        if (percent <= 15) text.textContent = 'BOOTING...';
+        else if (percent <= 45) text.textContent = 'STORY MODE';
+        else if (percent <= 60) text.textContent = 'INTEL DECODED';
+        else if (percent <= 95) text.textContent = 'TRIAL IN PROGRESS';
+        else text.textContent = 'MISSION COMPLETE';
     }
 }
 
-// ==================== PULSE ANIMATION ====================
+// ==================== CELEBRATIONS ====================
 
-function pulseElement(element) {
-    if (!element) return;
-    element.style.transition = 'transform 0.15s ease';
-    element.style.transform = 'scale(1.12)';
-    setTimeout(() => {
-        element.style.transform = 'scale(1)';
-        setTimeout(() => {
-            element.style.transition = '';
-            element.style.transform = '';
-        }, 150);
-    }, 150);
-}
-
-// ==================== SCREEN SHAKE ====================
-
-function screenShake(intensity = 'medium') {
-    const body = document.body;
-    const cls = `shake-${intensity}`;
-    body.classList.add(cls);
-    setTimeout(() => body.classList.remove(cls), 500);
-}
-
-// ==================== CELEBRATION SYSTEM ====================
-
-function showCelebration(isCorrect) {
-    if (!isCorrect) return;
-
+function showCelebration() {
     const overlay = document.getElementById('celebration-overlay');
     const emoji = document.getElementById('celebration-emoji');
     const text = document.getElementById('celebration-text');
@@ -510,7 +545,6 @@ function showCelebration(isCorrect) {
     overlay.offsetHeight;
     overlay.style.animation = 'celebrationPop 0.8s ease forwards';
 
-    // Mini confetti burst
     launchMiniConfetti();
 
     setTimeout(() => {
@@ -579,8 +613,8 @@ function stopTimer() {
 function createAmbientParticles() {
     const container = document.getElementById('ambient-particles');
     if (!container) return;
-    const colors = ['rgba(251,191,36,0.3)', 'rgba(45,212,191,0.3)', 'rgba(107,70,193,0.3)', 'rgba(6,182,212,0.3)'];
-    for (let i = 0; i < 30; i++) {
+    const colors = ['rgba(251,191,36,0.3)', 'rgba(45,212,191,0.3)', 'rgba(107,70,193,0.3)', 'rgba(6,182,212,0.3)', 'rgba(236,72,153,0.2)'];
+    for (let i = 0; i < 35; i++) {
         const p = document.createElement('div');
         p.className = 'ambient-particle';
         p.style.left = Math.random() * 100 + '%';
@@ -611,6 +645,63 @@ function createSceneParticles() {
     }
 }
 
+// ==================== MATRIX RAIN ====================
+
+function startMatrixRain() {
+    const canvas = document.getElementById('matrix-rain');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = new Array(columns).fill(1);
+
+    function draw() {
+        ctx.fillStyle = 'rgba(8, 8, 22, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0d9488';
+        ctx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+        state.matrixRainId = requestAnimationFrame(draw);
+    }
+    draw();
+}
+
+// ==================== BOOT PROGRESS BAR ANIMATION ====================
+
+function animateBootProgressBar() {
+    const fill = document.getElementById('boot-fill');
+    if (!fill) return;
+    const chars = '░▒▓█';
+    let progress = 0;
+    const total = 20;
+
+    function tick() {
+        if (progress >= total) return;
+        progress++;
+        let bar = '';
+        for (let i = 0; i < total; i++) {
+            if (i < progress) bar += '█';
+            else if (i === progress) bar += '▓';
+            else bar += '░';
+        }
+        fill.textContent = bar;
+        setTimeout(tick, 80 + Math.random() * 120);
+    }
+    setTimeout(tick, 4200); // Start after boot lines
+}
+
 // ==================== CINEMATIC INTRO ====================
 
 function runBootSequence() {
@@ -622,10 +713,11 @@ function runBootSequence() {
         setTimeout(() => {
             line.classList.add('visible');
             playSound('boot');
-            // Update progress during boot: 0-15%
             updateProgressBar(Math.round((i / totalLines) * 15));
         }, delay);
     });
+
+    animateBootProgressBar();
 
     // Show "Open Your Eyes" button after boot sequence
     setTimeout(() => {
@@ -633,11 +725,13 @@ function runBootSequence() {
         const btn = document.getElementById('wake-up-btn');
         btn.style.display = 'inline-flex';
         btn.classList.add('fade-in-up');
+        playSound('reveal');
     }, 6500);
 }
 
 function startAwakening() {
     playSound('click');
+    screenFlash('white');
     const intro = document.getElementById('intro-darkness');
     intro.classList.add('fade-to-white');
 
@@ -648,7 +742,6 @@ function startAwakening() {
         animateTerminal();
         startTypewriter();
 
-        // Award story start XP
         state.storyXP = 10;
         state.totalXP += 10;
         showXPGain(10, 'AWAKENED');
@@ -718,7 +811,6 @@ function typeNextChar() {
     const currentParagraph = paragraphs[state.typewriterIndex].text;
     const currentMood = paragraphs[state.typewriterIndex].mood;
 
-    // Update progress during story: 15-45%
     const storyProgress = 15 + ((state.typewriterIndex + (state.typewriterCharIndex / currentParagraph.length)) / paragraphs.length) * 30;
     updateProgressBar(Math.round(storyProgress));
 
@@ -736,9 +828,7 @@ function typeNextChar() {
         if (oldCursor) oldCursor.remove();
 
         const char = currentParagraph[state.typewriterCharIndex];
-        // Handle *italic* markers
         if (char === '*') {
-            // Toggle italic
             const existingEm = pEl.querySelector('em:last-child');
             if (existingEm && !existingEm.dataset.closed) {
                 existingEm.dataset.closed = 'true';
@@ -751,7 +841,6 @@ function typeNextChar() {
             return;
         }
 
-        // Find if we're inside an unclosed em
         const openEm = pEl.querySelector('em:not([data-closed])');
         if (openEm) {
             openEm.textContent += char;
@@ -769,23 +858,14 @@ function typeNextChar() {
             playSound('typewriter');
         }
 
-        // Variable speed: slower for periods, commas, dashes, ellipses
         let delay = 16;
         if (char === '.' || char === '!' || char === '?') delay = 80;
         else if (char === ',') delay = 50;
         else if (char === '"') delay = 40;
-
-        // Dramatic pause on em-dashes (—)
-        if (char === '—') {
-            delay = 200;
-        }
-
-        // Dramatic pause on ellipses (detect "..." pattern)
+        if (char === '—') delay = 200;
         if (char === '.' && state.typewriterCharIndex >= 3) {
             const prev2 = currentParagraph.substring(state.typewriterCharIndex - 3, state.typewriterCharIndex);
-            if (prev2 === '...') {
-                delay = 300;
-            }
+            if (prev2 === '...') delay = 300;
         }
 
         state.typewriterTimer = setTimeout(typeNextChar, delay);
@@ -818,7 +898,6 @@ function finishTypewriter() {
     document.querySelectorAll('.typewriter-cursor').forEach(c => c.remove());
     updateProgressBar(45);
 
-    // Show knowledge reveal cards with staggered animation
     setTimeout(() => {
         showKnowledgeReveals();
     }, 500);
@@ -838,20 +917,20 @@ function showKnowledgeReveals() {
             card.className = 'reveal-card';
             card.innerHTML = `
                 <div class="reveal-card-icon">${reveal.icon}</div>
-                <div class="reveal-card-title">${reveal.title}</div>
-                <div class="reveal-card-content">${reveal.content}</div>
+                <div class="reveal-card-body">
+                    <div class="reveal-card-title">${reveal.title}</div>
+                    <div class="reveal-card-content">${reveal.content}</div>
+                </div>
             `;
             container.appendChild(card);
             playSound('reveal');
             pulseElement(card);
 
-            // Award XP for each reveal
             state.totalXP += 5;
             state.storyXP += 5;
             showXPGain(5, 'INTEL');
             updateXPDisplay();
 
-            // Update progress during knowledge reveals: 45-60%
             state.revealedCards++;
             const revealProgress = 45 + (state.revealedCards / LEVEL_DATA.knowledgeReveals.length) * 15;
             updateProgressBar(Math.round(revealProgress));
@@ -879,7 +958,6 @@ function setPhase(phase) {
         target.classList.add('active-phase');
     }
 
-    // Update progress bar
     const segments = document.querySelectorAll('.level-progress-segments .segment');
     const phases = ['story', 'quiz', 'mastery'];
     const currentIdx = phases.indexOf(phase);
@@ -907,6 +985,8 @@ function startQuizPhase() {
     state.bestStreak = 0;
     state.comboCount = 0;
     state.wrongCount = 0;
+    state.questionResults = [];
+    renderQuestionDots();
     renderQuestion(0);
 }
 
@@ -915,8 +995,44 @@ function startMasteryPhase() {
     stopTimer();
     setPhase('mastery');
     updateProgressBar(100);
+    screenFlash('gold');
     renderMastery();
-    launchConfetti();
+
+    // Delayed epic confetti
+    setTimeout(() => {
+        launchConfetti();
+        playSound('levelup');
+    }, 800);
+
+    // Second wave of confetti
+    setTimeout(() => launchConfetti(), 2500);
+}
+
+// ==================== QUESTION PROGRESS DOTS ====================
+
+function renderQuestionDots() {
+    const container = document.getElementById('question-dots');
+    if (!container) return;
+    container.innerHTML = '';
+    LEVEL_DATA.quiz.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'question-dot';
+        dot.id = `q-dot-${i}`;
+        if (i === 0) dot.classList.add('active');
+        container.appendChild(dot);
+    });
+}
+
+function updateQuestionDots(index, isCorrect) {
+    // Mark current dot
+    const dot = document.getElementById(`q-dot-${index}`);
+    if (dot) {
+        dot.classList.remove('active');
+        dot.classList.add(isCorrect ? 'correct' : 'wrong');
+    }
+    // Highlight next dot
+    const nextDot = document.getElementById(`q-dot-${index + 1}`);
+    if (nextDot) nextDot.classList.add('active');
 }
 
 // ==================== QUIZ RENDERING ====================
@@ -927,7 +1043,6 @@ function renderQuestion(index) {
     const nav = document.getElementById('quiz-nav');
     nav.style.display = 'none';
 
-    // Update progress during quiz: 60-95%
     const quizProgress = 60 + ((index / LEVEL_DATA.quiz.length) * 35);
     updateProgressBar(Math.round(quizProgress));
 
@@ -950,6 +1065,13 @@ function renderQuestion(index) {
     html += `</div>`;
     container.innerHTML = html;
     updateStreakDisplay();
+
+    // Add hover sounds to interactive elements
+    setTimeout(() => {
+        container.querySelectorAll('.option-card, .narrative-choice, .match-option-chip, .match-drop').forEach(el => {
+            el.addEventListener('mouseenter', () => playSound('hover'));
+        });
+    }, 100);
 }
 
 function renderMCQ(q, qIndex) {
@@ -1163,10 +1285,13 @@ function submitMatching(qIndex) {
 
 function handleCorrectAnswer(qIndex, q, optIndex) {
     playSound('correct');
+    screenFlash('green');
     state.correctCount++;
     state.streak++;
     state.comboCount++;
     if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    state.questionResults[qIndex] = true;
+    updateQuestionDots(qIndex, true);
 
     const baseXP = 25;
     const streakBonus = state.streak > 1 ? state.streak * 5 : 0;
@@ -1177,22 +1302,27 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
     updateXPDisplay();
     updateStreakDisplay();
 
-    // Pulse the XP display
     const xpEl = document.getElementById('xp-display');
-    if (xpEl) pulseElement(xpEl);
+    if (xpEl) {
+        pulseElement(xpEl);
+        // Flash the XP stat
+        const xpStat = xpEl.closest('.xp-stat-item');
+        if (xpStat) {
+            xpStat.classList.remove('xp-gained');
+            void xpStat.offsetHeight;
+            xpStat.classList.add('xp-gained');
+        }
+    }
 
     if (state.streak >= 2) {
         playSound('streak');
-        // Show combo message for consecutive correct answers
         setTimeout(() => {
             showCombo(state.streak);
         }, 600);
     }
 
-    // Show celebration
-    showCelebration(true);
+    showCelebration();
 
-    // Show feedback with narrative response if available
     let feedbackText = q.explanation;
     if (q.type === 'narrative' && optIndex !== undefined && q.options[optIndex].response) {
         feedbackText = q.options[optIndex].response + '<br><br><em>' + q.explanation + '</em>';
@@ -1203,10 +1333,12 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
 
 function handleWrongAnswer(qIndex, q, optIndex) {
     playSound('wrong');
+    screenFlash('red');
     state.wrongCount++;
     state.comboCount = 0;
+    state.questionResults[qIndex] = false;
+    updateQuestionDots(qIndex, false);
 
-    // Vary shake intensity based on wrong answer count
     if (state.wrongCount <= 1) {
         screenShake('light');
     } else {
@@ -1214,16 +1346,14 @@ function handleWrongAnswer(qIndex, q, optIndex) {
     }
 
     state.streak = 0;
-    state.totalXP += 5;
+    state.totalXP += 5; // Participation XP
 
     updateXPDisplay();
     updateStreakDisplay();
 
-    // Get personalized wrong explanation
     const encouragement = LEVEL_DATA.encouragements[Math.floor(Math.random() * LEVEL_DATA.encouragements.length)];
     let feedbackText = `<div class="wrong-encouragement">${encouragement}</div>`;
 
-    // Add specific wrong explanation if available
     if (q.type === 'mcq' && q.wrongExplanations && q.wrongExplanations[optIndex]) {
         feedbackText += `<div class="wrong-specific">${q.wrongExplanations[optIndex]}</div>`;
     } else if (q.type === 'narrative' && optIndex !== undefined && q.options[optIndex].response) {
@@ -1296,7 +1426,6 @@ function updateStreakDisplay() {
 
 function updateXPDisplay() {
     animateNumber('xp-display', state.totalXP);
-    // Update level bar
     const fill = document.getElementById('level-bar-fill');
     if (fill) {
         const percent = Math.min((state.totalXP / 200) * 100, 100);
@@ -1346,27 +1475,32 @@ function renderMastery() {
     const elapsedMs = getElapsedMs();
     const accuracy = Math.round((state.correctCount / LEVEL_DATA.quiz.length) * 100);
 
-    // Time bonus calculation: faster = more XP
-    // Under 2 minutes = 50 bonus, under 3 min = 30, under 5 min = 15, else 0
     let timeBonus = 0;
     const elapsedSec = elapsedMs / 1000;
-    if (elapsedSec < 120) {
-        timeBonus = 50;
-    } else if (elapsedSec < 180) {
-        timeBonus = 30;
-    } else if (elapsedSec < 300) {
-        timeBonus = 15;
+    if (elapsedSec < 120) timeBonus = 50;
+    else if (elapsedSec < 180) timeBonus = 30;
+    else if (elapsedSec < 300) timeBonus = 15;
+
+    if (timeBonus > 0) state.totalXP += timeBonus;
+
+    // Animate stats with staggered reveals
+    setTimeout(() => animateNumber('final-xp', state.totalXP), 200);
+    setTimeout(() => { document.getElementById('final-time').textContent = getElapsedTime(); }, 400);
+    setTimeout(() => { document.getElementById('final-accuracy').textContent = accuracy + '%'; }, 600);
+    setTimeout(() => { document.getElementById('final-streak').textContent = state.bestStreak; }, 800);
+
+    // Performance stars
+    const starCount = accuracy === 100 ? 5 : accuracy >= 80 ? 4 : accuracy >= 60 ? 3 : accuracy >= 40 ? 2 : 1;
+    const starsEl = document.getElementById('performance-stars');
+    if (starsEl) {
+        let starsHtml = '';
+        for (let i = 0; i < 5; i++) {
+            starsHtml += i < starCount
+                ? '<span class="star-filled">⭐</span>'
+                : '<span class="star-empty">☆</span>';
+        }
+        starsEl.innerHTML = starsHtml;
     }
-
-    if (timeBonus > 0) {
-        state.totalXP += timeBonus;
-    }
-
-    animateNumber('final-xp', state.totalXP);
-    document.getElementById('final-time').textContent = getElapsedTime();
-
-    document.getElementById('final-accuracy').textContent = accuracy + '%';
-    document.getElementById('final-streak').textContent = state.bestStreak;
 
     // Performance-based titles
     const achieveName = document.getElementById('achievement-name');
@@ -1433,8 +1567,6 @@ function typeCliffhanger() {
         if (charIdx % 4 === 0) playSound('typewriter');
 
         let delay = char === '\n' ? 100 : char === '.' ? 60 : 20;
-
-        // Dramatic pause on em-dashes and ellipses in cliffhanger too
         if (char === '—') delay = 180;
         if (char === '.' && charIdx >= 3) {
             const prev = text.substring(charIdx - 3, charIdx);
@@ -1477,18 +1609,20 @@ function launchConfetti() {
 
     const colors = ['#f59e0b', '#2dd4bf', '#6b46c1', '#ea580c', '#22c55e', '#fbbf24', '#06b6d4', '#ec4899'];
     const particles = [];
+    const shapes = ['rect', 'circle', 'triangle'];
 
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < 180; i++) {
         particles.push({
-            x: canvas.width / 2 + (Math.random() - 0.5) * 300,
+            x: canvas.width / 2 + (Math.random() - 0.5) * 400,
             y: canvas.height / 2,
-            vx: (Math.random() - 0.5) * 15,
-            vy: -Math.random() * 18 - 5,
+            vx: (Math.random() - 0.5) * 18,
+            vy: -Math.random() * 20 - 5,
             size: 4 + Math.random() * 8,
             color: colors[Math.floor(Math.random() * colors.length)],
+            shape: shapes[Math.floor(Math.random() * shapes.length)],
             gravity: 0.3,
             life: 1,
-            decay: 0.006 + Math.random() * 0.006,
+            decay: 0.005 + Math.random() * 0.005,
             rotation: Math.random() * Math.PI * 2,
             rotSpeed: (Math.random() - 0.5) * 0.2
         });
@@ -1513,7 +1647,22 @@ function launchConfetti() {
             ctx.fillStyle = p.color;
             ctx.translate(p.x, p.y);
             ctx.rotate(p.rotation);
-            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+
+            if (p.shape === 'circle') {
+                ctx.beginPath();
+                ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (p.shape === 'triangle') {
+                ctx.beginPath();
+                ctx.moveTo(0, -p.size / 2);
+                ctx.lineTo(-p.size / 2, p.size / 2);
+                ctx.lineTo(p.size / 2, p.size / 2);
+                ctx.closePath();
+                ctx.fill();
+            } else {
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            }
+
             ctx.restore();
         });
 
@@ -1535,20 +1684,22 @@ function launchMiniConfetti() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const colors = ['#f59e0b', '#2dd4bf', '#22c55e', '#fbbf24'];
+    const colors = ['#f59e0b', '#2dd4bf', '#22c55e', '#fbbf24', '#ec4899'];
     const particles = [];
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 50; i++) {
         particles.push({
-            x: canvas.width / 2 + (Math.random() - 0.5) * 100,
+            x: canvas.width / 2 + (Math.random() - 0.5) * 150,
             y: canvas.height / 2 - 50,
-            vx: (Math.random() - 0.5) * 8,
-            vy: -Math.random() * 10 - 3,
+            vx: (Math.random() - 0.5) * 10,
+            vy: -Math.random() * 12 - 3,
             size: 3 + Math.random() * 5,
             color: colors[Math.floor(Math.random() * colors.length)],
             gravity: 0.35,
             life: 1,
-            decay: 0.015 + Math.random() * 0.01
+            decay: 0.012 + Math.random() * 0.01,
+            rotation: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.15
         });
     }
 
@@ -1563,9 +1714,15 @@ function launchMiniConfetti() {
             p.vy += p.gravity;
             p.y += p.vy;
             p.life -= p.decay;
+            p.rotation += p.rotSpeed;
+
+            ctx.save();
             ctx.globalAlpha = p.life;
             ctx.fillStyle = p.color;
-            ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
         });
 
         ctx.globalAlpha = 1;
@@ -1601,7 +1758,9 @@ function replayLevel() {
         storyXP: 0,
         revealedCards: 0,
         comboCount: 0,
-        wrongCount: 0
+        wrongCount: 0,
+        questionResults: [],
+        matrixRainId: state.matrixRainId
     };
 
     document.getElementById('begin-quiz-btn').style.display = 'none';
@@ -1610,14 +1769,24 @@ function replayLevel() {
     document.getElementById('xp-display').textContent = '0';
     document.getElementById('transmission-body').innerHTML = '';
 
-    // Remove time bonus display if present
     const timeBonusEl = document.querySelector('.time-bonus-display');
     if (timeBonusEl) timeBonusEl.remove();
 
-    // Reset boot sequence
     document.querySelectorAll('.boot-line').forEach(l => l.classList.remove('visible'));
     document.getElementById('wake-up-btn').style.display = 'none';
     document.getElementById('intro-darkness').classList.remove('fade-to-white');
+
+    // Reset question dots
+    const dotsContainer = document.getElementById('question-dots');
+    if (dotsContainer) dotsContainer.innerHTML = '';
+
+    // Reset performance stars
+    const starsEl = document.getElementById('performance-stars');
+    if (starsEl) starsEl.innerHTML = '';
+
+    // Reset boot progress bar
+    const bootFill = document.getElementById('boot-fill');
+    if (bootFill) bootFill.textContent = '░░░░░░░░░░░░░░░░░░░░';
 
     updateProgressBar(0);
     setPhase('intro');
@@ -1629,6 +1798,7 @@ function replayLevel() {
 document.addEventListener('DOMContentLoaded', () => {
     createAmbientParticles();
     createSceneParticles();
+    startMatrixRain();
     runBootSequence();
 
     window.addEventListener('resize', () => {
@@ -1636,6 +1806,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (canvas) {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+        }
+        const matrixCanvas = document.getElementById('matrix-rain');
+        if (matrixCanvas) {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
         }
     });
 });
