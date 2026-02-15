@@ -1,0 +1,363 @@
+/* ============================================
+   QUESTRA — Level 1 Page 1: Narrative Hook
+   Cinematic Terminal / 8-bit Hybrid
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg: #0a0a0a;
+    --glow-green: #39ff14;
+    --glow-cyan: #00e5ff;
+    --glow-dim: #0f7a0f;
+    --text-main: #b0ffb0;
+    --text-dim: #3a6b3a;
+    --text-guide: #00e5ff;
+    --text-warn: #ff3333;
+    --terminal-bg: #0d0d0d;
+    --terminal-border: #1a3a1a;
+    --font-pixel: 'Press Start 2P', monospace;
+    --font-terminal: 'VT323', monospace;
+}
+
+html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--text-main);
+    font-family: var(--font-terminal);
+    overflow: hidden;
+    cursor: default;
+}
+
+/* ===== CRT SCANLINE OVERLAY ===== */
+.crt-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 1000;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.06) 2px,
+        rgba(0, 0, 0, 0.06) 4px
+    );
+    mix-blend-mode: multiply;
+}
+
+/* ===== VIGNETTE ===== */
+.vignette {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 999;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%);
+}
+
+/* ===== FLICKER ANIMATION ===== */
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    3% { opacity: 0.4; }
+    6% { opacity: 1; }
+    7% { opacity: 0.7; }
+    9% { opacity: 1; }
+    50% { opacity: 1; }
+    52% { opacity: 0.85; }
+    53% { opacity: 1; }
+}
+
+@keyframes cursorBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+@keyframes textGlow {
+    0%, 100% { text-shadow: 0 0 4px var(--glow-green), 0 0 8px rgba(57,255,20,0.3); }
+    50% { text-shadow: 0 0 8px var(--glow-green), 0 0 16px rgba(57,255,20,0.5); }
+}
+
+@keyframes glitchShift {
+    0% { transform: translate(0); filter: none; }
+    20% { transform: translate(-3px, 1px); filter: hue-rotate(90deg); }
+    40% { transform: translate(2px, -1px); filter: hue-rotate(-90deg); }
+    60% { transform: translate(-1px, 2px); clip-path: inset(20% 0 30% 0); }
+    80% { transform: translate(3px, -2px); clip-path: inset(50% 0 10% 0); }
+    100% { transform: translate(0); filter: none; clip-path: none; }
+}
+
+@keyframes glitchText {
+    0%, 100% { transform: none; opacity: 1; }
+    10% { transform: skewX(-5deg) translateX(-2px); opacity: 0.8; }
+    20% { transform: skewX(3deg) translateX(3px); opacity: 0.9; }
+    30% { transform: none; opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes screenFlicker {
+    0% { opacity: 0; }
+    5% { opacity: 0.3; }
+    10% { opacity: 0; }
+    15% { opacity: 0.6; }
+    20% { opacity: 0.1; }
+    30% { opacity: 0.8; }
+    40% { opacity: 0.4; }
+    50% { opacity: 1; }
+    55% { opacity: 0.7; }
+    60% { opacity: 1; }
+    100% { opacity: 1; }
+}
+
+@keyframes wipeOut {
+    0% { opacity: 1; transform: none; }
+    30% { opacity: 0.8; transform: skewX(-2deg); }
+    60% { opacity: 0.4; transform: skewX(5deg) translateX(10px); filter: blur(1px); }
+    100% { opacity: 0; transform: skewX(-10deg) translateX(40px); filter: blur(4px); }
+}
+
+@keyframes subtleHum {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(0.5px); }
+}
+
+/* ===== NARRATIVE CONTAINER ===== */
+.narrative-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding: 20px;
+    animation: screenFlicker 2s ease-out forwards;
+}
+
+/* ===== TERMINAL FRAME ===== */
+.terminal-frame {
+    width: 100%;
+    max-width: 680px;
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    border-radius: 6px;
+    box-shadow:
+        0 0 20px rgba(57,255,20,0.05),
+        0 0 60px rgba(0,0,0,0.8),
+        inset 0 0 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+    animation: subtleHum 4s ease-in-out infinite;
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #111;
+    border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+}
+.terminal-dot.red { background: #ff5f56; }
+.terminal-dot.yellow { background: #ffbd2e; }
+.terminal-dot.green { background: #27c93f; }
+
+.terminal-title {
+    margin-left: 10px;
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+.terminal-body {
+    padding: 24px 20px;
+    min-height: 260px;
+    max-height: 60vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* ===== TEXT LINES ===== */
+.text-line {
+    font-family: var(--font-terminal);
+    font-size: 22px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    animation: fadeIn 0.4s ease-out;
+    color: var(--text-main);
+}
+
+.text-line.system {
+    color: var(--text-dim);
+    font-size: 18px;
+}
+
+.text-line.guide {
+    color: var(--text-guide);
+}
+
+.text-line.emphasis {
+    color: var(--glow-green);
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    letter-spacing: 2px;
+    animation: fadeIn 0.4s ease-out, textGlow 2s ease-in-out infinite;
+}
+
+.text-line.warning {
+    color: var(--text-warn);
+    font-family: var(--font-pixel);
+    font-size: 11px;
+}
+
+.text-line.glitch {
+    animation: glitchText 0.3s ease 3;
+}
+
+.text-line.wipe {
+    animation: wipeOut 1.2s ease-out forwards;
+}
+
+/* ===== CURSOR ===== */
+.cursor-line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+}
+
+.prompt {
+    color: var(--glow-green);
+    font-family: var(--font-terminal);
+    font-size: 22px;
+}
+
+.cursor {
+    color: var(--glow-green);
+    font-family: var(--font-terminal);
+    font-size: 22px;
+    animation: cursorBlink 0.8s step-end infinite;
+}
+
+/* ===== TYPING EFFECT ===== */
+.typing-char {
+    opacity: 0;
+    display: inline;
+}
+.typing-char.visible {
+    opacity: 1;
+}
+
+/* ===== CHOICE BUTTONS ===== */
+.choice-container {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.choice-btn {
+    font-family: var(--font-pixel);
+    font-size: 11px;
+    padding: 14px 24px;
+    background: transparent;
+    color: var(--glow-green);
+    border: 1px solid var(--glow-green);
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+.choice-btn::before {
+    content: '> ';
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.choice-btn:hover {
+    background: rgba(57,255,20,0.1);
+    box-shadow: 0 0 15px rgba(57,255,20,0.2), inset 0 0 15px rgba(57,255,20,0.05);
+    text-shadow: 0 0 8px var(--glow-green);
+}
+
+.choice-btn:hover::before {
+    opacity: 1;
+}
+
+.choice-btn:active {
+    transform: scale(0.97);
+}
+
+.choice-btn.cyan {
+    color: var(--glow-cyan);
+    border-color: var(--glow-cyan);
+}
+.choice-btn.cyan:hover {
+    background: rgba(0,229,255,0.1);
+    box-shadow: 0 0 15px rgba(0,229,255,0.2), inset 0 0 15px rgba(0,229,255,0.05);
+    text-shadow: 0 0 8px var(--glow-cyan);
+}
+
+/* ===== FADE OVERLAY ===== */
+.fade-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2000;
+    transition: opacity 2s ease;
+}
+.fade-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .terminal-body {
+        padding: 16px 14px;
+        min-height: 200px;
+    }
+    .text-line {
+        font-size: 18px;
+    }
+    .text-line.emphasis {
+        font-size: 11px;
+    }
+    .text-line.system {
+        font-size: 15px;
+    }
+    .choice-btn {
+        font-size: 9px;
+        padding: 12px 18px;
+    }
+    .terminal-title {
+        font-size: 6px;
+    }
+    .choice-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 400px) {
+    .terminal-frame {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+    .narrative-container {
+        padding: 10px;
+    }
+}
