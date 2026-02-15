@@ -73,6 +73,53 @@ async def home(request: Request):
         "stats": stats
     })
 
+@app.get("/level1", response_class=HTMLResponse)
+async def level1(request: Request):
+    """Render AI Agent Adventures - Level 1: The Awakening"""
+    return templates.TemplateResponse("level1.html", {
+        "request": request
+    })
+
+@app.post("/api/level1/submit-quiz")
+async def level1_submit_quiz(data: QuizAnswers):
+    """Submit Level 1 quiz answers and return score"""
+    # Level 1 correct answers: Q1=1(B), Q2=2(C), Q3=0(A)
+    correct_answers = [1, 2, 0]
+    correct = 0
+    results = []
+    for i, (user_ans, correct_ans) in enumerate(zip(data.answers, correct_answers)):
+        is_correct = user_ans == correct_ans
+        if is_correct:
+            correct += 1
+        results.append({"correct": is_correct, "correct_answer": correct_ans})
+    
+    xp_earned = correct * 25
+    add_xp(xp_earned, "Level 1 Quiz")
+    
+    return {
+        "correct": correct,
+        "total": len(correct_answers),
+        "percentage": round(correct / len(correct_answers) * 100),
+        "xp_earned": xp_earned,
+        "results": results,
+        "passed": correct >= 2
+    }
+
+@app.post("/api/level1/complete")
+async def level1_complete():
+    """Mark Level 1 as complete, award final XP"""
+    xp_earned = 50  # Completion bonus
+    add_xp(xp_earned, "Level 1 Complete")
+    increment_stat("stories")
+    unlock_achievement("first_story")
+    stats = get_stats()
+    return {
+        "xp_earned": xp_earned,
+        "total_xp": stats.get("xp", 0),
+        "level": stats.get("level", 1),
+        "achievements": stats.get("achievements", [])
+    }
+
 @app.get("/api/stats")
 async def api_stats():
     """Get user gamification stats"""

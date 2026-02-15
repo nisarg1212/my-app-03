@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questra ⋆ Level 1: The Awakening</title>
+    <meta name="description" content="AI Agent Adventures - Level 1: The Awakening. Learn what AI agents are through an immersive RPG experience.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <link rel="stylesheet" href="/static/css/level1.css">
+</head>
+<body>
+    <!-- CRT Scanline Overlay -->
+    <div class="crt-overlay"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo-link">
+                <div class="pixel-logo">
+                    <span class="logo-q">Q</span><span class="logo-rest">UESTRA</span>
+                </div>
+            </a>
+            <div class="header-right">
+                <div class="timer-display" id="timer-display">
+                    <span class="timer-icon">⏱</span>
+                    <span id="timer-value">00:00</span>
+                </div>
+                <div class="xp-display" id="xp-display">
+                    <span class="xp-icon">⚡</span>
+                    <span id="xp-total">0</span>
+                    <span class="xp-label">XP</span>
+                </div>
+                <div class="streak-display" id="streak-display">
+                    <span class="streak-icon">🔥</span>
+                    <span id="streak-count">0</span>
+                </div>
+                <button class="mute-btn" id="mute-btn" onclick="toggleMute()" title="Toggle Sound">
+                    🔊
+                </button>
+            </div>
+        </div>
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            <div class="progress-labels">
+                <span class="progress-label active" data-phase="story">📖 STORY</span>
+                <span class="progress-label" data-phase="quiz">❓ QUIZ</span>
+                <span class="progress-label" data-phase="mastery">🏆 MASTERY</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- ==================== PHASE 1: STORY ==================== -->
+        <section id="phase-story" class="phase phase-story active">
+            <div class="phase-container">
+                <div class="level-badge-top">
+                    <span class="level-tag">LEVEL 1</span>
+                    <span class="level-name">THE AWAKENING</span>
+                </div>
+                <h2 class="story-title" id="story-title">
+                    <span class="pixel-arrow">▶</span> INITIALIZING CONSCIOUSNESS...
+                </h2>
+                <div class="story-terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">NEURAL_LINK.exe</span>
+                    </div>
+                    <div class="terminal-body" id="story-content">
+                        <!-- Typewriter text will appear here -->
+                    </div>
+                    <div class="terminal-cursor" id="terminal-cursor">█</div>
+                </div>
+                <div class="story-controls">
+                    <button class="pixel-btn btn-skip" id="skip-btn" onclick="skipTypewriter()">
+                        ⏩ SKIP
+                    </button>
+                    <button class="pixel-btn btn-primary" id="continue-to-quiz-btn" onclick="startQuizPhase()" style="display:none;">
+                        ⚔️ BEGIN TRIAL →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PHASE 2: QUIZ ==================== -->
+        <section id="phase-quiz" class="phase phase-quiz">
+            <div class="phase-container">
+                <div class="quiz-header">
+                    <h2 class="section-title">❓ KNOWLEDGE TRIAL</h2>
+                    <div class="quiz-streak" id="quiz-streak">
+                        <span class="streak-label">STREAK</span>
+                        <span class="streak-value" id="quiz-streak-value">0</span>
+                    </div>
+                </div>
+
+                <!-- Question 1: Drag & Drop -->
+                <div class="quiz-question" id="q1" data-type="dragdrop">
+                    <div class="question-number">CHALLENGE 1 OF 3</div>
+                    <div class="question-text">
+                        Match each AI concept to its correct description. Drag the terms to their matching slots.
+                    </div>
+                    <div class="dragdrop-container">
+                        <div class="drag-items" id="drag-items">
+                            <div class="drag-item" draggable="true" data-value="agent">🤖 AI Agent</div>
+                            <div class="drag-item" draggable="true" data-value="llm">🧠 LLM</div>
+                            <div class="drag-item" draggable="true" data-value="prompt">💬 Prompt</div>
+                        </div>
+                        <div class="drop-zones">
+                            <div class="drop-zone" data-answer="agent">
+                                <div class="drop-label">An AI that can take actions and make decisions autonomously</div>
+                                <div class="drop-slot" data-correct="agent"></div>
+                            </div>
+                            <div class="drop-zone" data-answer="llm">
+                                <div class="drop-label">A large neural network trained on text data to understand language</div>
+                                <div class="drop-slot" data-correct="llm"></div>
+                            </div>
+                            <div class="drop-zone" data-answer="prompt">
+                                <div class="drop-label">The instruction or question you give to an AI system</div>
+                                <div class="drop-slot" data-correct="prompt"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="pixel-btn btn-check" onclick="checkDragDrop()" id="check-dd-btn">
+                        ✓ CHECK MATCHES
+                    </button>
+                    <div class="question-feedback" id="q1-feedback"></div>
+                </div>
+
+                <!-- Question 2: Choose Your Path -->
+                <div class="quiz-question" id="q2" data-type="path" style="display:none;">
+                    <div class="question-number">CHALLENGE 2 OF 3</div>
+                    <div class="question-text">
+                        You've just awakened as an AI agent. A user sends you a message: "Book me a flight to Tokyo next Tuesday." What's your FIRST step as a responsible AI agent?
+                    </div>
+                    <div class="path-choices">
+                        <div class="path-card" data-index="0" onclick="selectPath(this, 'q2')">
+                            <div class="path-icon">🚀</div>
+                            <div class="path-title">ACT IMMEDIATELY</div>
+                            <div class="path-desc">Search for flights and book the cheapest one right away</div>
+                        </div>
+                        <div class="path-card" data-index="1" onclick="selectPath(this, 'q2')">
+                            <div class="path-icon">🤔</div>
+                            <div class="path-title">CLARIFY & PLAN</div>
+                            <div class="path-desc">Ask for preferences (budget, airline, time) before taking action</div>
+                        </div>
+                        <div class="path-card" data-index="2" onclick="selectPath(this, 'q2')">
+                            <div class="path-icon">🚫</div>
+                            <div class="path-title">REFUSE</div>
+                            <div class="path-desc">Tell the user you can't book flights because you're just an AI</div>
+                        </div>
+                    </div>
+                    <div class="question-feedback" id="q2-feedback"></div>
+                </div>
+
+                <!-- Question 3: MCQ with pixel styling -->
+                <div class="quiz-question" id="q3" data-type="mcq" style="display:none;">
+                    <div class="question-number">CHALLENGE 3 OF 3</div>
+                    <div class="question-text">
+                        What makes an AI "agent" different from a regular AI chatbot?
+                    </div>
+                    <div class="mcq-options">
+                        <div class="mcq-option" data-index="0" onclick="selectMCQ(this, 'q3')">
+                            <span class="option-key">A</span>
+                            <span class="option-text">It can take autonomous actions and use tools, not just generate text</span>
+                        </div>
+                        <div class="mcq-option" data-index="1" onclick="selectMCQ(this, 'q3')">
+                            <span class="option-key">B</span>
+                            <span class="option-text">It has a physical robot body</span>
+                        </div>
+                        <div class="mcq-option" data-index="2" onclick="selectMCQ(this, 'q3')">
+                            <span class="option-key">C</span>
+                            <span class="option-text">It always gives correct answers</span>
+                        </div>
+                        <div class="mcq-option" data-index="3" onclick="selectMCQ(this, 'q3')">
+                            <span class="option-key">D</span>
+                            <span class="option-text">It requires an internet connection</span>
+                        </div>
+                    </div>
+                    <div class="question-feedback" id="q3-feedback"></div>
+                </div>
+
+                <!-- Quiz Submit -->
+                <div id="quiz-submit-area" style="display:none;">
+                    <button class="pixel-btn btn-primary btn-large" onclick="submitAllQuiz()" id="submit-quiz-btn">
+                        ⚡ SUBMIT ALL ANSWERS
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PHASE 3: MASTERY ==================== -->
+        <section id="phase-mastery" class="phase phase-mastery">
+            <div class="phase-container">
+                <div class="mastery-content">
+                    <div class="mission-debrief">
+                        <h2 class="section-title">🏆 MISSION DEBRIEF</h2>
+                        <div class="debrief-terminal">
+                            <div class="terminal-header">
+                                <span class="terminal-dot red"></span>
+                                <span class="terminal-dot yellow"></span>
+                                <span class="terminal-dot green"></span>
+                                <span class="terminal-title">DEBRIEF_REPORT.log</span>
+                            </div>
+                            <div class="debrief-body">
+                                <div class="debrief-line">> MISSION: The Awakening</div>
+                                <div class="debrief-line">> STATUS: <span class="text-green">COMPLETE</span></div>
+                                <div class="debrief-line">> AGENT DESIGNATION: <span class="text-gold">RECRUIT</span></div>
+                                <div class="debrief-line debrief-separator">─────────────────────────</div>
+                                <div class="debrief-stats">
+                                    <div class="debrief-stat">
+                                        <span class="stat-label-d">XP EARNED</span>
+                                        <span class="stat-value-d" id="mastery-xp">0</span>
+                                    </div>
+                                    <div class="debrief-stat">
+                                        <span class="stat-label-d">TIME ELAPSED</span>
+                                        <span class="stat-value-d" id="mastery-time">00:00</span>
+                                    </div>
+                                    <div class="debrief-stat">
+                                        <span class="stat-label-d">QUIZ ACCURACY</span>
+                                        <span class="stat-value-d" id="mastery-accuracy">0%</span>
+                                    </div>
+                                    <div class="debrief-stat">
+                                        <span class="stat-label-d">STREAK BONUS</span>
+                                        <span class="stat-value-d" id="mastery-streak">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Achievement Badge -->
+                    <div class="achievement-unlock" id="achievement-unlock">
+                        <div class="badge-container" id="badge-container">
+                            <div class="badge-glow"></div>
+                            <div class="badge-icon">🤖</div>
+                            <div class="badge-title">FIRST AWAKENING</div>
+                            <div class="badge-desc">Completed Level 1: The Awakening</div>
+                        </div>
+                    </div>
+
+                    <!-- Animated XP Counter -->
+                    <div class="xp-counter-large" id="xp-counter-large">
+                        <div class="xp-counter-label">TOTAL XP</div>
+                        <div class="xp-counter-value" id="xp-counter-value">0</div>
+                    </div>
+
+                    <!-- Confetti Canvas -->
+                    <canvas id="confetti-canvas"></canvas>
+
+                    <!-- Next Mission -->
+                    <div class="next-mission">
+                        <div class="pixel-divider"></div>
+                        <p class="next-mission-text">📡 TRANSMISSION INCOMING...</p>
+                        <p class="next-mission-subtitle">"Level 2: The First Mission" — Coming Soon</p>
+                        <div class="mission-buttons">
+                            <a href="/" class="pixel-btn btn-secondary">
+                                🏠 RETURN TO BASE
+                            </a>
+                            <button class="pixel-btn btn-primary" onclick="replayLevel()">
+                                🔄 REPLAY MISSION
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- XP Popup -->
+    <div id="xp-popup" class="xp-popup" style="display:none;">
+        <span id="xp-popup-value">+25 XP</span>
+    </div>
+
+    <script src="/static/js/level1.js"></script>
+</body>
+</html>
