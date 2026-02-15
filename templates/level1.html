@@ -79,6 +79,13 @@
     <main class="main level1-main">
         <div class="container">
 
+            <div class="progress-bar-container" id="progress-bar-container">
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">INITIALIZING...</div>
+            </div>
+
             <!-- ==================== INTRO CINEMATIC ==================== -->
             <section id="intro-phase" class="phase-section active-phase">
                 <div class="cinematic-intro">
@@ -255,6 +262,8 @@
 
     <!-- Pixel Confetti Canvas -->
     <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+    <div class="combo-display" id="combo-display"></div>
 
     <!-- Screen Shake Container (wraps body content via JS) -->
 

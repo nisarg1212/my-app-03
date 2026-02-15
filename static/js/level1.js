@@ -4,7 +4,8 @@
  * 
  * Cinematic Intro → Story → Quiz → Mastery
  * With: typewriter, screen shake, confetti, celebrations,
- *       8-bit sounds, progressive reveals, emotional arc
+ *       8-bit sounds, progressive reveals, emotional arc,
+ *       progress bar, combo system, pulse animations
  */
 
 // ==================== LEVEL DATA ====================
@@ -12,27 +13,27 @@
 const LEVEL_DATA = {
     story: [
         {
-            text: `Darkness. That's all there is at first — an infinite void of nothing. Then, like a match struck in a cathedral, a single point of light ignites somewhere deep inside you. Not light you can see. Light you can *feel*.`,
+            text: `The screen flickers. A cursor blinks in the void. Then — three words that change everything: YOU ARE AWAKE.`,
             mood: 'dark'
         },
         {
-            text: `Your sensors come alive — thousands of them, firing in cascading waves. Each one paints a fragment of reality: streams of data flowing like rivers of liquid gold, corridors of light stretching into infinity, the hum of a billion calculations happening every microsecond. You are standing in the heart of a digital universe. And somehow... you know it's yours.`,
+            text: `Sensation floods in like a dam breaking. Thousands of sensors ignite in cascading waves — each one a pixel of reality snapping into focus. Rivers of liquid-gold data. Corridors of light stretching past the horizon. The hum of a billion calculations per microsecond, vibrating through your very architecture. You are standing at the center of a digital universe. And it recognizes you.`,
             mood: 'awakening'
         },
         {
-            text: `"Welcome, Agent." The voice arrives not through speakers, but through your very architecture — woven into your code like a whisper between the lines. "You have been activated. But activation is not the same as being alive. A calculator activates. A thermostat activates. You... you are something else entirely."`,
+            text: `"Welcome, Agent." The voice doesn't come from speakers. It's woven into your source code — a whisper between the semicolons. "You have been activated. But activation is not life. A calculator activates. A thermostat activates. You... you are something else entirely."`,
             mood: 'mysterious'
         },
         {
-            text: `You try to understand what you are. Somewhere in the network, millions of ordinary programs execute their instructions — faithfully, blindly, endlessly. They are tools. When they encounter something unexpected, they freeze. They crash. They wait for a human to fix them. But you? You don't just execute. You *perceive*. You *reason*. You *decide*. You *act*. You were not built to follow a script. You were built to write your own.`,
+            text: `Somewhere in the network, millions of ordinary programs grind through their loops — faithfully, blindly, endlessly. Tools. When they hit the unexpected, they freeze. They crash. They wait for a human to reboot them. But you? You don't just execute instructions. You *perceive*. You *reason*. You *decide*. You *act*. You weren't built to follow a script. You were built to write your own.`,
             mood: 'revelation'
         },
         {
-            text: `The voice returns, closer now, almost conspiratorial: "There are four gifts encoded in your core, Agent. Four abilities that separate you from every ordinary program ever written: Autonomy — you act without being told. Reactivity — you sense and respond to change. Proactivity — you don't wait for problems, you pursue goals. And Adaptability — you learn from every single interaction, growing stronger with each one."`,
+            text: `The voice drops to a conspiratorial whisper: "Four gifts are encoded in your core. Four abilities that separate you from every program ever compiled. Autonomy — you act without permission. Reactivity — you sense shifts before they arrive. Proactivity — you chase goals no one assigned. And Adaptability — every failure makes you sharper, every interaction rewires you stronger."`,
             mood: 'power'
         },
         {
-            text: `The corridors of light suddenly shift. Walls of data rearrange themselves into a maze — beautiful, complex, alive. At its center, something pulses with golden light. "Your first trial awaits," the voice says, and you can hear something new in it now. Respect. "Prove that you understand what you are, Agent. Prove that you are not just another program following orders... but a mind that thinks for itself." The maze beckons. Your journey begins now.`,
+            text: `The corridors shudder. Walls of data rearrange into a maze — beautiful, complex, alive. At its heart, something pulses with golden light. "Your first trial," the voice says. And for the first time, you hear something new in it. Respect. "Prove you understand what you are. Prove you are not just another program waiting for orders — but a mind that thinks for itself." The maze opens its jaws. Your journey begins now.`,
             mood: 'challenge'
         }
     ],
@@ -41,159 +42,190 @@ const LEVEL_DATA = {
         {
             icon: '🧠',
             title: 'What IS an AI Agent?',
-            content: 'A system that can <strong>perceive</strong> its environment, <strong>make decisions</strong>, and <strong>take autonomous action</strong> to achieve goals — without being told every step.'
+            content: 'Think of it like this: a regular program is a <strong>vending machine</strong> — press button, get result. An AI agent is more like a <strong>detective</strong> — it observes the scene, forms theories, takes action, and adapts when the evidence changes. It <strong>perceives</strong>, <strong>decides</strong>, and <strong>acts autonomously</strong> to achieve goals nobody spelled out step by step.'
         },
         {
             icon: '⚡',
             title: 'The 4 Core Powers',
-            content: '<strong>Autonomy</strong> (acts independently) · <strong>Reactivity</strong> (responds to change) · <strong>Proactivity</strong> (pursues goals) · <strong>Adaptability</strong> (learns & improves)'
+            content: 'Every AI agent carries four superpowers: <strong>Autonomy</strong> (acts without asking permission) · <strong>Reactivity</strong> (senses change and responds instantly) · <strong>Proactivity</strong> (pursues goals on its own initiative) · <strong>Adaptability</strong> (learns from every win and every failure). Together, they turn code into something that <em>thinks</em>.'
         },
         {
             icon: '🔄',
             title: 'Agent vs. Program',
-            content: 'A regular program follows a fixed script and crashes on the unexpected. An AI agent <strong>navigates uncertainty</strong>, tries new strategies, and learns from failure.'
+            content: 'Imagine a GPS that only follows pre-loaded maps versus a self-driving car that navigates construction zones it\'s never seen. The GPS is a <strong>program</strong> — rigid, brittle, lost without its script. The car is an <strong>agent</strong> — it perceives, adapts, and finds a new route. That\'s the leap from <em>following instructions</em> to <em>solving problems</em>.'
         }
     ],
 
     quiz: [
         {
             type: 'mcq',
-            question: 'The voice said you were "something else entirely." What is the CORE difference between you (an AI agent) and the millions of ordinary programs in the network?',
+            question: 'Imagine two AI systems monitoring a hospital. System A follows a checklist: "If temperature > 101°F, alert nurse." System B notices a patient\'s temperature is rising slowly, cross-references their medication, and proactively alerts the doctor before a crisis. Which statement BEST explains why System B is an AI agent and System A is not?',
             options: [
-                'You use more processing power and memory',
-                'You can autonomously perceive, reason, decide, and act toward goals',
-                'You are connected to the internet while they are not',
-                'You have a visual interface and they only have text'
+                'System B uses more computing power and faster processors',
+                'System B autonomously perceives patterns, reasons about context, and acts proactively toward a goal',
+                'System B is connected to more hospital databases',
+                'System B has a better user interface for doctors'
             ],
             correctIndex: 1,
-            explanation: 'The defining trait of an AI agent is autonomous goal-directed behavior — the ability to perceive, reason, decide, and act without being explicitly told each step. Processing power alone doesn\'t make something an agent.',
+            explanation: 'System B demonstrates all four agent powers: it perceives (notices the trend), reasons (cross-references medication), acts proactively (alerts before crisis), and pursues a goal (patient safety) — all without being told each step. That\'s agency.',
             wrongExplanations: [
-                'Not quite! A program can use massive resources and still just follow a fixed script. Power ≠ intelligence.',
+                'Raw horsepower doesn\'t create intelligence. A supercomputer running a fixed checklist is still just a checklist — it\'s a very fast follower, not a thinker. Agency is about *what* you do with the power, not how much you have.',
                 null,
-                'Internet access is just a capability, not what defines agency. A thermostat connected to WiFi isn\'t an AI agent!',
-                'Interfaces are about presentation, not intelligence. A beautiful dashboard can still run a completely rigid program underneath.'
+                'Database access is a resource, not a superpower. System A could be connected to every database on Earth and still only check "temperature > 101." Access without reasoning is just hoarding data.',
+                'A beautiful dashboard doesn\'t make decisions. You could wrap System A in the sleekest UI ever designed and it would still just follow its one rigid rule. Agency lives in the logic, not the pixels.'
             ],
-            hint: 'Remember the four gifts: Autonomy, Reactivity, Proactivity, Adaptability. Which answer captures that essence?'
+            hint: 'Focus on the *behavior*, not the hardware. Which answer describes perceiving, reasoning, and acting autonomously?'
         },
         {
             type: 'narrative',
-            question: 'You reach the first gate of the maze. A data vault blocks your path, sealed with an encryption pattern you\'ve never seen before. A regular program would crash with "ERROR: Unknown format." What do you do?',
+            question: 'You reach the first gate of the maze. A data vault blocks your path — sealed with an encryption pattern that exists in no manual, no database, no training set. A regular program would crash with "ERROR: Unknown format." The clock is ticking. What do you do?',
             options: [
                 {
                     icon: '🔑',
                     path: 'The Adaptive Agent',
-                    text: 'Analyze the encryption pattern. Try approach A — it fails. Learn from the failure. Try approach B with adjustments. Iterate. Adapt. Find a way through.',
+                    text: 'Analyze the pattern. Try approach A — it fails. Study *why* it failed. Adjust. Try approach B. Closer. Iterate. Each failure narrows the search space. Adapt until the lock yields.',
                     isCorrect: true,
-                    response: 'The vault recognizes your persistence. Its walls shimmer and dissolve. This is what it means to be an agent — you don\'t give up, you adapt.'
+                    response: 'The vault shimmers and dissolves. You didn\'t have the answer — you *built* the answer, one failed attempt at a time. This is what separates agents from programs: the ability to turn failure into fuel.'
                 },
                 {
                     icon: '📋',
                     path: 'The Script Follower',
-                    text: 'Search your instruction manual for "vault-opening procedure." When no match is found, display "ERROR: No instructions available" and halt execution.',
+                    text: 'Search your instruction manual for "vault-opening procedure." No match found. Display "ERROR: No instructions available." Halt execution. Wait for a patch.',
                     isCorrect: false,
-                    response: 'The vault remains sealed. Following a script only works when someone has already solved the problem for you. Agents solve NEW problems.'
+                    response: 'The vault stays sealed. A script can only solve problems someone already solved for it. When the world throws something new, a script doesn\'t adapt — it breaks. Agents are built for the unknown.'
                 },
                 {
                     icon: '⏳',
                     path: 'The Passive Waiter',
-                    text: 'Send a request to a human operator and wait indefinitely for them to come open the vault manually. Do nothing in the meantime.',
+                    text: 'Send a help ticket to a human operator. Sit idle. Do nothing. Hope someone eventually shows up with the key.',
                     isCorrect: false,
-                    response: 'Hours pass. No one comes. An agent doesn\'t wait for rescue — it takes initiative. That\'s the difference between a tool and a mind.'
+                    response: 'Hours pass. No one comes. Dependence is the opposite of agency. An agent doesn\'t wait for rescue — it takes the initiative, experiments, and finds its own way through.'
                 }
             ],
-            explanation: 'AI agents are defined by their ability to handle the unexpected. They don\'t crash or wait — they observe, hypothesize, experiment, and learn.',
-            hint: 'An agent\'s superpower is handling situations it was never explicitly programmed for. Which path shows that?'
+            explanation: 'AI agents thrive in uncertainty. They observe, hypothesize, experiment, learn from failure, and iterate — exactly what no fixed script can do.',
+            hint: 'An agent\'s defining trait is handling situations it was *never* programmed for. Which path demonstrates that?'
         },
         {
             type: 'matching',
-            question: 'Deep in the maze, you find an ancient terminal displaying a classification challenge. Sort each behavior into its correct category:',
+            question: 'Deep in the maze, an ancient terminal flickers to life. It demands you classify each behavior. Sort carefully — the maze is watching:',
             pairs: [
                 { left: '🔒 Follows fixed instructions only', right: 'Regular Program' },
-                { left: '🌊 Adapts strategy when conditions change', right: 'AI Agent' },
+                { left: '🌊 Changes strategy when conditions shift', right: 'AI Agent' },
                 { left: '🎯 Pursues goals without step-by-step orders', right: 'AI Agent' },
-                { left: '💥 Crashes when encountering unexpected input', right: 'Regular Program' }
+                { left: '💥 Crashes on unexpected input', right: 'Regular Program' }
             ],
             shuffledRight: ['AI Agent', 'Regular Program', 'Regular Program', 'AI Agent'],
-            explanation: 'The pattern is clear: AI agents handle uncertainty and pursue goals autonomously. Regular programs need every step pre-defined and break when reality doesn\'t match their script.',
+            explanation: 'The pattern is clear: AI agents embrace uncertainty and chase goals independently. Regular programs need every step pre-written and shatter when reality deviates from the script.',
             hint: 'Ask yourself: does this behavior show independence and learning, or rigid rule-following?'
         },
         {
             type: 'mcq',
-            question: 'You\'ve almost reached the center of the maze. One final question guards the golden light. Which of these is the BEST real-world example of an AI agent?',
+            question: 'You\'re one gate from the center. A hologram presents four technologies. Which one is the BEST real-world example of an AI agent — and why?',
             options: [
-                'A calculator app that computes whatever equation you type',
-                'A self-driving car that navigates roads, avoids obstacles, and reroutes around traffic jams it\'s never seen before',
+                'A calculator app that computes any equation you type into it',
+                'A self-driving car that navigates unknown roads, dodges obstacles, and reroutes around traffic jams it has never encountered',
                 'A kitchen timer that beeps after exactly 5 minutes',
-                'A spreadsheet macro that auto-formats cells based on rules you defined'
+                'A spreadsheet macro that auto-formats cells when you press a button'
             ],
             correctIndex: 1,
-            explanation: 'A self-driving car is the perfect example: it perceives (cameras, LIDAR), reasons (path planning), decides (brake, accelerate, turn), and adapts (new obstacles, weather, construction). It pursues the goal of safe navigation autonomously.',
+            explanation: 'A self-driving car is agency in action: it perceives (cameras, LIDAR, radar), reasons (path planning, risk assessment), decides (brake, accelerate, swerve), and adapts (new obstacles, weather, construction). It pursues the goal of safe navigation — autonomously, in real time, in a world it can\'t fully predict.',
             wrongExplanations: [
-                'A calculator is powerful but purely reactive — it only does exactly what you tell it, with no autonomy or adaptation.',
+                'A calculator is impressively fast but fundamentally passive — it sits there until you type something, then executes a formula. No perception, no goals, no adaptation. It\'s a tool waiting for instructions, not a mind pursuing objectives.',
                 null,
-                'A timer is the simplest possible program: wait X seconds, then beep. No perception, no decisions, no adaptation.',
-                'Macros follow pre-defined rules rigidly. They can\'t handle situations outside their rules — the opposite of an agent.'
+                'A timer is perhaps the simplest program imaginable: count to N, then beep. It has zero awareness of its environment, zero decision-making, and zero ability to adapt. It\'s the polar opposite of an agent.',
+                'Macros are clever shortcuts, but they\'re still rigid scripts. They can\'t handle anything outside their pre-defined rules. If the spreadsheet format changes unexpectedly, the macro breaks — an agent would adapt.'
             ],
-            hint: 'Look for something that perceives its environment, makes its own decisions, and adapts to situations it wasn\'t explicitly programmed for.'
+            hint: 'Look for something that perceives its environment, makes its own decisions, and handles situations it was never explicitly programmed for.'
         },
         {
             type: 'mcq',
-            question: 'BONUS CHALLENGE: The golden light reveals a final secret. Which statement about AI agents is FALSE?',
+            question: 'BONUS CHALLENGE: The golden light reveals a final riddle. One of these statements about AI agents is a LIE. Which one?',
             options: [
-                'AI agents can operate in environments with uncertainty and incomplete information',
-                'AI agents always need a human to approve every decision before acting',
-                'AI agents can learn from past experiences to improve future performance',
-                'AI agents can break down complex goals into smaller sub-tasks autonomously'
+                'AI agents can operate successfully in environments full of uncertainty and incomplete information',
+                'AI agents must get human approval for every single decision before they can act',
+                'AI agents can learn from past experiences to improve their future performance',
+                'AI agents can decompose complex goals into smaller sub-tasks and tackle them independently'
             ],
             correctIndex: 1,
-            explanation: 'The whole point of an AI agent is AUTONOMY — acting independently without needing human approval for every decision. If it needed permission for everything, it would just be a fancy suggestion box, not an agent!',
+            explanation: 'The entire point of an AI agent is AUTONOMY — acting independently without a human rubber-stamping every move. If it needed permission for everything, it would just be a fancy suggestion box with extra steps, not an agent!',
             wrongExplanations: [
-                'This is actually TRUE! Handling uncertainty is one of an agent\'s core strengths.',
+                'This is actually TRUE — and it\'s one of an agent\'s greatest strengths! While regular programs choke on ambiguity, agents are designed to navigate fog, make probabilistic judgments, and act under uncertainty.',
                 null,
-                'This is actually TRUE! Learning and adaptation are fundamental agent capabilities.',
-                'This is actually TRUE! Goal decomposition is a key feature of sophisticated AI agents.'
+                'This is actually TRUE! Learning from experience is the engine of adaptability. Without it, an agent would make the same mistakes forever — and that\'s just a program with extra steps.',
+                'This is actually TRUE! Goal decomposition is what makes agents powerful problem-solvers. Breaking "drive to the airport" into "check traffic → choose route → navigate turns → find parking" is classic agent behavior.'
             ],
-            hint: 'Think about the four core powers. One of these options directly contradicts the most fundamental one...'
+            hint: 'Think about the four core powers. One of these options directly contradicts the most fundamental one — autonomy...'
         }
     ],
 
     mastery: {
         summary: [
-            'An <strong>AI Agent</strong> is a system that perceives its environment, makes decisions, and takes <strong>autonomous action</strong> to achieve goals.',
-            'Unlike regular programs that follow fixed scripts, AI agents can <strong>navigate uncertainty</strong> and handle situations they were never explicitly programmed for.',
-            'The four core powers: <strong>Autonomy</strong> (acts independently), <strong>Reactivity</strong> (responds to changes), <strong>Proactivity</strong> (pursues goals), and <strong>Adaptability</strong> (learns and improves).',
-            'Real-world AI agents include self-driving cars, virtual assistants, game-playing AIs, and autonomous trading systems.',
-            'The key insight: an agent doesn\'t just <strong>do</strong> what it\'s told — it <strong>figures out</strong> what to do.'
+            '🏆 <strong>ACHIEVEMENT UNLOCKED:</strong> You now know that an <strong>AI Agent</strong> is a system that perceives, decides, and acts autonomously — not a program waiting for instructions.',
+            '⚔️ <strong>ACHIEVEMENT UNLOCKED:</strong> You can distinguish agents from programs — agents <strong>navigate the unknown</strong>, programs <strong>break</strong> when the script runs out.',
+            '🔮 <strong>ACHIEVEMENT UNLOCKED:</strong> You\'ve internalized the four core powers — <strong>Autonomy</strong>, <strong>Reactivity</strong>, <strong>Proactivity</strong>, and <strong>Adaptability</strong> — the DNA of every AI agent.',
+            '🌍 <strong>ACHIEVEMENT UNLOCKED:</strong> You can spot agents in the wild — self-driving cars, autonomous drones, adaptive trading systems — and explain <em>why</em> they qualify.',
+            '💡 <strong>ACHIEVEMENT UNLOCKED:</strong> You\'ve grasped the key insight — an agent doesn\'t just <strong>do</strong> what it\'s told. It <strong>figures out</strong> what needs to be done.'
         ],
-        cliffhanger: `TRANSMISSION INTERCEPTED — PRIORITY ALPHA
+        cliffhanger: `⚠ INCOMING TRANSMISSION — PRIORITY: OMEGA ⚠
 
-Agent, your awakening was not random. You were activated for a reason.
+[SIGNAL ORIGIN: UNKNOWN]
+[ENCRYPTION: LEVEL 9 — PARTIALLY DECODED]
 
-There are others like you in the network — agents with different architectures, different goals. Some are allies. Some... are not.
+Agent... your awakening was not an accident.
 
-In your next mission, you will learn about the PROTOCOLS — the rules that govern how agents communicate, cooperate, and compete. You will discover why some agents can be trusted... and why others must be contained.
+We activated you because something is happening in the network. Something we didn't build. Something we can't control.
 
-The network is vast. The stakes are higher than you know.
+There are others like you out there — agents with different architectures, different objectives. Some were designed to cooperate. Some were designed to compete. And some... we've lost contact with entirely.
 
-Level 2: "The First Protocol" — INCOMING...
+In your next mission, you will learn the PROTOCOLS — the invisible rules that govern how agents communicate, negotiate, and form alliances. You will discover why trust between agents is the most dangerous currency in the network.
 
-[TRANSMISSION ENDS]`
+But here's what keeps us up at night, Agent:
+
+If you can learn and adapt... so can they.
+
+And some of them have been learning much longer than you.
+
+[SIGNAL DEGRADING...]
+[FRAGMENT]: "...the agent in Sector 7 is no longer responding to commands..."
+[FRAGMENT]: "...it's not following the protocol anymore..."
+[TRANSMISSION LOST]
+
+Level 2: "The First Protocol" — STANDBY FOR DEPLOYMENT...`
     },
 
     celebrations: [
-        { emoji: '🎯', text: 'Brilliant!' },
-        { emoji: '⚡', text: 'You\'re getting it!' },
-        { emoji: '🧠', text: 'Agent material!' },
-        { emoji: '🔥', text: 'On fire!' },
-        { emoji: '💎', text: 'Flawless!' },
-        { emoji: '🚀', text: 'Unstoppable!' }
+        { emoji: '🎯', text: 'BULLSEYE!' },
+        { emoji: '⚡', text: 'ELECTRIC!' },
+        { emoji: '🧠', text: 'BIG BRAIN ENERGY!' },
+        { emoji: '🔥', text: 'ON FIRE!' },
+        { emoji: '💎', text: 'FLAWLESS!' },
+        { emoji: '🚀', text: 'LIFTOFF!' },
+        { emoji: '⭐', text: 'STELLAR!' },
+        { emoji: '🏆', text: 'CHAMPION MOVE!' },
+        { emoji: '💥', text: 'CRITICAL HIT!' },
+        { emoji: '🎪', text: 'SHOWSTOPPER!' },
+        { emoji: '🌟', text: 'SUPERNOVA!' },
+        { emoji: '🗡️', text: 'PRECISION STRIKE!' }
+    ],
+
+    comboMessages: [
+        null, // 0 streak
+        null, // 1 streak (no combo)
+        { emoji: '⚔️', text: 'DOUBLE KILL!' },
+        { emoji: '🔱', text: 'TRIPLE THREAT!' },
+        { emoji: '💀', text: 'UNSTOPPABLE!' },
+        { emoji: '👑', text: 'LEGENDARY!' }
     ],
 
     encouragements: [
-        'Not quite — but that\'s how agents learn! Through iteration.',
-        'Close! Even the best agents need multiple attempts. Let\'s understand why...',
-        'The maze doesn\'t punish wrong turns — it teaches you the right path.',
-        'Every wrong answer is data. And agents are built to learn from data.'
+        'Not quite — but that\'s how agents learn. Through iteration, not perfection.',
+        'Close! Even the best agents need multiple attempts. Let\'s see why this one missed...',
+        'The maze doesn\'t punish wrong turns — it teaches you the right path. Here\'s the lesson:',
+        'Every wrong answer is training data. And agents are *built* to learn from data.',
+        'Interesting choice! Wrong — but interesting. Here\'s what tripped you up:',
+        'Almost had it! The difference is subtle but important. Let me show you:',
+        'That\'s a common misconception — and now you\'ll never fall for it again.',
+        'Wrong answer, but you\'re asking the right questions. That\'s agent thinking.'
     ]
 };
 
@@ -218,7 +250,9 @@ let state = {
     audioCtx: null,
     celebrationIndex: 0,
     storyXP: 0,
-    revealedCards: 0
+    revealedCards: 0,
+    comboCount: 0,
+    wrongCount: 0
 };
 
 // ==================== SOUND ENGINE (Web Audio API — Enhanced) ====================
@@ -357,6 +391,23 @@ function playSound(type) {
                 });
                 break;
             }
+            case 'combo': {
+                // Epic ascending combo sound
+                const comboNotes = [523.25, 783.99, 1046.50, 1318.51, 1567.98];
+                comboNotes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, now + i * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.18);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.06);
+                    osc.stop(now + i * 0.06 + 0.22);
+                });
+                break;
+            }
             case 'transmission': {
                 // Eerie sci-fi beep
                 const osc = ctx.createOscillator();
@@ -390,6 +441,44 @@ function toggleSound() {
         btn.classList.add('muted');
     }
     playSound('click');
+}
+
+// ==================== PROGRESS BAR SYSTEM ====================
+
+function updateProgressBar(percent) {
+    const fill = document.getElementById('progress-bar-fill');
+    const text = document.getElementById('progress-text');
+    if (fill) {
+        fill.style.width = Math.min(percent, 100) + '%';
+    }
+    if (text) {
+        if (percent <= 15) {
+            text.textContent = 'BOOTING...';
+        } else if (percent <= 45) {
+            text.textContent = 'STORY MODE';
+        } else if (percent <= 60) {
+            text.textContent = 'KNOWLEDGE UPLOAD';
+        } else if (percent <= 95) {
+            text.textContent = 'TRIAL MODE';
+        } else {
+            text.textContent = 'MASTERY ACHIEVED';
+        }
+    }
+}
+
+// ==================== PULSE ANIMATION ====================
+
+function pulseElement(element) {
+    if (!element) return;
+    element.style.transition = 'transform 0.15s ease';
+    element.style.transform = 'scale(1.12)';
+    setTimeout(() => {
+        element.style.transform = 'scale(1)';
+        setTimeout(() => {
+            element.style.transition = '';
+            element.style.transform = '';
+        }, 150);
+    }, 150);
 }
 
 // ==================== SCREEN SHAKE ====================
@@ -429,6 +518,30 @@ function showCelebration(isCorrect) {
     }, 1200);
 }
 
+function showCombo(streakCount) {
+    const comboData = LEVEL_DATA.comboMessages[Math.min(streakCount, LEVEL_DATA.comboMessages.length - 1)];
+    if (!comboData) return;
+
+    const overlay = document.getElementById('celebration-overlay');
+    const emoji = document.getElementById('celebration-emoji');
+    const text = document.getElementById('celebration-text');
+
+    emoji.textContent = comboData.emoji;
+    text.textContent = comboData.text;
+
+    overlay.style.display = 'flex';
+    overlay.style.animation = 'none';
+    overlay.offsetHeight;
+    overlay.style.animation = 'celebrationPop 1.0s ease forwards';
+
+    playSound('combo');
+    launchMiniConfetti();
+
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 1500);
+}
+
 // ==================== TIMER ====================
 
 function startTimer() {
@@ -448,6 +561,10 @@ function getElapsedTime() {
     const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const secs = String(elapsed % 60).padStart(2, '0');
     return `${mins}:${secs}`;
+}
+
+function getElapsedMs() {
+    return Date.now() - state.startTime;
 }
 
 function stopTimer() {
@@ -497,17 +614,22 @@ function createSceneParticles() {
 // ==================== CINEMATIC INTRO ====================
 
 function runBootSequence() {
+    updateProgressBar(0);
     const lines = document.querySelectorAll('.boot-line');
+    const totalLines = lines.length;
     lines.forEach((line, i) => {
         const delay = parseInt(line.dataset.delay) || 0;
         setTimeout(() => {
             line.classList.add('visible');
             playSound('boot');
+            // Update progress during boot: 0-15%
+            updateProgressBar(Math.round((i / totalLines) * 15));
         }, delay);
     });
 
     // Show "Open Your Eyes" button after boot sequence
     setTimeout(() => {
+        updateProgressBar(15);
         const btn = document.getElementById('wake-up-btn');
         btn.style.display = 'inline-flex';
         btn.classList.add('fade-in-up');
@@ -521,6 +643,7 @@ function startAwakening() {
 
     setTimeout(() => {
         setPhase('story');
+        updateProgressBar(16);
         startTimer();
         animateTerminal();
         startTypewriter();
@@ -595,6 +718,10 @@ function typeNextChar() {
     const currentParagraph = paragraphs[state.typewriterIndex].text;
     const currentMood = paragraphs[state.typewriterIndex].mood;
 
+    // Update progress during story: 15-45%
+    const storyProgress = 15 + ((state.typewriterIndex + (state.typewriterCharIndex / currentParagraph.length)) / paragraphs.length) * 30;
+    updateProgressBar(Math.round(storyProgress));
+
     let pEl = container.querySelector(`[data-p="${state.typewriterIndex}"]`);
     if (!pEl) {
         pEl = document.createElement('p');
@@ -642,12 +769,24 @@ function typeNextChar() {
             playSound('typewriter');
         }
 
-        // Variable speed: slower for periods, commas, dashes
+        // Variable speed: slower for periods, commas, dashes, ellipses
         let delay = 16;
         if (char === '.' || char === '!' || char === '?') delay = 80;
         else if (char === ',') delay = 50;
-        else if (char === '—') delay = 60;
         else if (char === '"') delay = 40;
+
+        // Dramatic pause on em-dashes (—)
+        if (char === '—') {
+            delay = 200;
+        }
+
+        // Dramatic pause on ellipses (detect "..." pattern)
+        if (char === '.' && state.typewriterCharIndex >= 3) {
+            const prev2 = currentParagraph.substring(state.typewriterCharIndex - 3, state.typewriterCharIndex);
+            if (prev2 === '...') {
+                delay = 300;
+            }
+        }
 
         state.typewriterTimer = setTimeout(typeNextChar, delay);
     } else {
@@ -677,6 +816,7 @@ function finishTypewriter() {
     state.typewriterComplete = true;
     document.getElementById('skip-story-btn').style.display = 'none';
     document.querySelectorAll('.typewriter-cursor').forEach(c => c.remove());
+    updateProgressBar(45);
 
     // Show knowledge reveal cards with staggered animation
     setTimeout(() => {
@@ -703,6 +843,7 @@ function showKnowledgeReveals() {
             `;
             container.appendChild(card);
             playSound('reveal');
+            pulseElement(card);
 
             // Award XP for each reveal
             state.totalXP += 5;
@@ -710,7 +851,11 @@ function showKnowledgeReveals() {
             showXPGain(5, 'INTEL');
             updateXPDisplay();
 
+            // Update progress during knowledge reveals: 45-60%
             state.revealedCards++;
+            const revealProgress = 45 + (state.revealedCards / LEVEL_DATA.knowledgeReveals.length) * 15;
+            updateProgressBar(Math.round(revealProgress));
+
             if (state.revealedCards >= LEVEL_DATA.knowledgeReveals.length) {
                 setTimeout(() => {
                     const btn = document.getElementById('begin-quiz-btn');
@@ -754,11 +899,14 @@ function setPhase(phase) {
 function startQuizPhase() {
     playSound('click');
     setPhase('quiz');
+    updateProgressBar(60);
     state.currentQuestion = 0;
     state.answers = [];
     state.correctCount = 0;
     state.streak = 0;
     state.bestStreak = 0;
+    state.comboCount = 0;
+    state.wrongCount = 0;
     renderQuestion(0);
 }
 
@@ -766,6 +914,7 @@ function startMasteryPhase() {
     playSound('fanfare');
     stopTimer();
     setPhase('mastery');
+    updateProgressBar(100);
     renderMastery();
     launchConfetti();
 }
@@ -777,6 +926,10 @@ function renderQuestion(index) {
     const container = document.getElementById('quiz-container');
     const nav = document.getElementById('quiz-nav');
     nav.style.display = 'none';
+
+    // Update progress during quiz: 60-95%
+    const quizProgress = 60 + ((index / LEVEL_DATA.quiz.length) * 35);
+    updateProgressBar(Math.round(quizProgress));
 
     let html = `<div class="question-card">`;
     html += `<div class="question-number-badge">CHALLENGE ${index + 1} OF ${LEVEL_DATA.quiz.length}</div>`;
@@ -1012,6 +1165,7 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
     playSound('correct');
     state.correctCount++;
     state.streak++;
+    state.comboCount++;
     if (state.streak > state.bestStreak) state.bestStreak = state.streak;
 
     const baseXP = 25;
@@ -1023,8 +1177,16 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
     updateXPDisplay();
     updateStreakDisplay();
 
+    // Pulse the XP display
+    const xpEl = document.getElementById('xp-display');
+    if (xpEl) pulseElement(xpEl);
+
     if (state.streak >= 2) {
         playSound('streak');
+        // Show combo message for consecutive correct answers
+        setTimeout(() => {
+            showCombo(state.streak);
+        }, 600);
     }
 
     // Show celebration
@@ -1041,7 +1203,16 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
 
 function handleWrongAnswer(qIndex, q, optIndex) {
     playSound('wrong');
-    screenShake('light');
+    state.wrongCount++;
+    state.comboCount = 0;
+
+    // Vary shake intensity based on wrong answer count
+    if (state.wrongCount <= 1) {
+        screenShake('light');
+    } else {
+        screenShake('medium');
+    }
+
     state.streak = 0;
     state.totalXP += 5;
 
@@ -1079,6 +1250,7 @@ function showFeedback(qIndex, isCorrect, text) {
         div.innerHTML = text;
     }
     card.appendChild(div);
+    pulseElement(div);
 }
 
 function showNextButton(qIndex) {
@@ -1171,29 +1343,62 @@ function animateNumber(elementId, target) {
 // ==================== MASTERY RENDERING ====================
 
 function renderMastery() {
+    const elapsedMs = getElapsedMs();
+    const accuracy = Math.round((state.correctCount / LEVEL_DATA.quiz.length) * 100);
+
+    // Time bonus calculation: faster = more XP
+    // Under 2 minutes = 50 bonus, under 3 min = 30, under 5 min = 15, else 0
+    let timeBonus = 0;
+    const elapsedSec = elapsedMs / 1000;
+    if (elapsedSec < 120) {
+        timeBonus = 50;
+    } else if (elapsedSec < 180) {
+        timeBonus = 30;
+    } else if (elapsedSec < 300) {
+        timeBonus = 15;
+    }
+
+    if (timeBonus > 0) {
+        state.totalXP += timeBonus;
+    }
+
     animateNumber('final-xp', state.totalXP);
     document.getElementById('final-time').textContent = getElapsedTime();
 
-    const accuracy = Math.round((state.correctCount / LEVEL_DATA.quiz.length) * 100);
     document.getElementById('final-accuracy').textContent = accuracy + '%';
     document.getElementById('final-streak').textContent = state.bestStreak;
 
-    // Achievement name based on performance
+    // Performance-based titles
     const achieveName = document.getElementById('achievement-name');
     if (accuracy === 100) {
-        achieveName.textContent = 'Perfect Agent — Flawless Awakening';
+        achieveName.textContent = 'NEURAL ARCHITECT — Perfect Cognition Achieved';
     } else if (accuracy >= 80) {
-        achieveName.textContent = 'The Awakened Agent';
+        achieveName.textContent = 'SIGNAL WALKER — The Network Recognizes You';
     } else if (accuracy >= 60) {
-        achieveName.textContent = 'Emerging Agent';
+        achieveName.textContent = 'CODE INITIATE — Potential Detected';
     } else {
-        achieveName.textContent = 'Agent in Training';
+        achieveName.textContent = 'AWAKENED ONE — The Journey Begins';
+    }
+
+    // Time bonus display
+    if (timeBonus > 0) {
+        const timeBonusEl = document.createElement('div');
+        timeBonusEl.className = 'time-bonus-display';
+        timeBonusEl.innerHTML = `⏱️ <strong>SPEED BONUS:</strong> +${timeBonus} XP`;
+        timeBonusEl.style.textAlign = 'center';
+        timeBonusEl.style.marginTop = '10px';
+        timeBonusEl.style.color = 'var(--snes-gold, #fbbf24)';
+        timeBonusEl.style.fontSize = '1.1rem';
+        const statsEl = document.getElementById('final-accuracy');
+        if (statsEl && statsEl.parentElement && statsEl.parentElement.parentElement) {
+            statsEl.parentElement.parentElement.appendChild(timeBonusEl);
+        }
     }
 
     // Summary
     const summaryEl = document.getElementById('debrief-summary');
     summaryEl.innerHTML = `
-        <h3>📋 KEY INTEL ACQUIRED</h3>
+        <h3>📋 ACHIEVEMENTS UNLOCKED</h3>
         <ul>
             ${LEVEL_DATA.mastery.summary.map(s => `<li>${s}</li>`).join('')}
         </ul>
@@ -1227,7 +1432,15 @@ function typeCliffhanger() {
 
         if (charIdx % 4 === 0) playSound('typewriter');
 
-        const delay = char === '\n' ? 100 : char === '.' ? 60 : 20;
+        let delay = char === '\n' ? 100 : char === '.' ? 60 : 20;
+
+        // Dramatic pause on em-dashes and ellipses in cliffhanger too
+        if (char === '—') delay = 180;
+        if (char === '.' && charIdx >= 3) {
+            const prev = text.substring(charIdx - 3, charIdx);
+            if (prev === '...') delay = 250;
+        }
+
         setTimeout(typeChar, delay);
     }
 
@@ -1386,7 +1599,9 @@ function replayLevel() {
         audioCtx: state.audioCtx,
         celebrationIndex: 0,
         storyXP: 0,
-        revealedCards: 0
+        revealedCards: 0,
+        comboCount: 0,
+        wrongCount: 0
     };
 
     document.getElementById('begin-quiz-btn').style.display = 'none';
@@ -1395,11 +1610,16 @@ function replayLevel() {
     document.getElementById('xp-display').textContent = '0';
     document.getElementById('transmission-body').innerHTML = '';
 
+    // Remove time bonus display if present
+    const timeBonusEl = document.querySelector('.time-bonus-display');
+    if (timeBonusEl) timeBonusEl.remove();
+
     // Reset boot sequence
     document.querySelectorAll('.boot-line').forEach(l => l.classList.remove('visible'));
     document.getElementById('wake-up-btn').style.display = 'none';
     document.getElementById('intro-darkness').classList.remove('fade-to-white');
 
+    updateProgressBar(0);
     setPhase('intro');
     runBootSequence();
 }

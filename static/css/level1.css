@@ -1880,3 +1880,192 @@ body.shake-medium {
         font-size: 0.85rem;
     }
 }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0;
+    background: rgba(10, 10, 30, 0.95);
+    border-bottom: 1px solid var(--pixel-teal);
+    backdrop-filter: blur(10px);
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--pixel-teal), var(--pixel-gold), var(--pixel-magenta));
+    background-size: 200% 100%;
+    animation: progressGradient 3s ease infinite;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px var(--pixel-teal), 0 0 20px rgba(0, 255, 204, 0.3);
+    position: relative;
+}
+
+.progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -2px;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--pixel-gold), 0 0 20px var(--pixel-gold);
+    opacity: 0.9;
+}
+
+@keyframes progressGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.progress-text {
+    text-align: center;
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    color: var(--pixel-teal);
+    padding: 2px 0 4px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+/* ===== COMBO DISPLAY ===== */
+.combo-display {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    font-family: var(--font-pixel);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--pixel-gold);
+    text-shadow:
+        0 0 20px var(--pixel-gold),
+        0 0 40px rgba(255, 204, 0, 0.5),
+        0 0 60px rgba(255, 204, 0, 0.3),
+        2px 2px 0 var(--pixel-dark);
+    pointer-events: none;
+    opacity: 0;
+    transition: none;
+    letter-spacing: 4px;
+}
+
+.combo-display.active {
+    animation: comboPopIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes comboPopIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.4);
+    }
+    40% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    70% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -70%) scale(1.1);
+    }
+}
+
+/* ===== PULSE ANIMATION ===== */
+.pulse-animate {
+    animation: pulseScale 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulseScale {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+/* ===== ENHANCED PARTICLES ===== */
+.ambient-particle {
+    will-change: transform, opacity;
+    filter: blur(0.5px);
+}
+
+.ambient-particle:nth-child(3n) {
+    background: var(--pixel-gold) !important;
+    box-shadow: 0 0 6px var(--pixel-gold);
+}
+
+.ambient-particle:nth-child(5n) {
+    background: var(--pixel-magenta) !important;
+    box-shadow: 0 0 6px var(--pixel-magenta);
+}
+
+.ambient-particle:nth-child(7n) {
+    width: 3px !important;
+    height: 3px !important;
+    border-radius: 50%;
+}
+
+/* ===== ENHANCED BUTTON GLOW ===== */
+.pixel-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.pixel-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.pixel-btn:hover::before {
+    opacity: 1;
+    animation: btnShimmer 1.5s ease infinite;
+}
+
+@keyframes btnShimmer {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== TIME BONUS ===== */
+.time-bonus {
+    display: inline-block;
+    color: var(--pixel-gold);
+    font-family: var(--font-pixel);
+    font-size: 0.9rem;
+    padding: 4px 12px;
+    background: rgba(255, 204, 0, 0.1);
+    border: 1px solid var(--pixel-gold);
+    border-radius: 4px;
+    margin-top: 8px;
+    animation: pulseScale 1s ease infinite;
+}
+
+/* ===== BODY ADJUSTMENT FOR PROGRESS BAR ===== */
+.level1-container {
+    padding-top: 35px;
+}
