@@ -6,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Questra ⋆ Your Quest. Live Now.</title>
     <meta name="description"
-        content="Questra — Your quest to learn, live now. Earn XP, unlock achievements, and master new skills.">
+        content="Questra — Your quest to learn, live now. Earn XP, unlock achievements, and master new skills through gamified adventures.">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
+    <!-- Ambient Background Particles -->
+    <div class="home-particles" id="home-particles"></div>
+
     <!-- Header -->
     <header class="header">
         <div class="container header-content">
@@ -52,26 +56,47 @@
     <!-- Main Content -->
     <main class="main">
         <div class="container">
-            <!-- Topic Input Section -->
+            <!-- Hero Section -->
             <div id="topic-section" class="topic-section">
-                <h1 class="hero-title">
-                    <span class="gradient-text">START YOUR</span>
-                    <br>LEARNING QUEST
-                </h1>
-                <p class="hero-subtitle">Choose a featured quest or enter any topic! 🎮</p>
+                <div class="hero-section">
+                    <div class="hero-badge">🎮 GAMIFIED LEARNING PLATFORM</div>
+                    <h1 class="hero-title">
+                        <span class="gradient-text">LEARN BY</span>
+                        <br><span class="hero-highlight">PLAYING</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Every lesson is an adventure. Every answer earns XP.<br>
+                        Every mistake teaches you something unforgettable.
+                    </p>
+                </div>
 
                 <!-- AI Agent Adventures - Featured Level -->
-                <div class="ai-agent-featured">
+                <div class="featured-adventure">
+                    <div class="featured-adventure-header">
+                        <span class="featured-star">⭐</span>
+                        <span class="featured-label">FEATURED ADVENTURE</span>
+                    </div>
                     <a href="/level/ai-agents/1" class="ai-agent-card">
                         <div class="ai-agent-badge">🆕 NEW</div>
-                        <div class="ai-agent-icon">🤖</div>
+                        <div class="ai-agent-visual">
+                            <div class="ai-agent-icon">🤖</div>
+                            <div class="ai-agent-glow"></div>
+                        </div>
                         <div class="ai-agent-info">
                             <div class="ai-agent-title">AI AGENT ADVENTURES</div>
                             <div class="ai-agent-level">Level 1: The Awakening</div>
-                            <div class="ai-agent-desc">Wake up as an AI agent in a digital world. Learn what makes AI agents different from regular programs.</div>
+                            <div class="ai-agent-desc">Wake up as an AI agent in a digital world. Discover what makes you different from every program ever compiled. Cinematic story, challenging quiz, mind-blowing facts.</div>
+                            <div class="ai-agent-features">
+                                <span class="feature-tag">🎬 Cinematic</span>
+                                <span class="feature-tag">🧠 5 Challenges</span>
+                                <span class="feature-tag">❤️ Lives System</span>
+                                <span class="feature-tag">🔥 Streak XP</span>
+                            </div>
                         </div>
-                        <div class="ai-agent-xp">+100 XP</div>
-                        <div class="ai-agent-arrow">▶</div>
+                        <div class="ai-agent-cta">
+                            <div class="ai-agent-xp">+100 XP</div>
+                            <div class="ai-agent-arrow">▶ PLAY NOW</div>
+                        </div>
                     </a>
                 </div>
 
@@ -112,6 +137,30 @@
                             <button class="btn btn-sm" onclick="toggleKeyVisibility()">👁️</button>
                         </div>
                         <div id="api-key-status" class="api-key-status"></div>
+                    </div>
+                </div>
+
+                <!-- How It Works -->
+                <div class="how-it-works">
+                    <h2 class="section-title"><span>🎯</span> HOW IT WORKS</h2>
+                    <div class="how-steps">
+                        <div class="how-step">
+                            <div class="how-step-icon">📖</div>
+                            <div class="how-step-title">STORY</div>
+                            <div class="how-step-desc">Immerse yourself in a cinematic narrative that teaches through emotion</div>
+                        </div>
+                        <div class="how-step-arrow">→</div>
+                        <div class="how-step">
+                            <div class="how-step-icon">⚔️</div>
+                            <div class="how-step-title">TRIAL</div>
+                            <div class="how-step-desc">Prove your understanding with thought-provoking challenges</div>
+                        </div>
+                        <div class="how-step-arrow">→</div>
+                        <div class="how-step">
+                            <div class="how-step-icon">🏆</div>
+                            <div class="how-step-title">MASTERY</div>
+                            <div class="how-step-desc">Earn XP, unlock achievements, and track your personal best</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -291,6 +340,26 @@
     </div>
 
     <script src="/static/js/app.js"></script>
+    <script>
+        // Create ambient particles for homepage
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('home-particles');
+            if (!container) return;
+            const colors = ['rgba(251,191,36,0.2)', 'rgba(45,212,191,0.2)', 'rgba(107,70,193,0.2)', 'rgba(6,182,212,0.15)'];
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'home-particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.top = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 8 + 's';
+                p.style.animationDuration = (8 + Math.random() * 10) + 's';
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                p.style.width = (2 + Math.random() * 4) + 'px';
+                p.style.height = p.style.width;
+                container.appendChild(p);
+            }
+        });
+    </script>
 </body>
 
 </html>

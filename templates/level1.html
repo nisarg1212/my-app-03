@@ -39,6 +39,13 @@
             </div>
 
             <div class="stats-bar">
+                <!-- Hearts Display -->
+                <div class="stat-item hearts-stat" id="hearts-display">
+                    <span class="heart heart-full">❤️</span>
+                    <span class="heart heart-full">❤️</span>
+                    <span class="heart heart-full">❤️</span>
+                </div>
+
                 <div class="stat-item">
                     <span class="stat-icon">🔥</span>
                     <span class="stat-value" id="streak-count">{{ stats.streak or 0 }}</span>
@@ -51,6 +58,9 @@
                     <span class="stat-label">XP</span>
                 </div>
 
+                <!-- XP Multiplier Badge -->
+                <div class="xp-multiplier-badge" id="xp-multiplier" style="display: none;">1x</div>
+
                 <div class="level-progress-mini">
                     <div class="level-bar-mini">
                         <div class="level-bar-fill-mini" id="level-bar-fill" style="width: 0%"></div>
@@ -61,6 +71,17 @@
             </div>
         </div>
     </header>
+
+    <!-- Daily Challenge Badge -->
+    <div class="daily-challenge-badge" id="daily-challenge-badge" style="display: none;">
+        <span class="daily-icon">🌟</span>
+        <span class="daily-text">DAILY CHALLENGE ACTIVE — +50 XP Bonus!</span>
+    </div>
+
+    <!-- Heart Warning -->
+    <div class="heart-warning" id="heart-warning" style="display: none;">
+        <span>⚠️</span> Last heart! Be careful, Agent...
+    </div>
 
     <!-- Level Progress Bar -->
     <div class="level-progress-bar-top">
@@ -215,6 +236,9 @@
                         </div>
                     </div>
 
+                    <!-- Personal Best -->
+                    <div class="personal-best-display" id="personal-best-display"></div>
+
                     <div class="mission-debrief">
                         <h2 class="debrief-title pixel-glow">Mission Debrief</h2>
 
@@ -239,7 +263,15 @@
                                 <div class="debrief-stat-label">BEST STREAK</div>
                                 <div class="debrief-stat-value" id="final-streak">0</div>
                             </div>
+                            <div class="debrief-stat" data-stat="hearts">
+                                <div class="debrief-stat-icon">❤️</div>
+                                <div class="debrief-stat-label">HEARTS REMAINING</div>
+                                <div class="debrief-stat-value" id="final-hearts">3/3</div>
+                            </div>
                         </div>
+
+                        <!-- Bonus Breakdown -->
+                        <div class="bonus-breakdown" id="bonus-breakdown"></div>
 
                         <!-- Performance Rating Stars -->
                         <div class="performance-stars" id="performance-stars"></div>
@@ -247,6 +279,9 @@
                         <div class="debrief-summary" id="debrief-summary">
                             <!-- Filled by JS -->
                         </div>
+
+                        <!-- Next Level Preview -->
+                        <div class="next-level-preview" id="next-level-preview"></div>
 
                         <!-- Cliffhanger Teaser -->
                         <div class="next-mission-teaser" id="next-mission-teaser">

@@ -755,3 +755,434 @@ body.shake-medium { animation: shakeMedium 0.5s ease; }
 }
 
 .level1-container { padding-top: 35px; }
+
+/* ===== HEARTS / LIVES SYSTEM ===== */
+.hearts-stat {
+    display: flex !important;
+    gap: 4px;
+    align-items: center;
+    padding: 6px 12px !important;
+}
+.heart {
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+.heart-full {
+    filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.5));
+    animation: heartBeat 2s ease-in-out infinite;
+}
+.heart-empty {
+    opacity: 0.3;
+    filter: grayscale(1);
+}
+.heart-breaking {
+    animation: heartBreak 0.6s ease forwards !important;
+}
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+}
+@keyframes heartBreak {
+    0% { transform: scale(1); opacity: 1; }
+    30% { transform: scale(1.3); opacity: 1; filter: brightness(2); }
+    60% { transform: scale(0.8) rotate(15deg); opacity: 0.5; }
+    100% { transform: scale(0) rotate(30deg); opacity: 0; }
+}
+
+.heart-warning {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10003;
+    background: rgba(239, 68, 68, 0.15);
+    border: 3px solid var(--snes-red);
+    padding: 16px 32px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.55rem;
+    color: var(--snes-red);
+    text-align: center;
+    animation: heartWarningPulse 1s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+}
+@keyframes heartWarningPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.5); }
+}
+
+/* ===== XP MULTIPLIER BADGE ===== */
+.xp-multiplier-badge {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    padding: 4px 10px;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: multiplierGlow 1.5s ease-in-out infinite;
+}
+.multiplier-rare {
+    color: var(--snes-teal-light);
+    border-color: var(--snes-teal);
+    background: rgba(13, 148, 136, 0.15);
+    text-shadow: 0 0 8px rgba(45, 212, 191, 0.5);
+}
+.multiplier-epic {
+    color: var(--snes-purple-light);
+    border-color: var(--snes-purple);
+    background: rgba(107, 70, 193, 0.15);
+    text-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+}
+.multiplier-legendary {
+    color: var(--snes-gold-bright);
+    border-color: var(--snes-gold);
+    background: rgba(251, 191, 36, 0.15);
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.7);
+}
+.multiplier-pop {
+    animation: multiplierPop 0.4s ease;
+}
+@keyframes multiplierPop {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+@keyframes multiplierGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+
+/* ===== DAILY CHALLENGE BADGE ===== */
+.daily-challenge-badge {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(234, 88, 12, 0.15));
+    border: 2px solid var(--snes-gold);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.4rem;
+    color: var(--snes-gold-bright);
+    letter-spacing: 1px;
+    animation: dailyBadgeGlow 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+}
+.daily-icon { font-size: 1rem; }
+@keyframes dailyBadgeGlow {
+    0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.1); }
+    50% { box-shadow: 0 0 25px rgba(251, 191, 36, 0.3); }
+}
+
+/* ===== "DID YOU KNOW?" CARDS ===== */
+.did-you-know-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--snes-bg-card), rgba(13, 148, 136, 0.08));
+    border: 4px solid var(--snes-teal);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.4), 0 0 30px rgba(13, 148, 136, 0.15);
+    padding: 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.did-you-know-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(13, 148, 136, 0.05), transparent, rgba(251, 191, 36, 0.05), transparent);
+    animation: dykRotate 8s linear infinite;
+}
+@keyframes dykRotate { to { transform: rotate(360deg); } }
+.dyk-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    position: relative;
+}
+.dyk-icon { font-size: 2rem; animation: dykBounce 2s ease-in-out infinite; }
+@keyframes dykBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.dyk-label {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    color: var(--snes-teal-light);
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
+}
+.dyk-content {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--snes-text);
+    margin-bottom: 16px;
+    position: relative;
+    padding: 0 10px;
+}
+.dyk-content strong { color: var(--snes-gold-bright); }
+.dyk-source {
+    font-size: 0.75rem;
+    color: var(--snes-text-dim);
+    font-style: italic;
+    margin-bottom: 24px;
+    position: relative;
+}
+.dyk-continue {
+    position: relative;
+    margin-top: 8px;
+}
+.did-you-know-card.fade-out {
+    animation: fadeOutDown 0.4s ease forwards;
+}
+@keyframes fadeOutDown {
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+/* ===== PHASE TRANSITIONS (ENHANCED) ===== */
+.phase-exit {
+    animation: phaseOut 0.3s ease forwards;
+}
+@keyframes phaseOut {
+    to { opacity: 0; transform: translateY(-20px); filter: blur(4px); }
+}
+.phase-enter {
+    animation: phaseIn 0.5s ease forwards;
+}
+
+/* ===== SLIDE IN RIGHT (for questions) ===== */
+.slide-in-right {
+    animation: slideInRight 0.5s ease forwards;
+}
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* ===== CORRECT ANSWER REVEAL (in wrong feedback) ===== */
+.correct-answer-reveal {
+    margin-top: 12px;
+    padding: 14px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 2px solid rgba(34, 197, 94, 0.3);
+    border-left: 4px solid var(--snes-green);
+    color: var(--snes-text);
+    line-height: 1.7;
+}
+.correct-answer-reveal strong {
+    color: var(--snes-green);
+}
+
+/* ===== BONUS BREAKDOWN (Mastery) ===== */
+.bonus-breakdown {
+    margin-bottom: 20px;
+}
+.bonus-item {
+    text-align: center;
+    padding: 8px 16px;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    border-radius: 0;
+    animation: bonusSlideIn 0.5s ease backwards;
+}
+.bonus-item:nth-child(1) { animation-delay: 1.2s; }
+.bonus-item:nth-child(2) { animation-delay: 1.4s; }
+.bonus-item:nth-child(3) { animation-delay: 1.6s; }
+@keyframes bonusSlideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.bonus-time {
+    color: var(--snes-teal-light);
+    background: rgba(13, 148, 136, 0.08);
+    border: 1px solid rgba(13, 148, 136, 0.3);
+}
+.bonus-hearts {
+    color: var(--snes-pink);
+    background: rgba(236, 72, 153, 0.08);
+    border: 1px solid rgba(236, 72, 153, 0.3);
+}
+.bonus-daily {
+    color: var(--snes-gold-bright);
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+/* ===== PERSONAL BEST ===== */
+.personal-best-display {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.new-best-badge {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    color: var(--snes-gold-bright);
+    padding: 12px 24px;
+    border: 3px solid var(--snes-gold);
+    background: rgba(251, 191, 36, 0.1);
+    display: inline-block;
+    animation: newBestPulse 1s ease-in-out infinite;
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+}
+@keyframes newBestPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); transform: scale(1); }
+    50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.5); transform: scale(1.05); }
+}
+.new-best-glow {
+    animation: newBestGlow 2s ease-in-out infinite;
+}
+@keyframes newBestGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+}
+.prev-best {
+    font-size: 0.8rem;
+    color: var(--snes-text-dim);
+    font-style: italic;
+}
+
+/* ===== NEXT LEVEL PREVIEW ===== */
+.next-level-preview {
+    margin-bottom: 32px;
+}
+.next-level-card {
+    background: linear-gradient(135deg, var(--snes-bg-dark), rgba(107, 70, 193, 0.08));
+    border: 3px solid var(--snes-purple);
+    padding: 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: nextLevelReveal 0.8s ease backwards;
+    animation-delay: 1.5s;
+}
+@keyframes nextLevelReveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.next-level-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(107, 70, 193, 0.1), transparent);
+    animation: nextLevelShimmer 3s ease-in-out infinite;
+}
+@keyframes nextLevelShimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+.next-level-badge {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.4rem;
+    color: var(--snes-purple-light);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    display: block;
+}
+.next-level-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    color: var(--snes-gold-bright);
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 0 var(--snes-orange);
+}
+.next-level-tagline {
+    font-size: 0.9rem;
+    color: var(--snes-teal-light);
+    font-style: italic;
+    margin-bottom: 16px;
+}
+.next-level-teaser {
+    font-size: 0.9rem;
+    color: var(--snes-text-dim);
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+.next-level-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+.skill-tag {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.35rem;
+    padding: 6px 12px;
+    border: 2px solid var(--snes-teal);
+    color: var(--snes-teal-light);
+    background: rgba(13, 148, 136, 0.1);
+    letter-spacing: 1px;
+}
+.next-level-reward {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    color: var(--snes-gold-bright);
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+/* ===== DEBRIEF STATS — 5th stat (hearts) ===== */
+.debrief-stat:nth-child(5) {
+    animation-delay: 1.0s;
+    grid-column: 1 / -1;
+}
+
+/* ===== ENHANCED MOBILE ===== */
+@media (max-width: 768px) {
+    .daily-challenge-badge {
+        top: auto;
+        bottom: 10px;
+        font-size: 0.35rem;
+        padding: 6px 14px;
+    }
+    .hearts-stat {
+        gap: 2px;
+    }
+    .heart {
+        font-size: 0.9rem;
+    }
+    .xp-multiplier-badge {
+        font-size: 0.4rem;
+        padding: 3px 8px;
+    }
+    .did-you-know-card {
+        padding: 24px;
+    }
+    .dyk-content {
+        font-size: 0.9rem;
+    }
+    .next-level-card {
+        padding: 20px;
+    }
+    .skill-tag {
+        font-size: 0.3rem;
+    }
+}
+@media (max-width: 480px) {
+    .hearts-stat {
+        padding: 4px 8px !important;
+    }
+    .heart {
+        font-size: 0.75rem;
+    }
+    .xp-multiplier-badge {
+        font-size: 0.35rem;
+    }
+    .daily-challenge-badge {
+        font-size: 0.3rem;
+        padding: 4px 10px;
+    }
+}
