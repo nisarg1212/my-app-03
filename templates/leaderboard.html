@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questra ⋆ Leaderboard</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/engagement.css">
+</head>
+
+<body>
+    <div class="home-particles" id="home-particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="/" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
+                    <img src="/static/gamify_logo.png" alt="Questra" class="logo-image">
+                    <span class="logo-text">QUESTRA</span>
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-value" id="streak-count">{{ stats.streak or 0 }}</span>
+                    <span class="stat-label">Streak</span>
+                </div>
+                <div class="xp-bar-container">
+                    <div class="xp-bar-header">
+                        <span id="xp-current">{{ stats.xp or 0 }}</span>
+                        <span id="xp-next">/ {{ ((stats.level or 1) * 100) }} XP</span>
+                    </div>
+                    <div class="xp-bar">
+                        <div class="xp-bar-fill" id="xp-bar-fill" style="width: {{ stats.xp_progress_percent or 0 }}%"></div>
+                    </div>
+                </div>
+                <div class="level-badge" id="level-badge">{{ stats.level or 1 }}</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="leaderboard-page">
+                <div class="leaderboard-header">
+                    <h1 class="page-title"><span>🏆</span> GLOBAL LEADERBOARD</h1>
+                    <p class="page-subtitle">Compete with learners worldwide. Climb the ranks!</p>
+                    <div class="leaderboard-nav">
+                        <a href="/" class="btn btn-secondary btn-sm"><span>🏠</span> HOME</a>
+                        <a href="/achievements" class="btn btn-secondary btn-sm"><span>🏅</span> ACHIEVEMENTS</a>
+                    </div>
+                </div>
+
+                <!-- Top 3 Podium -->
+                <div class="podium" id="podium">
+                    <div class="podium-spot second" id="podium-2">
+                        <div class="podium-avatar">🥈</div>
+                        <div class="podium-name">---</div>
+                        <div class="podium-xp">0 XP</div>
+                        <div class="podium-block">2</div>
+                    </div>
+                    <div class="podium-spot first" id="podium-1">
+                        <div class="podium-crown">👑</div>
+                        <div class="podium-avatar">🥇</div>
+                        <div class="podium-name">---</div>
+                        <div class="podium-xp">0 XP</div>
+                        <div class="podium-block">1</div>
+                    </div>
+                    <div class="podium-spot third" id="podium-3">
+                        <div class="podium-avatar">🥉</div>
+                        <div class="podium-name">---</div>
+                        <div class="podium-xp">0 XP</div>
+                        <div class="podium-block">3</div>
+                    </div>
+                </div>
+
+                <!-- Your Rank Card -->
+                <div class="your-rank-card" id="your-rank-card">
+                    <div class="your-rank-label">YOUR RANK</div>
+                    <div class="your-rank-number" id="your-rank">#--</div>
+                    <div class="your-rank-xp" id="your-xp">{{ stats.xp or 0 }} XP</div>
+                </div>
+
+                <!-- Full Leaderboard Table -->
+                <div class="leaderboard-table" id="leaderboard-table">
+                    <div class="leaderboard-loading">
+                        <div class="spinner"></div>
+                        <p>Loading leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/leaderboard');
+                const data = await res.json();
+                renderLeaderboard(data);
+            } catch (e) {
+                console.error('Leaderboard error:', e);
+            }
+
+            // Particles
+            const container = document.getElementById('home-particles');
+            if (container) {
+                const colors = ['rgba(251,191,36,0.2)', 'rgba(45,212,191,0.2)', 'rgba(107,70,193,0.2)'];
+                for (let i = 0; i < 15; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'home-particle';
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.top = Math.random() * 100 + '%';
+                    p.style.animationDelay = Math.random() * 8 + 's';
+                    p.style.animationDuration = (8 + Math.random() * 10) + 's';
+                    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    p.style.width = (2 + Math.random() * 4) + 'px';
+                    p.style.height = p.style.width;
+                    container.appendChild(p);
+                }
+            }
+        });
+
+        function renderLeaderboard(data) {
+            const entries = data.entries || [];
+            const userRank = data.user_rank || '--';
+
+            // Update your rank card
+            document.getElementById('your-rank').textContent = `#${userRank}`;
+
+            // Podium
+            for (let i = 0; i < 3 && i < entries.length; i++) {
+                const e = entries[i];
+                const spot = document.getElementById(`podium-${i + 1}`);
+                if (spot) {
+                    spot.querySelector('.podium-avatar').textContent = e.avatar || '🎮';
+                    spot.querySelector('.podium-name').textContent = e.username + (e.is_you ? ' (YOU)' : '');
+                    spot.querySelector('.podium-xp').textContent = e.xp.toLocaleString() + ' XP';
+                    if (e.is_you) spot.classList.add('is-you');
+                }
+            }
+
+            // Table
+            const table = document.getElementById('leaderboard-table');
+            let html = `
+                <div class="lb-header-row">
+                    <span class="lb-col-rank">RANK</span>
+                    <span class="lb-col-player">PLAYER</span>
+                    <span class="lb-col-level">LVL</span>
+                    <span class="lb-col-combo">COMBO</span>
+                    <span class="lb-col-xp">XP</span>
+                </div>
+            `;
+
+            entries.forEach((e, i) => {
+                const isYou = e.is_you;
+                const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${e.rank}`;
+                html += `
+                    <div class="lb-row ${isYou ? 'lb-row-you' : ''}" style="animation-delay: ${i * 0.05}s">
+                        <span class="lb-col-rank">${rankIcon}</span>
+                        <span class="lb-col-player">
+                            <span class="lb-avatar">${e.avatar}</span>
+                            ${e.username}${isYou ? ' <span class="you-badge">YOU</span>' : ''}
+                        </span>
+                        <span class="lb-col-level">${e.level}</span>
+                        <span class="lb-col-combo">${e.best_combo}x</span>
+                        <span class="lb-col-xp">${e.xp.toLocaleString()}</span>
+                    </div>
+                `;
+            });
+
+            table.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

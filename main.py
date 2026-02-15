@@ -1,4 +1,4 @@
-"""Questra - Interactive Learning Platform"""
+"""Questra - Interactive Learning Platform — Ultra Engagement Edition"""
 import os
 import uuid
 import time
@@ -16,7 +16,12 @@ from typing import List, Optional
 load_dotenv()
 
 # Import our modules
-from gamification import add_xp, get_stats, increment_stat, unlock_achievement
+from gamification import (
+    add_xp, get_stats, increment_stat, unlock_achievement, ACHIEVEMENTS,
+    record_combo, save_session_progress,
+    get_daily_challenge, complete_daily_challenge,
+    get_leaderboard, update_leaderboard_user
+)
 from modules.unified_generator import generate_all_content
 from modules.prebuilt_quests import get_all_quest_info
 from modules.quiz_mode import score_quiz
@@ -25,7 +30,7 @@ from modules.detective_mode import solve_case
 from gamification.models import LearningSession
 
 # Initialize FastAPI
-app = FastAPI(title="Questra", description="Your quest. Live now.")
+app = FastAPI(title="Questra", description="Your quest. Live now. — Ultra Engagement Edition")
 
 # CORS
 app.add_middleware(
@@ -72,7 +77,16 @@ class Level1Completion(BaseModel):
     correct_count: int = 0
     total_questions: int = 0
 
-# In-memory storage for level completion data (for future certificate generation)
+class ComboData(BaseModel):
+    combo: int = 0
+    correct: int = 0
+    total: int = 0
+    is_perfect: bool = False
+
+class UsernameUpdate(BaseModel):
+    username: str
+
+# In-memory storage for level completion data
 level_completions = {}
 
 # ==================== Routes ====================
@@ -81,9 +95,30 @@ level_completions = {}
 async def home(request: Request):
     """Render the main dashboard"""
     stats = get_stats()
+    daily = get_daily_challenge()
     return templates.TemplateResponse("index.html", {
         "request": request,
+        "stats": stats,
+        "daily_challenge": daily
+    })
+
+@app.get("/leaderboard", response_class=HTMLResponse)
+async def leaderboard_page(request: Request):
+    """Render the leaderboard page"""
+    stats = get_stats()
+    return templates.TemplateResponse("leaderboard.html", {
+        "request": request,
         "stats": stats
+    })
+
+@app.get("/achievements", response_class=HTMLResponse)
+async def achievements_page(request: Request):
+    """Render the achievements page"""
+    stats = get_stats()
+    return templates.TemplateResponse("achievements.html", {
+        "request": request,
+        "stats": stats,
+        "all_achievements": ACHIEVEMENTS
     })
 
 @app.get("/api/stats")
@@ -97,20 +132,85 @@ async def get_featured_quests():
     quests = get_all_quest_info()
     return {"quests": quests}
 
+# ==================== Engagement API ====================
+
+@app.get("/api/daily-challenge")
+async def api_daily_challenge():
+    """Get today's daily challenge"""
+    return get_daily_challenge()
+
+@app.post("/api/daily-challenge/complete")
+async def api_complete_daily():
+    """Complete today's daily challenge"""
+    result = complete_daily_challenge()
+    return result
+
+@app.post("/api/combo")
+async def api_record_combo(data: ComboData):
+    """Record combo/streak data"""
+    result = record_combo(data.combo, data.correct, data.total, data.is_perfect)
+    return result
+
+@app.get("/api/leaderboard")
+async def api_leaderboard():
+    """Get leaderboard data"""
+    update_leaderboard_user()
+    return get_leaderboard()
+
+@app.post("/api/username")
+async def api_update_username(data: UsernameUpdate):
+    """Update player username"""
+    from gamification.database import SessionLocal
+    from gamification.models_db import User
+    db = SessionLocal()
+    try:
+        user = db.query(User).first()
+        if user:
+            user.username = data.username[:20]  # Max 20 chars
+            db.commit()
+        return {"success": True, "username": data.username[:20]}
+    finally:
+        db.close()
+
+@app.get("/api/achievements")
+async def api_achievements():
+    """Get all achievements with unlock status"""
+    stats = get_stats()
+    unlocked = stats.get("achievements", [])
+    
+    result = []
+    for aid, ach in ACHIEVEMENTS.items():
+        result.append({
+            "id": aid,
+            "name": ach["name"],
+            "desc": ach["desc"],
+            "icon": ach["icon"],
+            "xp": ach.get("xp", 0),
+            "unlocked": aid in unlocked
+        })
+    
+    return {
+        "achievements": result,
+        "unlocked_count": len(unlocked),
+        "total": len(ACHIEVEMENTS)
+    }
+
 # ==================== AI Agent Adventures - Level 1 ====================
 
 @app.get("/level/ai-agents/1", response_class=HTMLResponse)
 async def ai_agents_level1(request: Request):
     """Render AI Agent Adventures Level 1: The Awakening"""
     stats = get_stats()
+    daily = get_daily_challenge()
     return templates.TemplateResponse("level1.html", {
         "request": request,
-        "stats": stats
+        "stats": stats,
+        "daily_challenge": daily
     })
 
 @app.post("/api/level1/complete")
 async def complete_level1(data: Level1Completion):
-    """Record Level 1 completion data for future certificate generation"""
+    """Record Level 1 completion data"""
     completion_id = str(uuid.uuid4())[:8]
     
     # Add XP to gamification engine
@@ -118,6 +218,22 @@ async def complete_level1(data: Level1Completion):
         add_xp(data.xp_earned, "AI Agent Adventures Level 1 completed")
         increment_stat("stories")
         increment_stat("quizzes")
+    
+    # Record combo data
+    if data.best_streak > 0 or data.correct_count > 0:
+        record_combo(
+            data.best_streak,
+            data.correct_count,
+            data.total_questions,
+            data.accuracy == 100
+        )
+    
+    # Check for first quest achievement
+    unlock_achievement("first_quest")
+    
+    # Check for speed demon
+    if data.time_ms > 0 and data.time_ms < 30000:
+        unlock_achievement("speed_demon")
     
     # Store completion data
     level_completions[completion_id] = {
@@ -138,20 +254,19 @@ async def complete_level1(data: Level1Completion):
         "success": True,
         "completion_id": completion_id,
         "xp_earned": data.xp_earned,
-        "message": "Level 1 completed! The Awakening mastered."
+        "message": "Level 1 completed! The Awakening mastered.",
+        "stats": get_stats()
     }
 
 # ==================== Learning Session ====================
 
 @app.post("/api/session/start")
 async def start_session(data: TopicRequest):
-    """Start a new learning session - generates ALL content at once"""
+    """Start a new learning session"""
     session_id = str(uuid.uuid4())[:8]
     
-    # Generate ALL content in one API call
     content = generate_all_content(data.topic, user_api_key=data.api_key)
     
-    # Check if generation failed
     if content.get("error"):
         return JSONResponse(
             {"error": True, "message": content["message"]}, 
@@ -170,6 +285,9 @@ async def start_session(data: TopicRequest):
     
     active_sessions[session_id] = session
     
+    # Save progress for "continue where you left off"
+    save_session_progress(data.topic, "story", session_id)
+    
     return {
         "session_id": session_id,
         "topic": data.topic,
@@ -184,7 +302,7 @@ async def start_session(data: TopicRequest):
 
 @app.post("/api/session/{session_id}/complete-story")
 async def complete_story(session_id: str):
-    """Mark story as complete and return quiz (already generated)"""
+    """Mark story as complete and return quiz"""
     if session_id not in active_sessions:
         return JSONResponse({"error": "Session not found"}, status_code=404)
     
@@ -197,8 +315,8 @@ async def complete_story(session_id: str):
         session.total_xp_earned += session.story.xp_reward
     
     session.current_mode = "quiz"
+    save_session_progress(session.topic, "quiz", session_id)
     
-    # Quiz was already generated with the session
     return {
         "story_complete": True,
         "xp_earned": session.story.xp_reward,
@@ -213,7 +331,7 @@ async def complete_story(session_id: str):
 
 @app.post("/api/session/{session_id}/submit-quiz")
 async def submit_quiz(session_id: str, data: QuizAnswers):
-    """Submit quiz answers and return master practice (already generated)"""
+    """Submit quiz answers"""
     if session_id not in active_sessions:
         return JSONResponse({"error": "Session not found"}, status_code=404)
     
@@ -230,12 +348,20 @@ async def submit_quiz(session_id: str, data: QuizAnswers):
         increment_stat("quizzes")
         session.total_xp_earned += result["xp_earned"]
         
+        # Record combo data
+        record_combo(
+            result.get("correct", 0),  # Use correct as combo approximation
+            result.get("correct", 0),
+            result.get("total", 0),
+            result.get("percentage", 0) == 100
+        )
+        
         if result["percentage"] == 100:
             unlock_achievement("quiz_master")
     
     session.current_mode = "master"
+    save_session_progress(session.topic, "master", session_id)
     
-    # Master was already generated with the session
     return {
         **result,
         "next_mode": "master",
@@ -250,7 +376,7 @@ async def submit_quiz(session_id: str, data: QuizAnswers):
 
 @app.post("/api/session/{session_id}/submit-master")
 async def submit_master(session_id: str, data: MasterAnswers):
-    """Submit master practice answers and return detective case (already generated)"""
+    """Submit master practice answers"""
     if session_id not in active_sessions:
         return JSONResponse({"error": "Session not found"}, status_code=404)
     
@@ -266,10 +392,11 @@ async def submit_master(session_id: str, data: MasterAnswers):
         add_xp(result["xp_earned"], "Master practice completed")
         increment_stat("masters")
         session.total_xp_earned += result["xp_earned"]
+        unlock_achievement("master_student")
     
     session.current_mode = "detective"
+    save_session_progress(session.topic, "detective", session_id)
     
-    # Detective was already generated with the session
     return {
         **result,
         "next_mode": "detective",
@@ -303,11 +430,18 @@ async def solve_detective_case(session_id: str, data: DetectiveAnswer):
         
         if result["solved"]:
             unlock_achievement("detective")
+        
+        # First quest complete!
+        unlock_achievement("first_quest")
+    
+    # Clear session progress (quest complete)
+    save_session_progress("", "", "")
     
     return {
         **result,
         "session_complete": True,
-        "total_session_xp": session.total_xp_earned
+        "total_session_xp": session.total_xp_earned,
+        "stats": get_stats()
     }
 
 @app.get("/api/session/{session_id}")

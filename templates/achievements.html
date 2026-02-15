@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questra ⋆ Achievements</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏅</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/engagement.css">
+</head>
+
+<body>
+    <div class="home-particles" id="home-particles"></div>
+
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="/" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
+                    <img src="/static/gamify_logo.png" alt="Questra" class="logo-image">
+                    <span class="logo-text">QUESTRA</span>
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-value">{{ stats.streak or 0 }}</span>
+                    <span class="stat-label">Streak</span>
+                </div>
+                <div class="level-badge">{{ stats.level or 1 }}</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="achievements-page">
+                <div class="achievements-page-header">
+                    <h1 class="page-title"><span>🏅</span> ACHIEVEMENTS</h1>
+                    <p class="page-subtitle">Unlock badges by completing challenges. Each achievement earns bonus XP!</p>
+                    <div class="achievements-progress-bar">
+                        <div class="achievements-progress-fill" id="ach-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="achievements-count" id="ach-count">0 / 0 Unlocked</div>
+                    <div class="leaderboard-nav">
+                        <a href="/" class="btn btn-secondary btn-sm"><span>🏠</span> HOME</a>
+                        <a href="/leaderboard" class="btn btn-secondary btn-sm"><span>🏆</span> LEADERBOARD</a>
+                    </div>
+                </div>
+
+                <div class="achievements-full-grid" id="achievements-full-grid">
+                    <div class="leaderboard-loading">
+                        <div class="spinner"></div>
+                        <p>Loading achievements...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/achievements');
+                const data = await res.json();
+                renderAchievements(data);
+            } catch (e) {
+                console.error('Achievements error:', e);
+            }
+
+            // Particles
+            const container = document.getElementById('home-particles');
+            if (container) {
+                const colors = ['rgba(251,191,36,0.2)', 'rgba(45,212,191,0.2)', 'rgba(107,70,193,0.2)'];
+                for (let i = 0; i < 15; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'home-particle';
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.top = Math.random() * 100 + '%';
+                    p.style.animationDelay = Math.random() * 8 + 's';
+                    p.style.animationDuration = (8 + Math.random() * 10) + 's';
+                    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    p.style.width = (2 + Math.random() * 4) + 'px';
+                    p.style.height = p.style.width;
+                    container.appendChild(p);
+                }
+            }
+        });
+
+        function renderAchievements(data) {
+            const grid = document.getElementById('achievements-full-grid');
+            const achievements = data.achievements || [];
+            const unlocked = data.unlocked_count || 0;
+            const total = data.total || 0;
+
+            // Update progress
+            document.getElementById('ach-count').textContent = `${unlocked} / ${total} Unlocked`;
+            document.getElementById('ach-progress').style.width = `${(unlocked / Math.max(1, total)) * 100}%`;
+
+            let html = '';
+            achievements.forEach((ach, i) => {
+                html += `
+                    <div class="ach-card ${ach.unlocked ? 'ach-unlocked' : 'ach-locked'}" 
+                         style="animation-delay: ${i * 0.06}s">
+                        <div class="ach-icon-wrap">
+                            <span class="ach-icon">${ach.icon}</span>
+                            ${ach.unlocked ? '<span class="ach-check">✓</span>' : '<span class="ach-lock">🔒</span>'}
+                        </div>
+                        <div class="ach-info">
+                            <div class="ach-name">${ach.name}</div>
+                            <div class="ach-desc">${ach.desc}</div>
+                            <div class="ach-reward">+${ach.xp} XP</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

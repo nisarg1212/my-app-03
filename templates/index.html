@@ -11,9 +11,13 @@
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/engagement.css">
 </head>
 
 <body>
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
     <!-- Ambient Background Particles -->
     <div class="home-particles" id="home-particles"></div>
 
@@ -26,29 +30,29 @@
             </div>
 
             <div class="stats-bar">
-                <div class="stat-item">
+                <div class="stat-item {{ 'streak-fire' if stats.streak and stats.streak >= 3 else '' }}">
                     <span class="stat-icon">🔥</span>
-                    <span class="stat-value" id="streak-count">0</span>
+                    <span class="stat-value" id="streak-count">{{ stats.streak or 0 }}</span>
                     <span class="stat-label">Streak</span>
                 </div>
 
-                <div class="stat-item clickable" onclick="showAchievements()">
+                <div class="stat-item clickable" onclick="window.location.href='/achievements'">
                     <span class="stat-icon">🏆</span>
-                    <span class="stat-value" id="achievement-count">0</span>
+                    <span class="stat-value" id="achievement-count">{{ (stats.achievements|length if stats.achievements else 0) }}/{{ stats.total_achievements or 23 }}</span>
                     <span class="stat-label">Badges</span>
                 </div>
 
                 <div class="xp-bar-container">
                     <div class="xp-bar-header">
-                        <span id="xp-current">0</span>
-                        <span id="xp-next">/ 100 XP</span>
+                        <span id="xp-current">{{ stats.xp or 0 }}</span>
+                        <span id="xp-next">/ {{ ((stats.level or 1) * 100) }} XP</span>
                     </div>
                     <div class="xp-bar">
-                        <div class="xp-bar-fill" id="xp-bar-fill" style="width: 0%"></div>
+                        <div class="xp-bar-fill" id="xp-bar-fill" style="width: {{ stats.xp_progress_percent or 0 }}%"></div>
                     </div>
                 </div>
 
-                <div class="level-badge" id="level-badge">1</div>
+                <div class="level-badge" id="level-badge">{{ stats.level or 1 }}</div>
             </div>
         </div>
     </header>
@@ -56,8 +60,16 @@
     <!-- Main Content -->
     <main class="main">
         <div class="container">
-            <!-- Hero Section -->
+            <!-- Topic Section -->
             <div id="topic-section" class="topic-section">
+
+                <!-- Continue Where You Left Off -->
+                <div id="continue-container"></div>
+
+                <!-- Daily Challenge Banner -->
+                <div id="daily-challenge-container"></div>
+
+                <!-- Hero Section -->
                 <div class="hero-section">
                     <div class="hero-badge">🎮 GAMIFIED LEARNING PLATFORM</div>
                     <h1 class="hero-title">
@@ -68,6 +80,12 @@
                         Every lesson is an adventure. Every answer earns XP.<br>
                         Every mistake teaches you something unforgettable.
                     </p>
+                </div>
+
+                <!-- Quick Nav -->
+                <div class="nav-links">
+                    <a href="/leaderboard" class="nav-link">🏆 LEADERBOARD</a>
+                    <a href="/achievements" class="nav-link">🏅 ACHIEVEMENTS</a>
                 </div>
 
                 <!-- AI Agent Adventures - Featured Level -->
@@ -120,7 +138,7 @@
                     </button>
                 </div>
 
-                <!-- API Key Section (for custom topics) -->
+                <!-- API Key Section -->
                 <div class="api-key-section">
                     <button class="api-key-toggle" onclick="toggleApiKeySection()">
                         <span id="api-key-arrow">▶</span> Use your own API key (for custom topics)
@@ -290,6 +308,9 @@
                             </div>
 
                             <div class="completion-buttons">
+                                <a href="/leaderboard" class="btn btn-secondary btn-sm">
+                                    <span>🏆</span> LEADERBOARD
+                                </a>
                                 <button class="btn btn-secondary" onclick="newAdventure()">
                                     <span>🏠</span> HOME
                                 </button>
@@ -339,6 +360,8 @@
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="/static/js/engagement.js"></script>
     <script src="/static/js/app.js"></script>
     <script>
         // Create ambient particles for homepage
@@ -358,6 +381,20 @@
                 p.style.height = p.style.width;
                 container.appendChild(p);
             }
+
+            // Load daily challenge banner
+            loadDailyChallenge().then(data => {
+                if (data) {
+                    renderDailyChallengeBanner(data, document.getElementById('daily-challenge-container'));
+                }
+            });
+
+            // Load continue prompt
+            fetch('/api/stats').then(r => r.json()).then(stats => {
+                if (stats.last_session_topic && stats.last_session_id) {
+                    renderContinuePrompt(stats, document.getElementById('continue-container'));
+                }
+            });
         });
     </script>
 </body>
