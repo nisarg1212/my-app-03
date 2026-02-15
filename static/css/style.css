@@ -1529,3 +1529,126 @@ body::after {
 .api-key-status.error {
     color: var(--danger);
 }
+
+/* ============================================
+   ADVENTURE BANNER
+   ============================================ */
+
+.adventure-banner {
+    max-width: 700px;
+    margin: 0 auto 32px;
+}
+
+.adventure-banner-link {
+    text-decoration: none;
+    display: block;
+}
+
+.adventure-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #1a1a3e 0%, #2a1a4e 100%);
+    border: 4px solid #9060e0;
+    box-shadow: 6px 6px 0 rgba(144, 96, 224, 0.3), 0 0 20px rgba(144, 96, 224, 0.15);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.adventure-banner-content::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 200%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(144, 96, 224, 0.1), transparent);
+    animation: bannerShimmer 3s infinite;
+}
+
+@keyframes bannerShimmer {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(50%); }
+}
+
+.adventure-banner-content:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 rgba(144, 96, 224, 0.3), 0 0 30px rgba(144, 96, 224, 0.25);
+    border-color: #a070f0;
+}
+
+.adventure-banner-badge {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.35rem;
+    padding: 4px 8px;
+    background: #f06080;
+    color: white;
+    border: 2px solid #0a0a14;
+    position: absolute;
+    top: -2px;
+    right: 12px;
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.adventure-banner-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.adventure-banner-text {
+    flex: 1;
+    text-align: left;
+}
+
+.adventure-banner-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    color: #f0c040;
+    margin-bottom: 6px;
+    text-shadow: 2px 2px 0 #b08020;
+}
+
+.adventure-banner-subtitle {
+    font-size: 0.7rem;
+    color: #a0a0c0;
+    line-height: 1.4;
+}
+
+.adventure-banner-cta {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    color: #f0c040;
+    padding: 8px 16px;
+    border: 3px solid #f0c040;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.adventure-banner-content:hover .adventure-banner-cta {
+    background: #f0c040;
+    color: #0a0a14;
+}
+
+@media (max-width: 768px) {
+    .adventure-banner-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .adventure-banner-text {
+        text-align: center;
+    }
+
+    .adventure-banner-badge {
+        position: static;
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+}

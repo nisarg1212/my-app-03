@@ -73,6 +73,36 @@ async def home(request: Request):
         "stats": stats
     })
 
+@app.get("/adventure", response_class=HTMLResponse)
+async def adventure(request: Request):
+    """Render the AI Agent Adventures page"""
+    return templates.TemplateResponse("adventure.html", {
+        "request": request
+    })
+
+class AdventureComplete(BaseModel):
+    level: int
+    xp_earned: int
+    time_seconds: int
+    accuracy: int
+
+@app.post("/api/adventure/complete")
+async def complete_adventure(data: AdventureComplete):
+    """Record adventure level completion"""
+    result = add_xp(data.xp_earned, f"AI Agent Adventures Level {data.level}")
+    increment_stat("stories")
+    
+    if data.accuracy >= 80:
+        unlock_achievement("quiz_master")
+    
+    return {
+        "success": True,
+        "xp_gained": data.xp_earned,
+        "total_xp": result.get("total_xp", 0),
+        "level": result.get("level", 1),
+        "leveled_up": result.get("leveled_up", False)
+    }
+
 @app.get("/api/stats")
 async def api_stats():
     """Get user gamification stats"""
