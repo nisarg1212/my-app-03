@@ -99,6 +99,13 @@ async def get_featured_quests():
 
 # ==================== AI Agent Adventures - Level 1 ====================
 
+@app.get("/level/ai-agents/1/intro", response_class=HTMLResponse)
+async def ai_agents_level1_intro(request: Request):
+    """Render AI Agent Adventures Level 1 Page 1: Narrative Hook"""
+    return templates.TemplateResponse("level1_intro.html", {
+        "request": request,
+    })
+
 @app.get("/level/ai-agents/1", response_class=HTMLResponse)
 async def ai_agents_level1(request: Request):
     """Render AI Agent Adventures Level 1: The Awakening"""
