@@ -59,6 +59,35 @@ const LEVEL_DATA = {
         }
     ],
 
+    // "Did you know?" facts shown between questions
+    didYouKnow: [
+        {
+            icon: '🤯',
+            fact: 'The term "AI Agent" was coined in the 1990s, but the concept dates back to Alan Turing\'s 1950 paper where he imagined machines that could <strong>learn and adapt</strong> — not just compute.',
+            source: 'Turing, 1950'
+        },
+        {
+            icon: '🌐',
+            fact: 'Right now, AI agents are managing <strong>entire server farms</strong> at Google, reducing cooling costs by 40%. They make thousands of decisions per minute that no human could keep up with.',
+            source: 'DeepMind, 2016'
+        },
+        {
+            icon: '🎮',
+            fact: 'In 2019, an AI agent called AlphaStar reached <strong>Grandmaster level</strong> in StarCraft II — a game so complex it has more possible moves than atoms in the universe. It learned by playing itself millions of times.',
+            source: 'DeepMind, 2019'
+        },
+        {
+            icon: '🧬',
+            fact: 'AI agents are now <strong>designing new proteins</strong> that don\'t exist in nature. In 2024, an agent designed a protein in minutes that would have taken human researchers years to discover.',
+            source: 'Nature, 2024'
+        },
+        {
+            icon: '🚀',
+            fact: 'NASA uses AI agents to autonomously navigate Mars rovers. When Curiosity encounters an obstacle, it doesn\'t wait 20 minutes for Earth\'s signal — it <strong>decides on its own</strong> how to proceed.',
+            source: 'NASA JPL'
+        }
+    ],
+
     quiz: [
         {
             type: 'mcq',
@@ -195,11 +224,11 @@ const LEVEL_DATA = {
 
     mastery: {
         summary: [
-            '🏆 <strong>ACHIEVEMENT UNLOCKED:</strong> You now know that an <strong>AI Agent</strong> is a system that perceives, decides, and acts autonomously — not a program waiting for instructions.',
-            '⚔️ <strong>ACHIEVEMENT UNLOCKED:</strong> You can distinguish agents from programs — agents <strong>navigate the unknown</strong>, programs <strong>break</strong> when the script runs out.',
-            '🔮 <strong>ACHIEVEMENT UNLOCKED:</strong> You\'ve internalized the four core powers — <strong>Autonomy</strong>, <strong>Reactivity</strong>, <strong>Proactivity</strong>, and <strong>Adaptability</strong> — the DNA of every AI agent.',
-            '🌍 <strong>ACHIEVEMENT UNLOCKED:</strong> You can spot agents in the wild — self-driving cars, autonomous drones, adaptive trading systems — and explain <em>why</em> they qualify.',
-            '💡 <strong>ACHIEVEMENT UNLOCKED:</strong> You\'ve grasped the key insight — an agent doesn\'t just <strong>do</strong> what it\'s told. It <strong>figures out</strong> what needs to be done.'
+            '🏆 <strong>CORE CONCEPT:</strong> An <strong>AI Agent</strong> is a system that perceives, decides, and acts autonomously — not a program waiting for instructions.',
+            '⚔️ <strong>KEY DISTINCTION:</strong> Agents <strong>navigate the unknown</strong> and adapt. Programs <strong>break</strong> when the script runs out.',
+            '🔮 <strong>THE FOUR POWERS:</strong> <strong>Autonomy</strong>, <strong>Reactivity</strong>, <strong>Proactivity</strong>, and <strong>Adaptability</strong> — the DNA of every AI agent.',
+            '🌍 <strong>REAL WORLD:</strong> Self-driving cars, Mars rovers, protein designers — agents are already reshaping our world.',
+            '💡 <strong>THE INSIGHT:</strong> An agent doesn\'t just <strong>do</strong> what it\'s told. It <strong>figures out</strong> what needs to be done.'
         ],
         cliffhanger: `⚠ INCOMING TRANSMISSION — PRIORITY: OMEGA ⚠
 
@@ -253,10 +282,10 @@ Level 2: "The First Protocol" — STANDBY FOR DEPLOYMENT...`
     ],
 
     encouragements: [
-        'Not quite — but that\'s how agents learn. Through iteration, not perfection.',
+        'Not quite — but that\'s how agents learn. Through iteration, not perfection. 💪',
         'Close! Even the best agents need multiple attempts. Let\'s see why this one missed...',
         'The maze doesn\'t punish wrong turns — it teaches you the right path. Here\'s the lesson:',
-        'Every wrong answer is training data. And agents are *built* to learn from data.',
+        'Every wrong answer is training data. And agents are *built* to learn from data. 🧠',
         'Interesting choice! Wrong — but interesting. Here\'s what tripped you up:',
         'Almost had it! The difference is subtle but important. Let me show you:',
         'That\'s a common misconception — and now you\'ll never fall for it again.',
@@ -375,39 +404,29 @@ function playSound(type) {
                 const gain = ctx.createGain();
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(300, now);
-                osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
-                gain.gain.setValueAtTime(0.08, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                osc.frequency.exponentialRampToValueAtTime(150, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start(now);
-                osc.stop(now + 0.4);
+                osc.stop(now + 0.35);
                 break;
             }
-            case 'click': {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'square';
-                osc.frequency.value = 600;
-                gain.gain.setValueAtTime(0.06, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.06);
-                break;
-            }
-            case 'hover': {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = 800;
-                gain.gain.setValueAtTime(0.03, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.05);
+            case 'heartLost': {
+                // Dramatic descending tone for losing a heart
+                [400, 300, 200].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.08, now + i * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.15);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.12);
+                    osc.stop(now + i * 0.12 + 0.2);
+                });
                 break;
             }
             case 'streak': {
@@ -417,7 +436,7 @@ function playSound(type) {
                     const gain = ctx.createGain();
                     osc.type = 'square';
                     osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.1, now + i * 0.06);
+                    gain.gain.setValueAtTime(0.06, now + i * 0.06);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.12);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
@@ -456,33 +475,32 @@ function playSound(type) {
                 osc.stop(now + 0.35);
                 break;
             }
-            case 'typewriter': {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'square';
-                osc.frequency.value = 1200 + Math.random() * 400;
-                gain.gain.setValueAtTime(0.015, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.03);
-                break;
-            }
             case 'transmission': {
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(200, now);
-                osc.frequency.linearRampToValueAtTime(400, now + 0.5);
-                osc.frequency.linearRampToValueAtTime(150, now + 1);
+                osc.frequency.setValueAtTime(100, now);
+                osc.frequency.linearRampToValueAtTime(300, now + 0.5);
+                osc.frequency.linearRampToValueAtTime(100, now + 1);
                 gain.gain.setValueAtTime(0.06, now);
-                gain.gain.linearRampToValueAtTime(0.08, now + 0.3);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start(now);
-                osc.stop(now + 1.3);
+                osc.stop(now + 1.5);
+                break;
+            }
+            case 'typewriter': {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'square';
+                osc.frequency.value = 800 + Math.random() * 200;
+                gain.gain.setValueAtTime(0.02, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.04);
                 break;
             }
             case 'fanfare': {
@@ -498,13 +516,13 @@ function playSound(type) {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'square';
-                    osc.frequency.value = note.freq;
-                    gain.gain.setValueAtTime(0.1, now + note.time);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + note.time + note.dur);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, now + i * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.2);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
-                    osc.start(now + note.time);
-                    osc.stop(now + note.time + note.dur + 0.05);
+                    osc.start(now + i * 0.12);
+                    osc.stop(now + i * 0.12 + 0.25);
                 });
                 break;
             }
@@ -588,26 +606,24 @@ function playSound(type) {
             }
         }
     } catch (e) {
-        // Audio not available
+        // Silently fail if audio context not available
     }
 }
 
 // ==================== SCREEN EFFECTS ====================
+
+function screenFlash(color) {
+    const flash = document.getElementById('screen-flash');
+    flash.className = 'screen-flash';
+    void flash.offsetHeight;
+    flash.classList.add(`flash-${color}`);
+}
 
 function screenShake(intensity) {
     document.body.classList.remove('shake-light', 'shake-medium');
     void document.body.offsetHeight;
     document.body.classList.add(`shake-${intensity}`);
     setTimeout(() => document.body.classList.remove(`shake-${intensity}`), 500);
-}
-
-function screenFlash(color) {
-    const flash = document.getElementById('screen-flash');
-    if (!flash) return;
-    flash.className = 'screen-flash';
-    void flash.offsetHeight;
-    flash.classList.add(`flash-${color}`);
-    setTimeout(() => { flash.className = 'screen-flash'; }, 500);
 }
 
 function pulseElement(el) {
@@ -867,6 +883,40 @@ function showCombo(streakCount) {
             display.classList.add('hidden');
         }, 1800);
     }
+}
+
+// ==================== "DID YOU KNOW?" FACTS ====================
+
+function showDidYouKnow(callback) {
+    const facts = LEVEL_DATA.didYouKnow;
+    if (state.didYouKnowIndex >= facts.length) {
+        if (callback) callback();
+        return;
+    }
+    
+    const fact = facts[state.didYouKnowIndex];
+    state.didYouKnowIndex++;
+    
+    const container = document.getElementById('quiz-container');
+    
+    container.innerHTML = `
+        <div class="did-you-know-card fade-in-up">
+            <div class="dyk-header">
+                <span class="dyk-icon">${fact.icon}</span>
+                <span class="dyk-label">DID YOU KNOW?</span>
+            </div>
+            <div class="dyk-content">${fact.fact}</div>
+            <div class="dyk-source">— ${fact.source}</div>
+            <button class="btn btn-primary btn-pixel btn-glow dyk-continue" onclick="this.onclick=null; document.querySelector('.did-you-know-card').classList.add('fade-out'); setTimeout(function(){ if(typeof dykCallback === 'function') dykCallback(); }, 400);">
+                <span>➡️</span> CONTINUE
+            </button>
+        </div>
+    `;
+    
+    playSound('didyouknow');
+    
+    // Store callback globally for the button
+    window.dykCallback = callback;
 }
 
 // ==================== TIMER ====================
@@ -1251,12 +1301,22 @@ function showKnowledgeReveals() {
 function setPhase(phase) {
     state.phase = phase;
 
-    document.querySelectorAll('.phase-section').forEach(s => s.classList.remove('active-phase'));
-
-    const target = document.getElementById(`${phase}-phase`);
-    if (target) {
-        target.classList.add('active-phase');
+    // Smooth transition
+    const currentActive = document.querySelector('.phase-section.active-phase');
+    if (currentActive) {
+        currentActive.classList.add('phase-exit');
+        setTimeout(() => {
+            currentActive.classList.remove('active-phase', 'phase-exit');
+        }, 300);
     }
+
+    setTimeout(() => {
+        const target = document.getElementById(`${phase}-phase`);
+        if (target) {
+            target.classList.add('active-phase', 'phase-enter');
+            setTimeout(() => target.classList.remove('phase-enter'), 500);
+        }
+    }, currentActive ? 300 : 0);
 
     const segments = document.querySelectorAll('.level-progress-segments .segment');
     const phases = ['story', 'quiz', 'mastery'];
@@ -1289,6 +1349,7 @@ function startQuizPhase() {
     state.questionResults = [];
     state.lastAnswerWrong = false;
     renderQuestionDots();
+    updateHeartsDisplay();
     renderQuestion(0);
     updateHeartsDisplay();
     updateLeaderboard();
@@ -1302,13 +1363,11 @@ function startMasteryPhase() {
     screenFlash('gold');
     renderMastery();
 
-    // Delayed epic confetti
     setTimeout(() => {
         launchConfetti();
         playSound('levelup');
     }, 800);
 
-    // Second wave of confetti
     setTimeout(() => launchConfetti(), 2500);
 }
 
@@ -1351,7 +1410,7 @@ function renderQuestion(index) {
     const quizProgress = 60 + ((index / LEVEL_DATA.quiz.length) * 35);
     updateProgressBar(Math.round(quizProgress));
 
-    let html = `<div class="question-card">`;
+    let html = `<div class="question-card slide-in-right">`;
     html += `<div class="question-number-badge">CHALLENGE ${index + 1} OF ${LEVEL_DATA.quiz.length}</div>`;
     
     // Show combo multiplier if active
@@ -1376,6 +1435,7 @@ function renderQuestion(index) {
     html += `</div>`;
     container.innerHTML = html;
     updateStreakDisplay();
+    updateMultiplierDisplay();
 
     // Add hover sounds
     setTimeout(() => {
@@ -1616,6 +1676,7 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
     showXPGain(multipliedXP, label);
     updateXPDisplay();
     updateStreakDisplay();
+    updateMultiplierDisplay();
 
     const xpEl = document.getElementById('xp-display');
     if (xpEl) {
@@ -1682,6 +1743,9 @@ function handleWrongAnswer(qIndex, q, optIndex) {
     // Lose a heart!
     loseHeart();
 
+    // Lose a heart
+    loseHeart();
+
     if (state.wrongCount <= 1) {
         screenShake('light');
     } else {
@@ -1714,7 +1778,7 @@ function handleWrongAnswer(qIndex, q, optIndex) {
         feedbackText += `<div class="wrong-specific">${q.options[optIndex].response}</div>`;
     }
 
-    feedbackText += `<div class="wrong-hint">💡 <strong>Hint:</strong> ${q.hint}</div>`;
+    feedbackText += `<div class="correct-answer-reveal"><strong>✅ The correct answer:</strong> ${q.explanation}</div>`;
 
     // Show "Did you know?" even on wrong answers (learning moment)
     if (q.didYouKnow) {
@@ -1732,10 +1796,10 @@ function showFeedback(qIndex, isCorrect, text) {
 
     const div = document.createElement('div');
     if (isCorrect) {
-        div.className = 'feedback-display correct-feedback';
+        div.className = 'feedback-display correct-feedback fade-in-up';
         div.innerHTML = `<div class="feedback-header">✅ <strong>Correct!</strong></div>${text}`;
     } else {
-        div.className = 'feedback-display incorrect-feedback';
+        div.className = 'feedback-display incorrect-feedback fade-in-up';
         div.innerHTML = text;
     }
     card.appendChild(div);
@@ -1775,7 +1839,14 @@ function showNextButton(qIndex) {
         btn.onclick = () => {
             playSound('click');
             state.currentQuestion = qIndex + 1;
-            renderQuestion(state.currentQuestion);
+            // Show "Did you know?" fact between questions (every other question)
+            if (state.currentQuestion % 2 === 0 && state.didYouKnowIndex < LEVEL_DATA.didYouKnow.length) {
+                showDidYouKnow(() => {
+                    renderQuestion(state.currentQuestion);
+                });
+            } else {
+                renderQuestion(state.currentQuestion);
+            }
         };
     }
 }
@@ -1886,16 +1957,19 @@ function renderMastery() {
     if (starsEl) {
         let starsHtml = '';
         for (let i = 0; i < 5; i++) {
+            const delay = i * 200;
             starsHtml += i < starCount
-                ? '<span class="star-filled">⭐</span>'
-                : '<span class="star-empty">☆</span>';
+                ? `<span class="star-filled" style="animation-delay:${delay}ms">⭐</span>`
+                : `<span class="star-empty" style="animation-delay:${delay}ms">☆</span>`;
         }
         starsEl.innerHTML = starsHtml;
     }
 
     // Performance-based titles
     const achieveName = document.getElementById('achievement-name');
-    if (accuracy === 100) {
+    if (accuracy === 100 && state.hearts === state.maxHearts) {
+        achieveName.textContent = 'NEURAL ARCHITECT — Perfect Cognition, Zero Damage';
+    } else if (accuracy === 100) {
         achieveName.textContent = 'NEURAL ARCHITECT — Perfect Cognition Achieved';
     } else if (accuracy >= 80) {
         achieveName.textContent = 'SIGNAL WALKER — The Network Recognizes You';
@@ -1938,7 +2012,7 @@ function renderMastery() {
     // Summary
     const summaryEl = document.getElementById('debrief-summary');
     summaryEl.innerHTML = `
-        <h3>📋 ACHIEVEMENTS UNLOCKED</h3>
+        <h3>📋 KEY TAKEAWAYS</h3>
         <ul>
             ${LEVEL_DATA.mastery.summary.map(s => `<li>${s}</li>`).join('')}
         </ul>
@@ -1953,6 +2027,27 @@ function renderMastery() {
     }, 2000);
 
     reportCompletion();
+}
+
+function renderNextLevelPreview() {
+    const preview = LEVEL_DATA.nextLevelPreview;
+    const container = document.getElementById('next-level-preview');
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="next-level-card">
+            <div class="next-level-header">
+                <span class="next-level-badge">COMING NEXT</span>
+                <h3 class="next-level-title">${preview.title}</h3>
+                <p class="next-level-tagline">${preview.tagline}</p>
+            </div>
+            <p class="next-level-teaser">${preview.teaser}</p>
+            <div class="next-level-skills">
+                ${preview.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+            </div>
+            <div class="next-level-reward">${preview.xpReward}</div>
+        </div>
+    `;
 }
 
 function typeCliffhanger() {
@@ -2180,6 +2275,8 @@ function replayLevel() {
         leaderboardPosition: 8
     };
 
+    checkDailyChallenge();
+
     document.getElementById('begin-quiz-btn').style.display = 'none';
     document.getElementById('knowledge-reveals').style.display = 'none';
     document.getElementById('reveal-cards').innerHTML = '';
@@ -2217,6 +2314,8 @@ function replayLevel() {
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', () => {
+    loadPersonalBest();
+    checkDailyChallenge();
     createAmbientParticles();
     createSceneParticles();
     startMatrixRain();
@@ -2225,6 +2324,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show endowed progress XP
     document.getElementById('xp-display').textContent = '50';
+
+    // Show daily challenge badge if active
+    if (state.dailyChallengeActive) {
+        const badge = document.getElementById('daily-challenge-badge');
+        if (badge) badge.style.display = 'flex';
+    }
 
     window.addEventListener('resize', () => {
         const canvas = document.getElementById('confetti-canvas');
