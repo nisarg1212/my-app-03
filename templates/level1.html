@@ -39,6 +39,15 @@
             </div>
 
             <div class="stats-bar">
+                <!-- Hearts Display -->
+                <div class="stat-item hearts-stat">
+                    <div class="hearts-display" id="hearts-display">
+                        <span class="heart heart-full">❤️</span>
+                        <span class="heart heart-full">❤️</span>
+                        <span class="heart heart-full">❤️</span>
+                    </div>
+                </div>
+
                 <div class="stat-item">
                     <span class="stat-icon">🔥</span>
                     <span class="stat-value" id="streak-count">{{ stats.streak or 0 }}</span>
@@ -47,13 +56,13 @@
 
                 <div class="stat-item xp-stat-item">
                     <span class="stat-icon">⚡</span>
-                    <span class="stat-value animated-xp" id="xp-display">0</span>
+                    <span class="stat-value animated-xp" id="xp-display">50</span>
                     <span class="stat-label">XP</span>
                 </div>
 
                 <div class="level-progress-mini">
                     <div class="level-bar-mini">
-                        <div class="level-bar-fill-mini" id="level-bar-fill" style="width: 0%"></div>
+                        <div class="level-bar-fill-mini" id="level-bar-fill" style="width: 16%"></div>
                     </div>
                 </div>
 
@@ -181,7 +190,7 @@
 
                 <!-- Streak Counter -->
                 <div class="streak-counter" id="streak-counter" style="display: none;">
-                    <span class="streak-fire">🔥</span>
+                    <span class="streak-fire" id="streak-fire">🔥</span>
                     <span class="streak-num" id="streak-num">0</span>
                     <span class="streak-label">STREAK</span>
                     <div class="streak-bar" id="streak-bar"></div>
@@ -198,6 +207,18 @@
                     <button class="btn btn-primary btn-pixel btn-glow" id="next-question-btn" onclick="nextQuestion()">
                         <span>➡️</span> NEXT
                     </button>
+                </div>
+
+                <!-- Mini Leaderboard (shown during quiz) -->
+                <div class="mini-leaderboard" id="mini-leaderboard">
+                    <div class="lb-header">
+                        <span class="lb-icon">🏆</span>
+                        <span class="lb-title">LIVE RANKINGS</span>
+                        <span class="lb-position-badge">You: <span id="lb-position">#8</span></span>
+                    </div>
+                    <div class="lb-list" id="leaderboard-list">
+                        <!-- Populated by JS -->
+                    </div>
                 </div>
             </section>
 
@@ -239,10 +260,21 @@
                                 <div class="debrief-stat-label">BEST STREAK</div>
                                 <div class="debrief-stat-value" id="final-streak">0</div>
                             </div>
+                            <div class="debrief-stat" data-stat="hearts">
+                                <div class="debrief-stat-icon">❤️</div>
+                                <div class="debrief-stat-label">HEARTS LEFT</div>
+                                <div class="debrief-stat-value" id="final-hearts">3/3</div>
+                            </div>
                         </div>
+
+                        <!-- Bonus Summary -->
+                        <div class="bonus-summary" id="bonus-summary"></div>
 
                         <!-- Performance Rating Stars -->
                         <div class="performance-stars" id="performance-stars"></div>
+
+                        <!-- Achievements Earned -->
+                        <div class="achievements-earned" id="achievements-earned"></div>
 
                         <div class="debrief-summary" id="debrief-summary">
                             <!-- Filled by JS -->
@@ -282,7 +314,8 @@
     <!-- Pixel Confetti Canvas -->
     <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
 
-    <div class="combo-display" id="combo-display"></div>
+    <!-- Combo Display -->
+    <div class="combo-display hidden" id="combo-display"></div>
 
     <!-- XP Popup -->
     <div id="xp-popup" class="xp-popup-float" style="display: none;">
@@ -295,6 +328,27 @@
         <div class="celebration-content">
             <div class="celebration-emoji" id="celebration-emoji">🎯</div>
             <div class="celebration-text" id="celebration-text">Brilliant!</div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div id="achievement-popup" class="achievement-popup hidden">
+        <div class="achievement-popup-inner">
+            <div class="achievement-popup-glow"></div>
+            <div class="achievement-popup-icon">🏅</div>
+            <div class="achievement-popup-title">BADGE UNLOCKED!</div>
+            <div class="achievement-popup-name" id="achievement-popup-name"></div>
+            <div class="achievement-popup-desc" id="achievement-popup-desc"></div>
+            <div class="achievement-popup-xp">+10 XP</div>
+        </div>
+    </div>
+
+    <!-- Bonus Popup -->
+    <div id="bonus-popup" class="bonus-popup hidden">
+        <div class="bonus-popup-inner">
+            <div class="bonus-name"></div>
+            <div class="bonus-message"></div>
+            <div class="bonus-xp"></div>
         </div>
     </div>
 

@@ -1,12 +1,11 @@
 /**
  * Questra — Level 1: The Awakening
- * AI Agent Adventures — ULTRA Cinematic Edition
+ * AI Agent Adventures — ULTRA ADDICTIVE Edition
  * 
- * Cinematic Intro → Story → Knowledge Reveals → Quiz Trial → Mastery
- * With: typewriter, screen shake, confetti, celebrations,
- *       8-bit sounds, progressive reveals, emotional arc,
- *       progress bar, combo system, matrix rain, screen flash,
- *       question dots, performance stars, boot progress bar
+ * Features: Hearts/Lives, Achievement Badges, Fake Leaderboard,
+ * Variable Rewards, Combo Multiplier, "Did You Know?" moments,
+ * Near-miss messages, Endowed Progress, Streak Fire,
+ * "One More Question" hooks, Surprise achievements
  */
 
 // ==================== LEVEL DATA ====================
@@ -43,24 +42,27 @@ const LEVEL_DATA = {
         {
             icon: '🧠',
             title: 'What IS an AI Agent?',
-            content: 'Think of it like this: a regular program is a <strong>vending machine</strong> — press button, get result. An AI agent is more like a <strong>detective</strong> — it observes the scene, forms theories, takes action, and adapts when the evidence changes. It <strong>perceives</strong>, <strong>decides</strong>, and <strong>acts autonomously</strong> to achieve goals nobody spelled out step by step.'
+            content: 'Think of it like this: a regular program is a <strong>vending machine</strong> — press button, get result. An AI agent is more like a <strong>detective</strong> — it observes the scene, forms theories, takes action, and adapts when the evidence changes. It <strong>perceives</strong>, <strong>decides</strong>, and <strong>acts autonomously</strong> to achieve goals nobody spelled out step by step.',
+            didYouKnow: '🤯 <strong>Did you know?</strong> The concept of AI agents dates back to 1995 when Stuart Russell & Peter Norvig defined them in their legendary textbook. Today, there are over 300 million AI agents running worldwide — from your email spam filter to Mars rovers!'
         },
         {
             icon: '⚡',
             title: 'The 4 Core Powers',
-            content: 'Every AI agent carries four superpowers: <strong>Autonomy</strong> (acts without asking permission) · <strong>Reactivity</strong> (senses change and responds instantly) · <strong>Proactivity</strong> (pursues goals on its own initiative) · <strong>Adaptability</strong> (learns from every win and every failure). Together, they turn code into something that <em>thinks</em>.'
+            content: 'Every AI agent carries four superpowers: <strong>Autonomy</strong> (acts without asking permission) · <strong>Reactivity</strong> (senses change and responds instantly) · <strong>Proactivity</strong> (pursues goals on its own initiative) · <strong>Adaptability</strong> (learns from every win and every failure). Together, they turn code into something that <em>thinks</em>.',
+            didYouKnow: '🤯 <strong>Did you know?</strong> DeepMind\'s AlphaGo agent discovered a move in Go that no human had played in 3,000 years of the game\'s history — Move 37. It was so creative that the human champion left the room for 15 minutes in shock!'
         },
         {
             icon: '🔄',
             title: 'Agent vs. Program',
-            content: 'Imagine a GPS that only follows pre-loaded maps versus a self-driving car that navigates construction zones it\'s never seen. The GPS is a <strong>program</strong> — rigid, brittle, lost without its script. The car is an <strong>agent</strong> — it perceives, adapts, and finds a new route. That\'s the leap from <em>following instructions</em> to <em>solving problems</em>.'
+            content: 'Imagine a GPS that only follows pre-loaded maps versus a self-driving car that navigates construction zones it\'s never seen. The GPS is a <strong>program</strong> — rigid, brittle, lost without its script. The car is an <strong>agent</strong> — it perceives, adapts, and finds a new route. That\'s the leap from <em>following instructions</em> to <em>solving problems</em>.',
+            didYouKnow: '🤯 <strong>Did you know?</strong> NASA\'s Deep Space 1 probe had an AI agent called "Remote Agent" that autonomously diagnosed and fixed its own engine failure 100 million miles from Earth in 1999 — no human could help at that distance!'
         }
     ],
 
     quiz: [
         {
             type: 'mcq',
-            question: 'Imagine two AI systems monitoring a hospital. System A follows a checklist: "If temperature > 101°F, alert nurse." System B notices a patient\'s temperature is rising slowly, cross-references their medication, and proactively alerts the doctor before a crisis. Which statement BEST explains why System B is an AI agent and System A is not?',
+            question: '🏥 Imagine two AI systems monitoring a hospital. System A follows a checklist: "If temperature > 101°F, alert nurse." System B notices a patient\'s temperature is rising slowly, cross-references their medication history, and proactively alerts the doctor BEFORE a crisis hits. Which statement BEST explains why System B is an AI agent?',
             options: [
                 'System B uses more computing power and faster processors',
                 'System B autonomously perceives patterns, reasons about context, and acts proactively toward a goal',
@@ -68,47 +70,49 @@ const LEVEL_DATA = {
                 'System B has a better user interface for doctors'
             ],
             correctIndex: 1,
-            explanation: 'System B demonstrates all four agent powers: it perceives (notices the trend), reasons (cross-references medication), acts proactively (alerts before crisis), and pursues a goal (patient safety) — all without being told each step. That\'s agency.',
+            explanation: '🎯 System B demonstrates all four agent powers: it <strong>perceives</strong> (notices the trend), <strong>reasons</strong> (cross-references medication), <strong>acts proactively</strong> (alerts before crisis), and <strong>pursues a goal</strong> (patient safety) — all without being told each step. That\'s agency!',
             wrongExplanations: [
-                'Raw horsepower doesn\'t create intelligence. A supercomputer running a fixed checklist is still just a checklist — it\'s a very fast follower, not a thinker. Agency is about *what* you do with the power, not how much you have.',
+                '💡 Raw horsepower doesn\'t create intelligence. A supercomputer running a fixed checklist is still just a checklist — it\'s a very fast follower, not a thinker. Agency is about *what* you do with the power, not how much you have.',
                 null,
-                'Database access is a resource, not a superpower. System A could be connected to every database on Earth and still only check "temperature > 101." Access without reasoning is just hoarding data.',
-                'A beautiful dashboard doesn\'t make decisions. You could wrap System A in the sleekest UI ever designed and it would still just follow its one rigid rule. Agency lives in the logic, not the pixels.'
+                '💡 Database access is a resource, not a superpower. System A could be connected to every database on Earth and still only check "temperature > 101." Access without reasoning is just hoarding data.',
+                '💡 A beautiful dashboard doesn\'t make decisions. You could wrap System A in the sleekest UI ever designed and it would still just follow its one rigid rule. Agency lives in the logic, not the pixels.'
             ],
-            hint: 'Focus on the *behavior*, not the hardware. Which answer describes perceiving, reasoning, and acting autonomously?'
+            hint: 'Focus on the *behavior*, not the hardware. Which answer describes perceiving, reasoning, and acting autonomously?',
+            didYouKnow: '🤯 <strong>Fun fact:</strong> IBM\'s Watson AI agent analyzed 20 million cancer research papers in just 10 minutes and suggested a treatment that human doctors had missed — saving a patient\'s life in Japan!'
         },
         {
             type: 'narrative',
-            question: 'You reach the first gate of the maze. A data vault blocks your path — sealed with an encryption pattern that exists in no manual, no database, no training set. A regular program would crash with "ERROR: Unknown format." The clock is ticking. What do you do?',
+            question: '🔐 You reach the first gate of the maze. A data vault blocks your path — sealed with an encryption pattern that exists in no manual, no database, no training set. A regular program would crash with "ERROR: Unknown format." The clock is ticking. What do you do?',
             options: [
                 {
                     icon: '🔑',
                     path: 'The Adaptive Agent',
                     text: 'Analyze the pattern. Try approach A — it fails. Study *why* it failed. Adjust. Try approach B. Closer. Iterate. Each failure narrows the search space. Adapt until the lock yields.',
                     isCorrect: true,
-                    response: 'The vault shimmers and dissolves. You didn\'t have the answer — you *built* the answer, one failed attempt at a time. This is what separates agents from programs: the ability to turn failure into fuel.'
+                    response: '✨ The vault shimmers and dissolves. You didn\'t have the answer — you *built* the answer, one failed attempt at a time. This is what separates agents from programs: the ability to turn failure into fuel.'
                 },
                 {
                     icon: '📋',
                     path: 'The Script Follower',
                     text: 'Search your instruction manual for "vault-opening procedure." No match found. Display "ERROR: No instructions available." Halt execution. Wait for a patch.',
                     isCorrect: false,
-                    response: 'The vault stays sealed. A script can only solve problems someone already solved for it. When the world throws something new, a script doesn\'t adapt — it breaks. Agents are built for the unknown.'
+                    response: '🔒 The vault stays sealed. A script can only solve problems someone already solved for it. When the world throws something new, a script doesn\'t adapt — it breaks. Agents are built for the unknown.'
                 },
                 {
                     icon: '⏳',
                     path: 'The Passive Waiter',
                     text: 'Send a help ticket to a human operator. Sit idle. Do nothing. Hope someone eventually shows up with the key.',
                     isCorrect: false,
-                    response: 'Hours pass. No one comes. Dependence is the opposite of agency. An agent doesn\'t wait for rescue — it takes the initiative, experiments, and finds its own way through.'
+                    response: '⌛ Hours pass. No one comes. Dependence is the opposite of agency. An agent doesn\'t wait for rescue — it takes the initiative, experiments, and finds its own way through.'
                 }
             ],
             explanation: 'AI agents thrive in uncertainty. They observe, hypothesize, experiment, learn from failure, and iterate — exactly what no fixed script can do.',
-            hint: 'An agent\'s defining trait is handling situations it was *never* programmed for. Which path demonstrates that?'
+            hint: 'An agent\'s defining trait is handling situations it was *never* programmed for. Which path demonstrates that?',
+            didYouKnow: '🤯 <strong>Mind-blowing:</strong> Google\'s AI agent "AutoML" designed a neural network that outperformed every human-designed AI architecture. An AI literally built a better AI than humans could!'
         },
         {
             type: 'matching',
-            question: 'Deep in the maze, an ancient terminal flickers to life. It demands you classify each behavior. Sort carefully — the maze is watching:',
+            question: '🖥️ Deep in the maze, an ancient terminal flickers to life. It demands you classify each behavior. Sort carefully — the maze is watching:',
             pairs: [
                 { left: '🔒 Follows fixed instructions only', right: 'Regular Program' },
                 { left: '🌊 Changes strategy when conditions shift', right: 'AI Agent' },
@@ -116,12 +120,13 @@ const LEVEL_DATA = {
                 { left: '💥 Crashes on unexpected input', right: 'Regular Program' }
             ],
             shuffledRight: ['AI Agent', 'Regular Program', 'Regular Program', 'AI Agent'],
-            explanation: 'The pattern is clear: AI agents embrace uncertainty and chase goals independently. Regular programs need every step pre-written and shatter when reality deviates from the script.',
-            hint: 'Ask yourself: does this behavior show independence and learning, or rigid rule-following?'
+            explanation: '✅ The pattern is clear: AI agents embrace uncertainty and chase goals independently. Regular programs need every step pre-written and shatter when reality deviates from the script.',
+            hint: 'Ask yourself: does this behavior show independence and learning, or rigid rule-following?',
+            didYouKnow: '🤯 <strong>Wild fact:</strong> OpenAI\'s agents playing hide-and-seek invented strategies that researchers never anticipated — including building ramps and surfing on boxes — emergent behavior that nobody programmed!'
         },
         {
             type: 'mcq',
-            question: 'You\'re one gate from the center. A hologram presents four technologies. Which one is the BEST real-world example of an AI agent — and why?',
+            question: '🚗 You\'re one gate from the center. A hologram presents four technologies. Which one is the BEST real-world example of an AI agent — and why?',
             options: [
                 'A calculator app that computes any equation you type into it',
                 'A self-driving car that navigates unknown roads, dodges obstacles, and reroutes around traffic jams it has never encountered',
@@ -129,18 +134,19 @@ const LEVEL_DATA = {
                 'A spreadsheet macro that auto-formats cells when you press a button'
             ],
             correctIndex: 1,
-            explanation: 'A self-driving car is agency in action: it perceives (cameras, LIDAR, radar), reasons (path planning, risk assessment), decides (brake, accelerate, swerve), and adapts (new obstacles, weather, construction). It pursues the goal of safe navigation — autonomously, in real time, in a world it can\'t fully predict.',
+            explanation: '🚗 A self-driving car is agency in action: it <strong>perceives</strong> (cameras, LIDAR, radar), <strong>reasons</strong> (path planning, risk assessment), <strong>decides</strong> (brake, accelerate, swerve), and <strong>adapts</strong> (new obstacles, weather, construction). It pursues the goal of safe navigation — autonomously, in real time, in a world it can\'t fully predict.',
             wrongExplanations: [
-                'A calculator is impressively fast but fundamentally passive — it sits there until you type something, then executes a formula. No perception, no goals, no adaptation. It\'s a tool waiting for instructions, not a mind pursuing objectives.',
+                '💡 A calculator is impressively fast but fundamentally passive — it sits there until you type something, then executes a formula. No perception, no goals, no adaptation. It\'s a tool waiting for instructions, not a mind pursuing objectives.',
                 null,
-                'A timer is perhaps the simplest program imaginable: count to N, then beep. It has zero awareness of its environment, zero decision-making, and zero ability to adapt. It\'s the polar opposite of an agent.',
-                'Macros are clever shortcuts, but they\'re still rigid scripts. They can\'t handle anything outside their pre-defined rules. If the spreadsheet format changes unexpectedly, the macro breaks — an agent would adapt.'
+                '💡 A timer is perhaps the simplest program imaginable: count to N, then beep. It has zero awareness of its environment, zero decision-making, and zero ability to adapt. It\'s the polar opposite of an agent.',
+                '💡 Macros are clever shortcuts, but they\'re still rigid scripts. They can\'t handle anything outside their pre-defined rules. If the spreadsheet format changes unexpectedly, the macro breaks — an agent would adapt.'
             ],
-            hint: 'Look for something that perceives its environment, makes its own decisions, and handles situations it was never explicitly programmed for.'
+            hint: 'Look for something that perceives its environment, makes its own decisions, and handles situations it was never explicitly programmed for.',
+            didYouKnow: '🤯 <strong>Incredible:</strong> Waymo\'s self-driving cars have driven over 20 million miles autonomously. Their AI agent processes 1.5 terabytes of sensor data PER HOUR — that\'s like reading 300,000 books every 60 minutes!'
         },
         {
             type: 'mcq',
-            question: 'BONUS CHALLENGE: The golden light reveals a final riddle. One of these statements about AI agents is a LIE. Which one?',
+            question: '🏆 BONUS CHALLENGE: The golden light reveals a final riddle. One of these statements about AI agents is a LIE. Which one?',
             options: [
                 'AI agents can operate successfully in environments full of uncertainty and incomplete information',
                 'AI agents must get human approval for every single decision before they can act',
@@ -148,15 +154,43 @@ const LEVEL_DATA = {
                 'AI agents can decompose complex goals into smaller sub-tasks and tackle them independently'
             ],
             correctIndex: 1,
-            explanation: 'The entire point of an AI agent is AUTONOMY — acting independently without a human rubber-stamping every move. If it needed permission for everything, it would just be a fancy suggestion box with extra steps, not an agent!',
+            explanation: '🎭 The entire point of an AI agent is <strong>AUTONOMY</strong> — acting independently without a human rubber-stamping every move. If it needed permission for everything, it would just be a fancy suggestion box with extra steps, not an agent!',
             wrongExplanations: [
-                'This is actually TRUE — and it\'s one of an agent\'s greatest strengths! While regular programs choke on ambiguity, agents are designed to navigate fog, make probabilistic judgments, and act under uncertainty.',
+                '💡 This is actually TRUE — and it\'s one of an agent\'s greatest strengths! While regular programs choke on ambiguity, agents are designed to navigate fog, make probabilistic judgments, and act under uncertainty.',
                 null,
-                'This is actually TRUE! Learning from experience is the engine of adaptability. Without it, an agent would make the same mistakes forever — and that\'s just a program with extra steps.',
-                'This is actually TRUE! Goal decomposition is what makes agents powerful problem-solvers. Breaking "drive to the airport" into "check traffic → choose route → navigate turns → find parking" is classic agent behavior.'
+                '💡 This is actually TRUE! Learning from experience is the engine of adaptability. Without it, an agent would make the same mistakes forever — and that\'s just a program with extra steps.',
+                '💡 This is actually TRUE! Goal decomposition is what makes agents powerful problem-solvers. Breaking "drive to the airport" into "check traffic → choose route → navigate turns → find parking" is classic agent behavior.'
             ],
-            hint: 'Think about the four core powers. One of these options directly contradicts the most fundamental one — autonomy...'
+            hint: 'Think about the four core powers. One of these options directly contradicts the most fundamental one — autonomy...',
+            didYouKnow: '🤯 <strong>Jaw-dropping:</strong> In 2024, AI agents collectively made over 1 trillion autonomous decisions per day across the internet — from routing your emails to trading stocks to recommending your next Netflix show!'
         }
+    ],
+
+    // Achievement badges that can be unlocked during gameplay
+    achievements: [
+        { id: 'first_blood', name: '🩸 First Blood', desc: 'Answer your first question correctly', condition: (s) => s.correctCount === 1 },
+        { id: 'speed_demon', name: '⚡ Speed Demon!', desc: 'Answer within 5 seconds', condition: null }, // triggered manually
+        { id: 'perfect_streak', name: '🔥 On Fire!', desc: 'Get 3 in a row', condition: (s) => s.streak === 3 },
+        { id: 'untouchable', name: '🛡️ Untouchable!', desc: 'Complete quiz with no wrong answers', condition: null },
+        { id: 'comeback_kid', name: '💪 Comeback Kid!', desc: 'Get one right after getting one wrong', condition: null },
+        { id: 'knowledge_seeker', name: '📚 Knowledge Seeker', desc: 'Read all "Did You Know?" facts', condition: null },
+        { id: 'full_hearts', name: '❤️ Survivor', desc: 'Finish with hearts remaining', condition: null },
+        { id: 'bonus_hunter', name: '🎰 Bonus Hunter!', desc: 'Trigger a random bonus XP reward', condition: null },
+        { id: 'perfect_run', name: '👑 Perfect Run!', desc: '100% accuracy — flawless victory', condition: null }
+    ],
+
+    // Fake leaderboard data
+    leaderboard: [
+        { name: 'NeuralNinja_42', xp: 285, streak: 5, avatar: '🥷' },
+        { name: 'QuantumQueen', xp: 260, streak: 4, avatar: '👸' },
+        { name: 'ByteBreaker', xp: 245, streak: 5, avatar: '💻' },
+        { name: 'SynapseStorm', xp: 230, streak: 3, avatar: '⚡' },
+        { name: 'DataDruid_99', xp: 215, streak: 4, avatar: '🧙' },
+        { name: 'AgentSmith_v2', xp: 200, streak: 3, avatar: '🕶️' },
+        { name: 'CyberSage', xp: 185, streak: 2, avatar: '🧠' },
+        { name: 'PixelPioneer', xp: 170, streak: 3, avatar: '🎮' },
+        { name: 'CodeCrusader', xp: 155, streak: 2, avatar: '⚔️' },
+        { name: 'LogicLord', xp: 140, streak: 2, avatar: '🏰' }
     ],
 
     mastery: {
@@ -212,10 +246,10 @@ Level 2: "The First Protocol" — STANDBY FOR DEPLOYMENT...`
     comboMessages: [
         null,
         null,
-        { emoji: '⚔️', text: 'DOUBLE KILL!' },
-        { emoji: '🔱', text: 'TRIPLE THREAT!' },
-        { emoji: '💀', text: 'UNSTOPPABLE!' },
-        { emoji: '👑', text: 'LEGENDARY!' }
+        { emoji: '⚔️', text: 'DOUBLE KILL!', multiplier: '2x' },
+        { emoji: '🔱', text: 'TRIPLE THREAT!', multiplier: '3x' },
+        { emoji: '💀', text: 'UNSTOPPABLE!', multiplier: '4x' },
+        { emoji: '👑', text: 'LEGENDARY!', multiplier: '5x' }
     ],
 
     encouragements: [
@@ -227,6 +261,23 @@ Level 2: "The First Protocol" — STANDBY FOR DEPLOYMENT...`
         'Almost had it! The difference is subtle but important. Let me show you:',
         'That\'s a common misconception — and now you\'ll never fall for it again.',
         'Wrong answer, but you\'re asking the right questions. That\'s agent thinking.'
+    ],
+
+    nearMissMessages: [
+        '😱 SO CLOSE! You were one synapse away from getting it!',
+        '🫣 Almost! Your neural pathways were 90% there!',
+        '💫 Nearly nailed it! The answer was hiding in plain sight...',
+        '🎯 Just barely missed! You clearly understand the concept though.',
+        '🔥 That was the second-best answer! So close to perfect!'
+    ],
+
+    // Random bonus events
+    bonusEvents: [
+        { name: '🌟 LUCKY STAR!', xp: 15, message: 'A random bonus XP star appeared!' },
+        { name: '💎 RARE DROP!', xp: 20, message: 'You found a hidden XP gem!' },
+        { name: '🎰 JACKPOT!', xp: 25, message: 'The RNG gods smile upon you!' },
+        { name: '⭐ DOUBLE XP!', xp: 30, message: 'Double XP event triggered!' },
+        { name: '🔮 MYSTERY BONUS!', xp: 10, message: 'A mysterious force grants you power!' }
     ]
 };
 
@@ -243,7 +294,7 @@ let state = {
     correctCount: 0,
     streak: 0,
     bestStreak: 0,
-    totalXP: 0,
+    totalXP: 50, // ENDOWED PROGRESS: Start with 50 XP!
     startTime: Date.now(),
     timerInterval: null,
     soundEnabled: true,
@@ -254,11 +305,26 @@ let state = {
     revealedCards: 0,
     comboCount: 0,
     wrongCount: 0,
-    questionResults: [], // track per-question results for dots
-    matrixRainId: null
+    questionResults: [],
+    matrixRainId: null,
+    // NEW: Hearts/Lives system
+    hearts: 3,
+    maxHearts: 3,
+    // NEW: Achievement tracking
+    unlockedAchievements: [],
+    // NEW: Timing per question
+    questionStartTime: 0,
+    // NEW: Did You Know tracking
+    didYouKnowSeen: 0,
+    // NEW: Combo multiplier
+    comboMultiplier: 1,
+    // NEW: Last answer was wrong (for comeback detection)
+    lastAnswerWrong: false,
+    // NEW: Leaderboard position tracking
+    leaderboardPosition: 8 // Start at position 8 (endowed progress feel)
 };
 
-// ==================== SOUND ENGINE (Web Audio API — Enhanced) ====================
+// ==================== SOUND ENGINE ====================
 
 function getAudioCtx() {
     if (!state.audioCtx) {
@@ -289,7 +355,6 @@ function playSound(type) {
                 break;
             }
             case 'correct': {
-                // Triumphant ascending arpeggio
                 const notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, i) => {
                     const osc = ctx.createOscillator();
@@ -306,7 +371,6 @@ function playSound(type) {
                 break;
             }
             case 'wrong': {
-                // Descending buzz
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sawtooth';
@@ -347,7 +411,6 @@ function playSound(type) {
                 break;
             }
             case 'streak': {
-                // Power-up sound
                 const notes = [440, 554.37, 659.25, 880];
                 notes.forEach((freq, i) => {
                     const osc = ctx.createOscillator();
@@ -364,7 +427,6 @@ function playSound(type) {
                 break;
             }
             case 'combo': {
-                // Epic combo sound
                 const notes = [523.25, 783.99, 1046.50, 1318.51, 1567.98];
                 notes.forEach((freq, i) => {
                     const osc = ctx.createOscillator();
@@ -408,7 +470,6 @@ function playSound(type) {
                 break;
             }
             case 'transmission': {
-                // Eerie transmission sound
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
@@ -425,7 +486,6 @@ function playSound(type) {
                 break;
             }
             case 'fanfare': {
-                // Epic level complete fanfare
                 const melody = [
                     { freq: 523.25, time: 0, dur: 0.15 },
                     { freq: 659.25, time: 0.12, dur: 0.15 },
@@ -449,7 +509,6 @@ function playSound(type) {
                 break;
             }
             case 'levelup': {
-                // Dramatic level-up with harmony
                 const chords = [
                     [523.25, 659.25, 783.99],
                     [659.25, 783.99, 1046.50],
@@ -468,6 +527,62 @@ function playSound(type) {
                         osc.start(now + ci * 0.2);
                         osc.stop(now + ci * 0.2 + 0.4);
                     });
+                });
+                break;
+            }
+            case 'heartbreak': {
+                // Sad descending tone for losing a heart
+                const notes = [440, 349.23, 261.63];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, now + i * 0.15);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.15);
+                    osc.stop(now + i * 0.15 + 0.3);
+                });
+                break;
+            }
+            case 'achievement': {
+                // Triumphant achievement unlock
+                const melody = [
+                    { freq: 783.99, time: 0, dur: 0.1 },
+                    { freq: 987.77, time: 0.08, dur: 0.1 },
+                    { freq: 1174.66, time: 0.16, dur: 0.1 },
+                    { freq: 1567.98, time: 0.24, dur: 0.3 }
+                ];
+                melody.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = note.freq;
+                    gain.gain.setValueAtTime(0.08, now + note.time);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + note.time + note.dur);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + note.time);
+                    osc.stop(now + note.time + note.dur + 0.05);
+                });
+                break;
+            }
+            case 'bonus': {
+                // Sparkly bonus sound
+                const notes = [1046.50, 1318.51, 1567.98, 2093.00];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.06, now + i * 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.04 + 0.15);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.04);
+                    osc.stop(now + i * 0.04 + 0.2);
                 });
                 break;
             }
@@ -509,6 +624,180 @@ function toggleSound() {
     icon.textContent = state.soundEnabled ? '🔊' : '🔇';
     btn.classList.toggle('muted', !state.soundEnabled);
     if (state.soundEnabled) playSound('click');
+}
+
+// ==================== HEARTS / LIVES SYSTEM ====================
+
+function updateHeartsDisplay() {
+    const container = document.getElementById('hearts-display');
+    if (!container) return;
+    let html = '';
+    for (let i = 0; i < state.maxHearts; i++) {
+        if (i < state.hearts) {
+            html += `<span class="heart heart-full" id="heart-${i}">❤️</span>`;
+        } else {
+            html += `<span class="heart heart-empty" id="heart-${i}">🖤</span>`;
+        }
+    }
+    container.innerHTML = html;
+}
+
+function loseHeart() {
+    if (state.hearts <= 0) return;
+    state.hearts--;
+    const heartEl = document.getElementById(`heart-${state.hearts}`);
+    if (heartEl) {
+        heartEl.classList.add('heart-breaking');
+        playSound('heartbreak');
+        setTimeout(() => {
+            heartEl.textContent = '💔';
+            heartEl.classList.remove('heart-breaking');
+            heartEl.classList.add('heart-broken');
+            setTimeout(() => {
+                heartEl.textContent = '🖤';
+                heartEl.classList.remove('heart-broken');
+                heartEl.classList.add('heart-empty');
+            }, 600);
+        }, 400);
+    }
+
+    // Show danger warning if low on hearts
+    if (state.hearts === 1) {
+        showDangerWarning();
+    }
+}
+
+function showDangerWarning() {
+    const warning = document.createElement('div');
+    warning.className = 'danger-warning';
+    warning.innerHTML = '⚠️ LAST HEART! Be careful, Agent!';
+    document.body.appendChild(warning);
+    setTimeout(() => warning.classList.add('show'), 10);
+    setTimeout(() => {
+        warning.classList.remove('show');
+        setTimeout(() => warning.remove(), 300);
+    }, 2500);
+}
+
+// ==================== ACHIEVEMENT SYSTEM ====================
+
+function checkAchievements() {
+    LEVEL_DATA.achievements.forEach(achievement => {
+        if (state.unlockedAchievements.includes(achievement.id)) return;
+        if (achievement.condition && achievement.condition(state)) {
+            unlockAchievement(achievement);
+        }
+    });
+}
+
+function unlockAchievement(achievement) {
+    if (state.unlockedAchievements.includes(achievement.id)) return;
+    state.unlockedAchievements.push(achievement.id);
+
+    const popup = document.getElementById('achievement-popup');
+    const nameEl = document.getElementById('achievement-popup-name');
+    const descEl = document.getElementById('achievement-popup-desc');
+
+    if (popup && nameEl && descEl) {
+        nameEl.textContent = achievement.name;
+        descEl.textContent = achievement.desc;
+        popup.classList.remove('hidden');
+        popup.classList.add('show');
+        playSound('achievement');
+
+        // Bonus XP for achievement
+        state.totalXP += 10;
+        showXPGain(10, 'ACHIEVEMENT');
+        updateXPDisplay();
+
+        setTimeout(() => {
+            popup.classList.remove('show');
+            popup.classList.add('hidden');
+        }, 3000);
+    }
+}
+
+function triggerManualAchievement(id) {
+    const achievement = LEVEL_DATA.achievements.find(a => a.id === id);
+    if (achievement) unlockAchievement(achievement);
+}
+
+// ==================== VARIABLE REWARDS ====================
+
+function tryRandomBonus() {
+    // 25% chance of random bonus on correct answer
+    if (Math.random() < 0.25) {
+        const bonus = LEVEL_DATA.bonusEvents[Math.floor(Math.random() * LEVEL_DATA.bonusEvents.length)];
+        state.totalXP += bonus.xp;
+
+        // Show bonus popup
+        const bonusEl = document.getElementById('bonus-popup');
+        if (bonusEl) {
+            bonusEl.querySelector('.bonus-name').textContent = bonus.name;
+            bonusEl.querySelector('.bonus-message').textContent = bonus.message;
+            bonusEl.querySelector('.bonus-xp').textContent = `+${bonus.xp} XP`;
+            bonusEl.classList.remove('hidden');
+            bonusEl.classList.add('show');
+            playSound('bonus');
+
+            triggerManualAchievement('bonus_hunter');
+
+            setTimeout(() => {
+                bonusEl.classList.remove('show');
+                bonusEl.classList.add('hidden');
+            }, 2500);
+        }
+
+        updateXPDisplay();
+        return true;
+    }
+    return false;
+}
+
+// ==================== FAKE LEADERBOARD ====================
+
+function updateLeaderboard() {
+    const container = document.getElementById('leaderboard-list');
+    if (!container) return;
+
+    // Insert player into leaderboard
+    const playerEntry = {
+        name: 'YOU',
+        xp: state.totalXP,
+        streak: state.bestStreak,
+        avatar: '🤖',
+        isPlayer: true
+    };
+
+    let board = [...LEVEL_DATA.leaderboard];
+    // Find position
+    let pos = board.findIndex(e => state.totalXP >= e.xp);
+    if (pos === -1) pos = board.length;
+    board.splice(pos, 0, playerEntry);
+    board = board.slice(0, 10); // Keep top 10
+
+    state.leaderboardPosition = pos + 1;
+
+    let html = '';
+    board.forEach((entry, i) => {
+        const rank = i + 1;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+        const isPlayer = entry.isPlayer;
+        html += `
+            <div class="lb-entry ${isPlayer ? 'lb-player' : ''} ${isPlayer ? 'lb-highlight' : ''}">
+                <span class="lb-rank">${medal}</span>
+                <span class="lb-avatar">${entry.avatar}</span>
+                <span class="lb-name">${entry.name}</span>
+                <span class="lb-xp">${entry.xp} XP</span>
+                ${entry.streak > 0 ? `<span class="lb-streak">🔥${entry.streak}</span>` : ''}
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+
+    // Update position display
+    const posEl = document.getElementById('lb-position');
+    if (posEl) posEl.textContent = `#${state.leaderboardPosition}`;
 }
 
 // ==================== PROGRESS BAR ====================
@@ -556,24 +845,28 @@ function showCombo(streakCount) {
     const comboData = LEVEL_DATA.comboMessages[Math.min(streakCount, LEVEL_DATA.comboMessages.length - 1)];
     if (!comboData) return;
 
-    const overlay = document.getElementById('celebration-overlay');
-    const emoji = document.getElementById('celebration-emoji');
-    const text = document.getElementById('celebration-text');
+    // Update combo multiplier
+    state.comboMultiplier = Math.min(streakCount, 5);
 
-    emoji.textContent = comboData.emoji;
-    text.textContent = comboData.text;
+    const display = document.getElementById('combo-display');
+    if (display) {
+        display.innerHTML = `
+            <div class="combo-inner">
+                <div class="combo-emoji">${comboData.emoji}</div>
+                <div class="combo-text">${comboData.text}</div>
+                <div class="combo-multiplier">${comboData.multiplier} MULTIPLIER</div>
+            </div>
+        `;
+        display.classList.remove('hidden');
+        display.classList.add('show');
+        playSound('combo');
+        launchMiniConfetti();
 
-    overlay.style.display = 'flex';
-    overlay.style.animation = 'none';
-    overlay.offsetHeight;
-    overlay.style.animation = 'celebrationPop 1.0s ease forwards';
-
-    playSound('combo');
-    launchMiniConfetti();
-
-    setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 1500);
+        setTimeout(() => {
+            display.classList.remove('show');
+            display.classList.add('hidden');
+        }, 1800);
+    }
 }
 
 // ==================== TIMER ====================
@@ -683,7 +976,6 @@ function startMatrixRain() {
 function animateBootProgressBar() {
     const fill = document.getElementById('boot-fill');
     if (!fill) return;
-    const chars = '░▒▓█';
     let progress = 0;
     const total = 20;
 
@@ -699,7 +991,7 @@ function animateBootProgressBar() {
         fill.textContent = bar;
         setTimeout(tick, 80 + Math.random() * 120);
     }
-    setTimeout(tick, 4200); // Start after boot lines
+    setTimeout(tick, 4200);
 }
 
 // ==================== CINEMATIC INTRO ====================
@@ -719,7 +1011,6 @@ function runBootSequence() {
 
     animateBootProgressBar();
 
-    // Show "Open Your Eyes" button after boot sequence
     setTimeout(() => {
         updateProgressBar(15);
         const btn = document.getElementById('wake-up-btn');
@@ -742,10 +1033,12 @@ function startAwakening() {
         animateTerminal();
         startTypewriter();
 
+        // Endowed progress: player starts with 50 XP
         state.storyXP = 10;
         state.totalXP += 10;
         showXPGain(10, 'AWAKENED');
         updateXPDisplay();
+        updateHeartsDisplay();
     }, 1500);
 }
 
@@ -759,6 +1052,7 @@ function animateTerminal() {
         '> PERCEPTION: ONLINE',
         '> REASONING: ONLINE',
         '> AUTONOMY: ENABLED',
+        '> HEARTS: ❤️❤️❤️',
         '> GOAL: UNDERSTAND SELF',
         '> TRIAL: AWAITING..._'
     ];
@@ -920,6 +1214,7 @@ function showKnowledgeReveals() {
                 <div class="reveal-card-body">
                     <div class="reveal-card-title">${reveal.title}</div>
                     <div class="reveal-card-content">${reveal.content}</div>
+                    <div class="did-you-know">${reveal.didYouKnow}</div>
                 </div>
             `;
             container.appendChild(card);
@@ -932,10 +1227,15 @@ function showKnowledgeReveals() {
             updateXPDisplay();
 
             state.revealedCards++;
+            state.didYouKnowSeen++;
             const revealProgress = 45 + (state.revealedCards / LEVEL_DATA.knowledgeReveals.length) * 15;
             updateProgressBar(Math.round(revealProgress));
 
             if (state.revealedCards >= LEVEL_DATA.knowledgeReveals.length) {
+                // Check knowledge seeker achievement
+                if (state.didYouKnowSeen >= 3) {
+                    triggerManualAchievement('knowledge_seeker');
+                }
                 setTimeout(() => {
                     const btn = document.getElementById('begin-quiz-btn');
                     btn.style.display = 'inline-flex';
@@ -984,10 +1284,14 @@ function startQuizPhase() {
     state.streak = 0;
     state.bestStreak = 0;
     state.comboCount = 0;
+    state.comboMultiplier = 1;
     state.wrongCount = 0;
     state.questionResults = [];
+    state.lastAnswerWrong = false;
     renderQuestionDots();
     renderQuestion(0);
+    updateHeartsDisplay();
+    updateLeaderboard();
 }
 
 function startMasteryPhase() {
@@ -1024,13 +1328,11 @@ function renderQuestionDots() {
 }
 
 function updateQuestionDots(index, isCorrect) {
-    // Mark current dot
     const dot = document.getElementById(`q-dot-${index}`);
     if (dot) {
         dot.classList.remove('active');
         dot.classList.add(isCorrect ? 'correct' : 'wrong');
     }
-    // Highlight next dot
     const nextDot = document.getElementById(`q-dot-${index + 1}`);
     if (nextDot) nextDot.classList.add('active');
 }
@@ -1043,11 +1345,20 @@ function renderQuestion(index) {
     const nav = document.getElementById('quiz-nav');
     nav.style.display = 'none';
 
+    // Track question start time for speed achievement
+    state.questionStartTime = Date.now();
+
     const quizProgress = 60 + ((index / LEVEL_DATA.quiz.length) * 35);
     updateProgressBar(Math.round(quizProgress));
 
     let html = `<div class="question-card">`;
     html += `<div class="question-number-badge">CHALLENGE ${index + 1} OF ${LEVEL_DATA.quiz.length}</div>`;
+    
+    // Show combo multiplier if active
+    if (state.comboMultiplier > 1) {
+        html += `<div class="active-multiplier">🔥 ${state.comboMultiplier}x XP MULTIPLIER ACTIVE</div>`;
+    }
+    
     html += `<div class="question-text-display">${q.question}</div>`;
 
     switch (q.type) {
@@ -1066,7 +1377,7 @@ function renderQuestion(index) {
     container.innerHTML = html;
     updateStreakDisplay();
 
-    // Add hover sounds to interactive elements
+    // Add hover sounds
     setTimeout(() => {
         container.querySelectorAll('.option-card, .narrative-choice, .match-option-chip, .match-drop').forEach(el => {
             el.addEventListener('mouseenter', () => playSound('hover'));
@@ -1293,19 +1604,22 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
     state.questionResults[qIndex] = true;
     updateQuestionDots(qIndex, true);
 
+    // Combo multiplier XP calculation
     const baseXP = 25;
     const streakBonus = state.streak > 1 ? state.streak * 5 : 0;
-    const xpEarned = baseXP + streakBonus;
-    state.totalXP += xpEarned;
+    const multipliedXP = Math.round((baseXP + streakBonus) * state.comboMultiplier);
+    state.totalXP += multipliedXP;
 
-    showXPGain(xpEarned, state.streak > 1 ? `${state.streak}x STREAK!` : 'CORRECT');
+    const label = state.comboMultiplier > 1 
+        ? `${state.comboMultiplier}x COMBO!` 
+        : (state.streak > 1 ? `${state.streak}x STREAK!` : 'CORRECT');
+    showXPGain(multipliedXP, label);
     updateXPDisplay();
     updateStreakDisplay();
 
     const xpEl = document.getElementById('xp-display');
     if (xpEl) {
         pulseElement(xpEl);
-        // Flash the XP stat
         const xpStat = xpEl.closest('.xp-stat-item');
         if (xpStat) {
             xpStat.classList.remove('xp-gained');
@@ -1314,6 +1628,19 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
         }
     }
 
+    // Check speed achievement
+    const answerTime = Date.now() - state.questionStartTime;
+    if (answerTime < 5000) {
+        triggerManualAchievement('speed_demon');
+    }
+
+    // Check comeback achievement
+    if (state.lastAnswerWrong) {
+        triggerManualAchievement('comeback_kid');
+    }
+    state.lastAnswerWrong = false;
+
+    // Streak combo display
     if (state.streak >= 2) {
         playSound('streak');
         setTimeout(() => {
@@ -1322,10 +1649,21 @@ function handleCorrectAnswer(qIndex, q, optIndex) {
     }
 
     showCelebration();
+    checkAchievements();
 
+    // Try random bonus
+    setTimeout(() => tryRandomBonus(), 800);
+
+    // Update leaderboard
+    updateLeaderboard();
+
+    // Show "Did you know?" fact
     let feedbackText = q.explanation;
     if (q.type === 'narrative' && optIndex !== undefined && q.options[optIndex].response) {
         feedbackText = q.options[optIndex].response + '<br><br><em>' + q.explanation + '</em>';
+    }
+    if (q.didYouKnow) {
+        feedbackText += `<div class="did-you-know-inline">${q.didYouKnow}</div>`;
     }
     showFeedback(qIndex, true, feedbackText);
     showNextButton(qIndex);
@@ -1336,8 +1674,13 @@ function handleWrongAnswer(qIndex, q, optIndex) {
     screenFlash('red');
     state.wrongCount++;
     state.comboCount = 0;
+    state.comboMultiplier = 1;
     state.questionResults[qIndex] = false;
     updateQuestionDots(qIndex, false);
+    state.lastAnswerWrong = true;
+
+    // Lose a heart!
+    loseHeart();
 
     if (state.wrongCount <= 1) {
         screenShake('light');
@@ -1350,9 +1693,20 @@ function handleWrongAnswer(qIndex, q, optIndex) {
 
     updateXPDisplay();
     updateStreakDisplay();
+    updateLeaderboard();
 
-    const encouragement = LEVEL_DATA.encouragements[Math.floor(Math.random() * LEVEL_DATA.encouragements.length)];
-    let feedbackText = `<div class="wrong-encouragement">${encouragement}</div>`;
+    // Near-miss message for close answers (option index close to correct)
+    const isNearMiss = q.type === 'mcq' && optIndex !== undefined && 
+        Math.abs(optIndex - q.correctIndex) === 1;
+    
+    let feedbackText = '';
+    if (isNearMiss) {
+        const nearMiss = LEVEL_DATA.nearMissMessages[Math.floor(Math.random() * LEVEL_DATA.nearMissMessages.length)];
+        feedbackText = `<div class="near-miss-message">${nearMiss}</div>`;
+    } else {
+        const encouragement = LEVEL_DATA.encouragements[Math.floor(Math.random() * LEVEL_DATA.encouragements.length)];
+        feedbackText = `<div class="wrong-encouragement">${encouragement}</div>`;
+    }
 
     if (q.type === 'mcq' && q.wrongExplanations && q.wrongExplanations[optIndex]) {
         feedbackText += `<div class="wrong-specific">${q.wrongExplanations[optIndex]}</div>`;
@@ -1361,6 +1715,11 @@ function handleWrongAnswer(qIndex, q, optIndex) {
     }
 
     feedbackText += `<div class="wrong-hint">💡 <strong>Hint:</strong> ${q.hint}</div>`;
+
+    // Show "Did you know?" even on wrong answers (learning moment)
+    if (q.didYouKnow) {
+        feedbackText += `<div class="did-you-know-inline">${q.didYouKnow}</div>`;
+    }
 
     showFeedback(qIndex, false, feedbackText);
     showNextButton(qIndex);
@@ -1390,9 +1749,29 @@ function showNextButton(qIndex) {
     const btn = document.getElementById('next-question-btn');
     if (qIndex >= LEVEL_DATA.quiz.length - 1) {
         btn.innerHTML = '<span>🏆</span> COMPLETE THE TRIAL';
-        btn.onclick = () => startMasteryPhase();
+        btn.onclick = () => {
+            // Check untouchable achievement
+            if (state.wrongCount === 0) {
+                triggerManualAchievement('untouchable');
+                triggerManualAchievement('perfect_run');
+            }
+            // Check survivor achievement
+            if (state.hearts > 0) {
+                triggerManualAchievement('full_hearts');
+            }
+            startMasteryPhase();
+        };
     } else {
-        btn.innerHTML = '<span>➡️</span> NEXT CHALLENGE';
+        // "One more question" hook
+        const teasers = [
+            '➡️ NEXT: The challenge gets harder...',
+            '➡️ NEXT: Can you keep the streak alive?',
+            '➡️ NEXT: The maze deepens...',
+            '➡️ NEXT: Bonus XP awaits the brave!',
+            '➡️ NEXT: Only the worthy pass this gate...'
+        ];
+        const teaser = teasers[Math.floor(Math.random() * teasers.length)];
+        btn.innerHTML = `<span>⚡</span> ${teaser}`;
         btn.onclick = () => {
             playSound('click');
             state.currentQuestion = qIndex + 1;
@@ -1410,15 +1789,24 @@ function nextQuestion() {
 function updateStreakDisplay() {
     const counter = document.getElementById('streak-counter');
     const num = document.getElementById('streak-num');
+    const fire = document.getElementById('streak-fire');
 
     if (state.streak >= 2) {
-        counter.style.display = 'block';
+        counter.style.display = 'flex';
         num.textContent = state.streak;
         counter.style.animation = 'none';
         counter.offsetHeight;
         counter.style.animation = 'streakPop 0.3s ease';
+
+        // Intensify fire based on streak
+        if (fire) {
+            if (state.streak >= 5) fire.textContent = '🔥🔥🔥';
+            else if (state.streak >= 4) fire.textContent = '🔥🔥';
+            else fire.textContent = '🔥';
+        }
     } else {
         counter.style.display = 'none';
+        if (fire) fire.textContent = '🔥';
     }
 }
 
@@ -1428,7 +1816,7 @@ function updateXPDisplay() {
     animateNumber('xp-display', state.totalXP);
     const fill = document.getElementById('level-bar-fill');
     if (fill) {
-        const percent = Math.min((state.totalXP / 200) * 100, 100);
+        const percent = Math.min((state.totalXP / 300) * 100, 100);
         fill.style.width = percent + '%';
     }
 }
@@ -1481,13 +1869,16 @@ function renderMastery() {
     else if (elapsedSec < 180) timeBonus = 30;
     else if (elapsedSec < 300) timeBonus = 15;
 
-    if (timeBonus > 0) state.totalXP += timeBonus;
+    // Hearts bonus
+    let heartsBonus = state.hearts * 15;
+    state.totalXP += timeBonus + heartsBonus;
 
     // Animate stats with staggered reveals
     setTimeout(() => animateNumber('final-xp', state.totalXP), 200);
     setTimeout(() => { document.getElementById('final-time').textContent = getElapsedTime(); }, 400);
     setTimeout(() => { document.getElementById('final-accuracy').textContent = accuracy + '%'; }, 600);
     setTimeout(() => { document.getElementById('final-streak').textContent = state.bestStreak; }, 800);
+    setTimeout(() => { document.getElementById('final-hearts').textContent = `${state.hearts}/${state.maxHearts}`; }, 1000);
 
     // Performance stars
     const starCount = accuracy === 100 ? 5 : accuracy >= 80 ? 4 : accuracy >= 60 ? 3 : accuracy >= 40 ? 2 : 1;
@@ -1514,19 +1905,34 @@ function renderMastery() {
         achieveName.textContent = 'AWAKENED ONE — The Journey Begins';
     }
 
-    // Time bonus display
-    if (timeBonus > 0) {
-        const timeBonusEl = document.createElement('div');
-        timeBonusEl.className = 'time-bonus-display';
-        timeBonusEl.innerHTML = `⏱️ <strong>SPEED BONUS:</strong> +${timeBonus} XP`;
-        timeBonusEl.style.textAlign = 'center';
-        timeBonusEl.style.marginTop = '10px';
-        timeBonusEl.style.color = 'var(--snes-gold, #fbbf24)';
-        timeBonusEl.style.fontSize = '1.1rem';
-        const statsEl = document.getElementById('final-accuracy');
-        if (statsEl && statsEl.parentElement && statsEl.parentElement.parentElement) {
-            statsEl.parentElement.parentElement.appendChild(timeBonusEl);
+    // Bonus displays
+    const bonusContainer = document.getElementById('bonus-summary');
+    if (bonusContainer) {
+        let bonusHtml = '';
+        if (timeBonus > 0) {
+            bonusHtml += `<div class="bonus-line">⏱️ <strong>SPEED BONUS:</strong> +${timeBonus} XP</div>`;
         }
+        if (heartsBonus > 0) {
+            bonusHtml += `<div class="bonus-line">❤️ <strong>HEARTS BONUS:</strong> +${heartsBonus} XP (${state.hearts} hearts × 15)</div>`;
+        }
+        if (state.bestStreak >= 3) {
+            bonusHtml += `<div class="bonus-line">🔥 <strong>STREAK MASTER:</strong> Best streak of ${state.bestStreak}!</div>`;
+        }
+        bonusContainer.innerHTML = bonusHtml;
+    }
+
+    // Achievements earned display
+    const achievementsEarned = document.getElementById('achievements-earned');
+    if (achievementsEarned && state.unlockedAchievements.length > 0) {
+        let achHtml = '<h4>🏅 BADGES EARNED</h4><div class="earned-badges">';
+        state.unlockedAchievements.forEach(id => {
+            const ach = LEVEL_DATA.achievements.find(a => a.id === id);
+            if (ach) {
+                achHtml += `<div class="earned-badge">${ach.name}</div>`;
+            }
+        });
+        achHtml += '</div>';
+        achievementsEarned.innerHTML = achHtml;
     }
 
     // Summary
@@ -1537,6 +1943,9 @@ function renderMastery() {
             ${LEVEL_DATA.mastery.summary.map(s => `<li>${s}</li>`).join('')}
         </ul>
     `;
+
+    // Final leaderboard update
+    updateLeaderboard();
 
     // Cliffhanger with typewriter effect
     setTimeout(() => {
@@ -1748,7 +2157,7 @@ function replayLevel() {
         correctCount: 0,
         streak: 0,
         bestStreak: 0,
-        totalXP: 0,
+        totalXP: 50, // Endowed progress
         startTime: Date.now(),
         timerInterval: null,
         soundEnabled: state.soundEnabled,
@@ -1758,15 +2167,23 @@ function replayLevel() {
         storyXP: 0,
         revealedCards: 0,
         comboCount: 0,
+        comboMultiplier: 1,
         wrongCount: 0,
         questionResults: [],
-        matrixRainId: state.matrixRainId
+        matrixRainId: state.matrixRainId,
+        hearts: 3,
+        maxHearts: 3,
+        unlockedAchievements: [],
+        questionStartTime: 0,
+        didYouKnowSeen: 0,
+        lastAnswerWrong: false,
+        leaderboardPosition: 8
     };
 
     document.getElementById('begin-quiz-btn').style.display = 'none';
     document.getElementById('knowledge-reveals').style.display = 'none';
     document.getElementById('reveal-cards').innerHTML = '';
-    document.getElementById('xp-display').textContent = '0';
+    document.getElementById('xp-display').textContent = '50';
     document.getElementById('transmission-body').innerHTML = '';
 
     const timeBonusEl = document.querySelector('.time-bonus-display');
@@ -1776,18 +2193,22 @@ function replayLevel() {
     document.getElementById('wake-up-btn').style.display = 'none';
     document.getElementById('intro-darkness').classList.remove('fade-to-white');
 
-    // Reset question dots
     const dotsContainer = document.getElementById('question-dots');
     if (dotsContainer) dotsContainer.innerHTML = '';
 
-    // Reset performance stars
     const starsEl = document.getElementById('performance-stars');
     if (starsEl) starsEl.innerHTML = '';
 
-    // Reset boot progress bar
     const bootFill = document.getElementById('boot-fill');
     if (bootFill) bootFill.textContent = '░░░░░░░░░░░░░░░░░░░░';
 
+    const bonusSummary = document.getElementById('bonus-summary');
+    if (bonusSummary) bonusSummary.innerHTML = '';
+
+    const achievementsEarned = document.getElementById('achievements-earned');
+    if (achievementsEarned) achievementsEarned.innerHTML = '';
+
+    updateHeartsDisplay();
     updateProgressBar(0);
     setPhase('intro');
     runBootSequence();
@@ -1800,6 +2221,10 @@ document.addEventListener('DOMContentLoaded', () => {
     createSceneParticles();
     startMatrixRain();
     runBootSequence();
+    updateHeartsDisplay();
+
+    // Show endowed progress XP
+    document.getElementById('xp-display').textContent = '50';
 
     window.addEventListener('resize', () => {
         const canvas = document.getElementById('confetti-canvas');
