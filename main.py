@@ -1,6 +1,7 @@
 """Questra - Interactive Learning Platform"""
 import os
 import uuid
+import time
 from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
@@ -62,6 +63,18 @@ class MasterAnswers(BaseModel):
 class DetectiveAnswer(BaseModel):
     answer: str
 
+class Level1Completion(BaseModel):
+    xp_earned: int = 0
+    time_elapsed: str = "00:00"
+    time_ms: int = 0
+    accuracy: int = 0
+    best_streak: int = 0
+    correct_count: int = 0
+    total_questions: int = 0
+
+# In-memory storage for level completion data
+level_completions = {}
+
 # ==================== Routes ====================
 
 @app.get("/", response_class=HTMLResponse)
@@ -83,6 +96,48 @@ async def get_featured_quests():
     """Get list of pre-built featured quests"""
     quests = get_all_quest_info()
     return {"quests": quests}
+
+# ==================== AI Agent Adventures - Level 1 ====================
+
+@app.get("/level/ai-agents/1", response_class=HTMLResponse)
+async def ai_agents_level1(request: Request):
+    """Render AI Agent Adventures Level 1: The Awakening"""
+    stats = get_stats()
+    return templates.TemplateResponse("level1.html", {
+        "request": request,
+        "stats": stats
+    })
+
+@app.post("/api/level1/complete")
+async def complete_level1(data: Level1Completion):
+    """Record Level 1 completion data"""
+    completion_id = str(uuid.uuid4())[:8]
+    
+    if data.xp_earned > 0:
+        add_xp(data.xp_earned, "AI Agent Adventures Level 1 completed")
+        increment_stat("stories")
+        increment_stat("quizzes")
+    
+    level_completions[completion_id] = {
+        "id": completion_id,
+        "level": 1,
+        "topic": "AI Agent Adventures",
+        "xp_earned": data.xp_earned,
+        "time_elapsed": data.time_elapsed,
+        "time_ms": data.time_ms,
+        "accuracy": data.accuracy,
+        "best_streak": data.best_streak,
+        "correct_count": data.correct_count,
+        "total_questions": data.total_questions,
+        "completed_at": int(time.time())
+    }
+    
+    return {
+        "success": True,
+        "completion_id": completion_id,
+        "xp_earned": data.xp_earned,
+        "message": "Level 1 completed! The Awakening mastered."
+    }
 
 # ==================== Learning Session ====================
 
