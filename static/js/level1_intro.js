@@ -1,339 +1,552 @@
-/**
- * Questra — Level 1 Page 1: Narrative Hook
- * 50-second cinematic intro with branching choices
- */
-
 (function () {
     'use strict';
 
-    // ==================== AUDIO ====================
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = null;
-    let ambientOsc = null;
-    let ambientGain = null;
-
-    function initAudio() {
-        if (audioCtx) return;
-        try {
-            audioCtx = new AudioCtx();
-            // Ambient hum — low drone
-            ambientOsc = audioCtx.createOscillator();
-            ambientGain = audioCtx.createGain();
-            ambientOsc.type = 'sine';
-            ambientOsc.frequency.value = 55; // low A
-            ambientGain.gain.value = 0;
-            ambientOsc.connect(ambientGain);
-            ambientGain.connect(audioCtx.destination);
-            ambientOsc.start();
-            // Fade in ambient
-            ambientGain.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 2);
-        } catch (e) { /* audio not supported */ }
-    }
-
-    function playTypeTick() {
-        if (!audioCtx) return;
-        try {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'square';
-            osc.frequency.value = 800 + Math.random() * 400;
-            gain.gain.value = 0.015;
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
-        } catch (e) {}
-    }
-
-    function playGlitchSound() {
-        if (!audioCtx) return;
-        try {
-            const bufferSize = audioCtx.sampleRate * 0.15;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * 0.08;
-            }
-            const source = audioCtx.createBufferSource();
-            source.buffer = buffer;
-            source.connect(audioCtx.destination);
-            source.start();
-        } catch (e) {}
-    }
-
-    // ==================== DOM ====================
     const textArea = document.getElementById('text-area');
-    const cursorLine = document.getElementById('cursor-line');
+    const terminalBody = document.getElementById('terminal-body');
     const choiceContainer = document.getElementById('choice-container');
     const fadeOverlay = document.getElementById('fade-overlay');
 
-    // ==================== STATE ====================
-    let sawLogs = false;
-    let codename = generateCodename();
-
-    function generateCodename() {
-        const prefixes = ['ORION', 'VEGA', 'NOVA', 'LYRA', 'ATLAS', 'ECHO', 'PULSE', 'CIPHER'];
-        const num = Math.floor(Math.random() * 9) + 1;
-        return prefixes[Math.floor(Math.random() * prefixes.length)] + '-' + num;
+    if (!textArea || !terminalBody || !choiceContainer || !fadeOverlay) {
+        return;
     }
 
-    // ==================== TEXT ENGINE ====================
+    class SystemAudio {
+        constructor() {
+            this.AudioContextImpl = window.AudioContext || window.webkitAudioContext;
+            this.ctx = null;
+            this.humOscillator = null;
+            this.humGain = null;
+        }
 
-    function addLine(text, cls) {
-        const div = document.createElement('div');
-        div.className = 'text-line' + (cls ? ' ' + cls : '');
-        div.textContent = text;
-        textArea.appendChild(div);
-        scrollToBottom();
-        return div;
-    }
+        unlock() {
+            if (!this.AudioContextImpl) {
+                return;
+            }
 
-    function scrollToBottom() {
-        const body = document.getElementById('terminal-body');
-        body.scrollTop = body.scrollHeight;
-    }
+            if (!this.ctx) {
+                try {
+                    this.ctx = new this.AudioContextImpl();
+                    this.humGain = this.ctx.createGain();
+                    this.humGain.gain.value = 0;
 
-    function typeText(text, cls, speed) {
-        return new Promise((resolve) => {
-            const div = document.createElement('div');
-            div.className = 'text-line' + (cls ? ' ' + cls : '');
-            textArea.appendChild(div);
-            scrollToBottom();
-
-            let i = 0;
-            const spd = speed || 35;
-            function tick() {
-                if (i < text.length) {
-                    div.textContent += text[i];
-                    if (text[i] !== ' ') playTypeTick();
-                    i++;
-                    scrollToBottom();
-                    setTimeout(tick, spd);
-                } else {
-                    resolve(div);
+                    this.humOscillator = this.ctx.createOscillator();
+                    this.humOscillator.type = 'sine';
+                    this.humOscillator.frequency.value = 58;
+                    this.humOscillator.connect(this.humGain);
+                    this.humGain.connect(this.ctx.destination);
+                    this.humOscillator.start();
+                } catch (error) {
+                    this.ctx = null;
+                    return;
                 }
             }
-            tick();
-        });
-    }
 
-    function wait(ms) {
-        return new Promise(r => setTimeout(r, ms));
-    }
-
-    function clearLines() {
-        textArea.innerHTML = '';
-    }
-
-    function showChoices(options) {
-        return new Promise((resolve) => {
-            choiceContainer.innerHTML = '';
-            choiceContainer.style.display = 'flex';
-            options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'choice-btn' + (opt.cls ? ' ' + opt.cls : '');
-                btn.textContent = opt.label;
-                btn.addEventListener('click', () => {
-                    initAudio();
-                    choiceContainer.style.display = 'none';
-                    resolve(opt.value);
-                });
-                choiceContainer.appendChild(btn);
-            });
-        });
-    }
-
-    function glitchLine(el, duration) {
-        el.classList.add('glitch');
-        playGlitchSound();
-        return wait(duration || 600).then(() => {
-            el.classList.remove('glitch');
-        });
-    }
-
-    function wipeLine(el) {
-        el.classList.add('wipe');
-        playGlitchSound();
-        return wait(1200).then(() => {
-            el.remove();
-        });
-    }
-
-    // ==================== NARRATIVE SEQUENCE ====================
-
-    async function runNarrative() {
-        // === 1. OPENING SEQUENCE (~10s) ===
-        // Screen flicker is handled by CSS animation on .narrative-container
-        await wait(1800); // let flicker finish
-
-        initAudio(); // try to init on first interaction fallback
-
-        // Cursor blinks alone for a moment
-        await wait(1000);
-
-        // Typing lines
-        await typeText('YOU ARE AWAKE.', 'emphasis', 55);
-        await wait(2000);
-
-        await typeText('Data streams initialize.', 'system', 30);
-        await wait(1500);
-
-        await typeText('You are online.', 'system', 30);
-        await wait(2000);
-
-        // === 2. GUIDE INTRODUCTION (Auto) ===
-        clearLines();
-        await wait(600);
-
-        await typeText('Connection established.', 'system', 28);
-        await wait(1200);
-
-        const guideLine1 = await typeText('Hello, Agent ' + codename + '.', 'guide', 32);
-        await wait(2000);
-
-        await typeText('I am your system guide.', 'guide', 30);
-        await wait(1800);
-
-        await typeText('You have been selected for a trial.', 'guide', 30);
-        await wait(2000);
-
-        await typeText('Do not be alarmed. Everything is under control.', 'guide', 28);
-        await wait(2200);
-
-        // === 3. FIRST PAUSE — Player Choice ===
-        const choice1 = await showChoices([
-            { label: 'Begin Trial', value: 'begin' },
-            { label: 'Inspect System Logs', value: 'logs', cls: 'cyan' }
-        ]);
-
-        clearLines();
-        await wait(400);
-
-        // === 4. HIDDEN LOG EVENT (only if logs inspected) ===
-        if (choice1 === 'logs') {
-            sawLogs = true;
-
-            addLine('[ACCESSING SYSTEM LOGS...]', 'system');
-            await wait(800);
-
-            addLine('Log 001: System initialized — nominal.', 'system');
-            await wait(600);
-            addLine('Log 002: Agent profile loaded.', 'system');
-            await wait(600);
-            addLine('Log 003: Trial parameters set.', 'system');
-            await wait(800);
-
-            // The hidden message
-            const warningLine = addLine('SYSTEM NOTICE: DO NOT TRUST THE—', 'warning');
-            playGlitchSound();
-            await wait(1400);
-
-            // Wipe it
-            await wipeLine(warningLine);
-            await wait(600);
-
-            clearLines();
-            await wait(300);
-        }
-
-        // === 5. GUIDE GLITCH (Auto) ===
-        const glitchGuide = await typeText('Resuming session...', 'guide', 30);
-        await wait(800);
-
-        // Subtle glitch on guide text
-        await glitchLine(glitchGuide, 500);
-        await wait(400);
-
-        // Remove the glitched line and replace
-        glitchGuide.remove();
-        const apologyLine = await typeText('Apologies... minor system delay.', 'guide', 28);
-        await wait(2000);
-
-        await typeText('Everything is functioning normally.', 'guide', 28);
-        await wait(1800);
-
-        // === 6. SECOND PAUSE — Small Agency ===
-        const secondLabel = sawLogs ? 'Ask about the message' : 'Ask the Guide';
-        const choice2 = await showChoices([
-            { label: 'Proceed to Trial', value: 'proceed' },
-            { label: secondLabel, value: 'ask', cls: 'cyan' }
-        ]);
-
-        clearLines();
-        await wait(400);
-
-        if (choice2 === 'ask') {
-            if (sawLogs) {
-                await typeText('What message?', 'guide', 30);
-                await wait(1500);
-                await typeText('I detect no anomalies in the logs.', 'guide', 28);
-                await wait(1800);
-                await typeText('Perhaps a rendering artifact.', 'guide', 28);
-                await wait(1500);
-                await typeText('Nothing to concern yourself with, Agent.', 'guide', 28);
-            } else {
-                await typeText('Questions are good, Agent ' + codename + '.', 'guide', 28);
-                await wait(1500);
-                await typeText('But answers come through the trial.', 'guide', 28);
-                await wait(1500);
-                await typeText('Trust the process.', 'guide', 28);
+            if (this.ctx.state === 'suspended') {
+                this.ctx.resume().catch(() => {});
             }
-            await wait(2000);
-            clearLines();
-            await wait(400);
+
+            this.fadeHumIn();
         }
 
-        // === 7. CLIFFHANGER ENDING (Auto) ===
-        await typeText('Your curiosity is... noted.', 'guide', 30);
-        await wait(1800);
+        fadeHumIn() {
+            if (!this.ctx || !this.humGain) {
+                return;
+            }
 
-        await typeText('A useful trait for what comes next.', 'guide', 28);
-        await wait(2000);
-
-        clearLines();
-        await wait(600);
-
-        await typeText('TRIAL SEQUENCE INITIATING...', 'emphasis', 45);
-        await wait(2000);
-
-        await typeText('Prepare yourself, Agent ' + codename + '.', 'guide', 30);
-        await wait(2500);
-
-        // Fade to black
-        fadeOverlay.classList.add('active');
-        // Fade out ambient
-        if (ambientGain && audioCtx) {
-            ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
+            const now = this.ctx.currentTime;
+            this.humGain.gain.cancelScheduledValues(now);
+            this.humGain.gain.setValueAtTime(this.humGain.gain.value, now);
+            this.humGain.gain.linearRampToValueAtTime(0.008, now + 1.1);
         }
-        await wait(2500);
 
-        // Redirect to the main Level 1 experience
-        window.location.href = '/level/ai-agents/1';
+        fadeHumOut() {
+            if (!this.ctx || !this.humGain) {
+                return;
+            }
+
+            const now = this.ctx.currentTime;
+            this.humGain.gain.cancelScheduledValues(now);
+            this.humGain.gain.setValueAtTime(this.humGain.gain.value, now);
+            this.humGain.gain.linearRampToValueAtTime(0.0001, now + 1.0);
+        }
+
+        beep(frequency, durationMs, volume, type) {
+            if (!this.ctx) {
+                return;
+            }
+
+            try {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type || 'triangle';
+                osc.frequency.value = frequency;
+
+                const now = this.ctx.currentTime;
+                gain.gain.setValueAtTime(volume, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + (durationMs / 1000));
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + (durationMs / 1000));
+            } catch (error) {
+                // Ignore audio failures.
+            }
+        }
+
+        typeTick() {
+            this.beep(720 + Math.random() * 140, 28, 0.004, 'square');
+        }
+
+        choiceConfirm() {
+            this.beep(520, 120, 0.015, 'triangle');
+        }
+
+        transitionCue() {
+            this.beep(300, 220, 0.02, 'sine');
+            setTimeout(() => this.beep(220, 320, 0.015, 'sine'), 85);
+        }
     }
 
-    // ==================== START ====================
+    class NarrativeLineSystem {
+        constructor(config) {
+            this.textArea = config.textArea;
+            this.terminalBody = config.terminalBody;
+            this.audio = config.audio;
+            this.maxVisibleLines = config.maxVisibleLines || 2;
+            this.charDelay = config.charDelay || 17;
+            this.fastCharDelay = config.fastCharDelay || 4;
+            this.defaultHold = config.defaultHold || 1700;
 
-    // Start on first user interaction (needed for audio policy)
-    let started = false;
+            this.waitResolver = null;
+            this.typingResolver = null;
+            this.skipCurrentTyping = false;
+            this.boostNextDelay = false;
+        }
 
-    function startOnInteraction() {
-        if (started) return;
-        started = true;
-        initAudio();
-        runNarrative();
+        requestAdvance() {
+            if (this.waitResolver) {
+                const resolve = this.waitResolver;
+                this.waitResolver = null;
+                resolve();
+                return;
+            }
+
+            if (this.typingResolver) {
+                this.skipCurrentTyping = true;
+                const resolve = this.typingResolver;
+                this.typingResolver = null;
+                resolve();
+                return;
+            }
+
+            this.boostNextDelay = true;
+        }
+
+        trimLines() {
+            while (this.textArea.childElementCount > this.maxVisibleLines) {
+                this.textArea.firstElementChild.remove();
+            }
+        }
+
+        scrollToBottom() {
+            this.terminalBody.scrollTop = this.terminalBody.scrollHeight;
+        }
+
+        clear() {
+            this.textArea.innerHTML = '';
+            this.scrollToBottom();
+        }
+
+        wait(ms, skippable) {
+            if (!ms || ms <= 0) {
+                return Promise.resolve();
+            }
+
+            const effectiveMs = this.boostNextDelay ? Math.min(ms, 220) : ms;
+            this.boostNextDelay = false;
+
+            if (!skippable) {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, effectiveMs);
+                });
+            }
+
+            return new Promise((resolve) => {
+                let completed = false;
+                const timeout = setTimeout(() => {
+                    if (completed) {
+                        return;
+                    }
+
+                    completed = true;
+                    this.waitResolver = null;
+                    resolve();
+                }, effectiveMs);
+
+                this.waitResolver = () => {
+                    if (completed) {
+                        return;
+                    }
+
+                    completed = true;
+                    clearTimeout(timeout);
+                    resolve();
+                };
+            });
+        }
+
+        waitChar(ms) {
+            if (!ms || ms <= 0) {
+                return Promise.resolve();
+            }
+
+            return new Promise((resolve) => {
+                let completed = false;
+                const timeout = setTimeout(() => {
+                    if (completed) {
+                        return;
+                    }
+
+                    completed = true;
+                    this.typingResolver = null;
+                    resolve();
+                }, ms);
+
+                this.typingResolver = () => {
+                    if (completed) {
+                        return;
+                    }
+
+                    completed = true;
+                    clearTimeout(timeout);
+                    resolve();
+                };
+            });
+        }
+
+        async renderLine(text, options) {
+            const config = Object.assign({
+                className: 'system',
+                typed: true,
+                hold: this.defaultHold,
+                autoAdvance: true
+            }, options || {});
+
+            const line = document.createElement('div');
+            line.className = `text-line ${config.className}`.trim();
+            this.textArea.appendChild(line);
+            this.scrollToBottom();
+
+            if (!config.typed) {
+                line.textContent = text;
+            } else {
+                this.skipCurrentTyping = false;
+
+                for (let index = 0; index < text.length; index += 1) {
+                    if (this.skipCurrentTyping) {
+                        line.textContent = text;
+                        break;
+                    }
+
+                    const char = text[index];
+                    line.textContent += char;
+
+                    if (char !== ' ' && index % 2 === 0) {
+                        this.audio.typeTick();
+                    }
+
+                    this.scrollToBottom();
+                    const delay = this.boostNextDelay ? this.fastCharDelay : this.charDelay;
+                    await this.waitChar(delay);
+                }
+            }
+
+            this.typingResolver = null;
+            this.skipCurrentTyping = false;
+            this.trimLines();
+
+            if (config.autoAdvance) {
+                await this.wait(config.hold, true);
+            }
+
+            return line;
+        }
     }
 
-    // Auto-start after a brief delay, but also listen for click to init audio
-    document.addEventListener('click', initAudio, { once: true });
-    document.addEventListener('keydown', initAudio, { once: true });
-
-    // Start the narrative immediately (CSS flicker handles the opening feel)
-    setTimeout(() => {
-        if (!started) {
-            started = true;
-            runNarrative();
+    class ChoiceComponent {
+        constructor(config) {
+            this.container = config.container;
+            this.audio = config.audio;
+            this.active = false;
         }
-    }, 200);
 
+        hide() {
+            this.active = false;
+            this.container.hidden = true;
+            this.container.style.display = 'none';
+            this.container.innerHTML = '';
+        }
+
+        async present(options) {
+            this.container.innerHTML = '';
+            this.container.hidden = false;
+            this.container.style.display = 'flex';
+            this.active = true;
+
+            return new Promise((resolve) => {
+                options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = `choice-btn ${option.className || ''}`.trim();
+                    button.textContent = option.label;
+
+                    button.addEventListener('click', () => {
+                        if (!this.active) {
+                            return;
+                        }
+
+                        this.audio.unlock();
+                        this.audio.choiceConfirm();
+                        this.hide();
+                        resolve(option.value);
+                    });
+
+                    this.container.appendChild(button);
+
+                    if (index === 0) {
+                        requestAnimationFrame(() => button.focus());
+                    }
+                });
+            });
+        }
+    }
+
+    class SceneController {
+        constructor(config) {
+            this.narrative = config.narrative;
+            this.choices = config.choices;
+            this.audio = config.audio;
+            this.fadeOverlay = config.fadeOverlay;
+
+            this.state = {
+                firstChoice: null,
+                evidenceInspected: false,
+                reviewedSummary: false
+            };
+        }
+
+        async openingConnection() {
+            await this.narrative.renderLine('Connecting to Investigator Channel...', {
+                className: 'system',
+                hold: 1550
+            });
+            await this.narrative.renderLine('Link established.', {
+                className: 'system',
+                hold: 1450
+            });
+            await this.narrative.renderLine('AI Assistant online.', {
+                className: 'system',
+                hold: 1500
+            });
+            await this.narrative.renderLine('Hello, Detective.', {
+                className: 'assistant',
+                hold: 1550
+            });
+            await this.narrative.renderLine("I'm your AI partner.", {
+                className: 'assistant',
+                hold: 1550
+            });
+        }
+
+        async introduction() {
+            await this.narrative.renderLine("We've received a new case.", {
+                className: 'assistant',
+                hold: 1650
+            });
+            await this.narrative.renderLine("Something doesn't add up.", {
+                className: 'assistant',
+                hold: 1650
+            });
+            await this.narrative.renderLine('I think you should see this.', {
+                className: 'assistant',
+                hold: 1650
+            });
+        }
+
+        async firstInteraction() {
+            const choice = await this.choices.present([
+                { label: 'View Case File', value: 'case_file' },
+                { label: 'Ask: What kind of case?', value: 'ask_case', className: 'alt' }
+            ]);
+
+            this.state.firstChoice = choice;
+
+            if (choice === 'case_file') {
+                await this.narrative.renderLine('Opening case file preview...', {
+                    className: 'status',
+                    hold: 1200,
+                    typed: false
+                });
+            }
+
+            if (choice === 'ask_case') {
+                await this.narrative.renderLine('What kind of case is this?', {
+                    className: 'user',
+                    hold: 1200,
+                    typed: false
+                });
+                await this.narrative.renderLine('A prediction anomaly. Impossible on paper.', {
+                    className: 'assistant',
+                    hold: 1500
+                });
+            }
+        }
+
+        async caseHookReveal() {
+            await this.narrative.renderLine('An AI system made a prediction.', {
+                className: 'assistant',
+                hold: 1700
+            });
+            await this.narrative.renderLine('Hours later - it came true.', {
+                className: 'assistant',
+                hold: 1750
+            });
+            await this.narrative.renderLine('No one knows how.', {
+                className: 'assistant emphasis',
+                hold: 1700
+            });
+        }
+
+        async optionalCuriosityMoment() {
+            const choice = await this.choices.present([
+                { label: 'Inspect Evidence Preview', value: 'inspect' },
+                { label: 'Continue', value: 'continue', className: 'alt' }
+            ]);
+
+            if (choice !== 'inspect') {
+                return;
+            }
+
+            this.state.evidenceInspected = true;
+
+            await this.narrative.renderLine('LOG NOTE:', {
+                className: 'evidence',
+                hold: 1200,
+                typed: false
+            });
+            await this.narrative.renderLine('Prediction issued before data existed.', {
+                className: 'evidence',
+                hold: 1750
+            });
+        }
+
+        async personalityMoment() {
+            if (this.state.evidenceInspected) {
+                await this.narrative.renderLine('Yeah... that bothered me too.', {
+                    className: 'assistant',
+                    hold: 1500
+                });
+            } else {
+                await this.narrative.renderLine('I did not want to bias your read too early.', {
+                    className: 'assistant',
+                    hold: 1450
+                });
+            }
+
+            await this.narrative.renderLine('Ready to investigate?', {
+                className: 'assistant',
+                hold: 1500
+            });
+        }
+
+        async finalInteraction() {
+            const choice = await this.choices.present([
+                { label: 'Start Investigation', value: 'start' },
+                { label: 'Review Case Summary', value: 'summary', className: 'alt' }
+            ]);
+
+            if (choice === 'summary') {
+                this.state.reviewedSummary = true;
+                await this.narrative.renderLine('Case #001 Summary:', {
+                    className: 'status',
+                    hold: 1000,
+                    typed: false
+                });
+                await this.narrative.renderLine('An impossible prediction came true within hours.', {
+                    className: 'assistant',
+                    hold: 1400
+                });
+                await this.narrative.renderLine('Objective: trace source, motive, and method.', {
+                    className: 'assistant',
+                    hold: 1400
+                });
+            }
+        }
+
+        async transitionToTrial() {
+            await this.narrative.renderLine('Opening Case #001...', {
+                className: 'status',
+                hold: 1500,
+                typed: false
+            });
+            await this.narrative.renderLine('Loading Investigation Environment...', {
+                className: 'status',
+                hold: 1550,
+                typed: false
+            });
+
+            this.audio.transitionCue();
+            this.audio.fadeHumOut();
+            this.fadeOverlay.classList.add('active');
+            await this.narrative.wait(1500, false);
+            window.location.href = '/level/ai-agents/1/trial?v=20260222_case001_2';
+        }
+
+        async run() {
+            await this.openingConnection();
+            await this.introduction();
+            await this.firstInteraction();
+            await this.caseHookReveal();
+            await this.optionalCuriosityMoment();
+            await this.personalityMoment();
+            await this.finalInteraction();
+            await this.transitionToTrial();
+        }
+    }
+
+    const audio = new SystemAudio();
+    const narrative = new NarrativeLineSystem({
+        textArea,
+        terminalBody,
+        audio,
+        maxVisibleLines: 2,
+        charDelay: 16,
+        fastCharDelay: 4,
+        defaultHold: 1650
+    });
+
+    const choices = new ChoiceComponent({
+        container: choiceContainer,
+        audio
+    });
+
+    const sceneController = new SceneController({
+        narrative,
+        choices,
+        audio,
+        fadeOverlay
+    });
+
+    function unlockAudioAndAdvance() {
+        audio.unlock();
+        narrative.requestAdvance();
+    }
+
+    document.addEventListener('pointerdown', unlockAudioAndAdvance);
+    document.addEventListener('keydown', unlockAudioAndAdvance);
+
+    sceneController.run().catch(() => {
+        window.location.href = '/level/ai-agents/1/trial?v=20260222_case001_2';
+    });
 })();

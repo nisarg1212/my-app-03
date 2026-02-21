@@ -26,6 +26,8 @@ from gamification.models import LearningSession
 
 # Initialize FastAPI
 app = FastAPI(title="Questra", description="Your quest. Live now.")
+LEVEL1_INTRO_ASSET_VERSION = "20260222_2"
+LEVEL1_TRIAL_ASSET_VERSION = "20260222_case001_2"
 
 # CORS
 app.add_middleware(
@@ -102,18 +104,40 @@ async def get_featured_quests():
 @app.get("/level/ai-agents/1/intro", response_class=HTMLResponse)
 async def ai_agents_level1_intro(request: Request):
     """Render AI Agent Adventures Level 1 Page 1: Narrative Hook"""
-    return templates.TemplateResponse("level1_intro.html", {
+    response = templates.TemplateResponse("level1_intro.html", {
         "request": request,
+        "asset_version": LEVEL1_INTRO_ASSET_VERSION,
     })
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @app.get("/level/ai-agents/1", response_class=HTMLResponse)
 async def ai_agents_level1(request: Request):
-    """Render AI Agent Adventures Level 1: The Awakening"""
-    stats = get_stats()
-    return templates.TemplateResponse("level1.html", {
+    """Render AI Agent Adventures Level 1 entrypoint (intro scene)"""
+    response = templates.TemplateResponse("level1_intro.html", {
         "request": request,
-        "stats": stats
+        "asset_version": LEVEL1_INTRO_ASSET_VERSION,
     })
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
+@app.get("/level/ai-agents/1/trial", response_class=HTMLResponse)
+async def ai_agents_level1_trial(request: Request):
+    """Render AI Agent Adventures Level 1: Case 001"""
+    stats = get_stats()
+    response = templates.TemplateResponse("level1.html", {
+        "request": request,
+        "stats": stats,
+        "asset_version": LEVEL1_TRIAL_ASSET_VERSION,
+    })
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @app.post("/api/level1/complete")
 async def complete_level1(data: Level1Completion):

@@ -3,43 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questra ⋆ AI Agents — Initialization</title>
-    <meta name="description" content="AI Agent Adventures Level 1: The narrative begins.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/level1_intro.css">
+    <title>Questra | Case Dispatch 001</title>
+    <meta name="description" content="Questra Level 1 opening scene.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/level1_intro.css?v={{ asset_version or '1' }}">
 </head>
 <body>
-    <!-- CRT Scanline Overlay -->
-    <div class="crt-overlay"></div>
-    <!-- Vignette -->
-    <div class="vignette"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="crt-overlay" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
 
-    <!-- Main narrative container -->
-    <div class="narrative-container" id="narrative">
-        <div class="terminal-frame">
-            <div class="terminal-header">
+    <main class="narrative-container" id="narrative" aria-live="polite">
+        <section class="terminal-frame" id="terminal-frame" role="region" aria-label="Investigation terminal">
+            <header class="terminal-header">
                 <span class="terminal-dot red"></span>
                 <span class="terminal-dot yellow"></span>
                 <span class="terminal-dot green"></span>
-                <span class="terminal-title">QUESTRA // SYSTEM v3.1.7</span>
-            </div>
+                <span class="terminal-title">Questra // Detective Dispatch</span>
+            </header>
             <div class="terminal-body" id="terminal-body">
                 <div id="text-area"></div>
                 <div class="cursor-line" id="cursor-line">
                     <span class="prompt">&gt;</span>
-                    <span class="cursor" id="cursor">█</span>
+                    <span class="cursor" id="cursor">|</span>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Choice buttons (hidden by default) -->
-        <div class="choice-container" id="choice-container" style="display:none;"></div>
-    </div>
+        <div class="choice-container" id="choice-container" hidden></div>
+        <p class="advance-hint">Tap or press any key to advance faster</p>
+    </main>
 
-    <!-- Fade overlay for ending -->
-    <div class="fade-overlay" id="fade-overlay"></div>
+    <div class="fade-overlay" id="fade-overlay" aria-hidden="true"></div>
 
-    <script src="/static/js/level1_intro.js"></script>
+    <script src="/static/js/level1_intro.js?v={{ asset_version or '1' }}"></script>
 </body>
 </html>
